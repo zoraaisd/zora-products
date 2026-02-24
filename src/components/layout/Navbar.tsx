@@ -14,7 +14,7 @@ interface NavbarProps {
   onAboutClick: () => void;
   onProductClick: () => void;
   onContactClick: () => void;
-  currentPage: "home" | "about" | "products" | "product-detail" | "contact";
+  currentPage: "home" | "about" | "products" | "product-detail" | "contact" | "privacy" | "terms" | "cookies" | "documentation" | "blog" | "faq";
 }
 
 const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, currentPage }: NavbarProps) => {

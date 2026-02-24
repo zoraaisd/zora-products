@@ -176,72 +176,72 @@ function App() {
   }
 
   // New pages - Legal
-  if (page === "privacy") {
-    return (
-      <PrivacyPolicy
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onContact={() => setPageState("contact")}
-      />
-    );
-  }
+  // if (page === "privacy") {
+  //   return (
+  //     <PrivacyPolicy
+  //       onHome={() => setPageState("home")}
+  //       onAbout={() => setPageState("about")}
+  //       onProducts={() => setPageState("products")}
+  //       onContact={() => setPageState("contact")}
+  //     />
+  //   );
+  // }
 
-  if (page === "terms") {
-    return (
-      <TermsOfService
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onContact={() => setPageState("contact")}
-      />
-    );
-  }
+  // if (page === "terms") {
+  //   return (
+  //     <TermsOfService
+  //       onHome={() => setPageState("home")}
+  //       onAbout={() => setPageState("about")}
+  //       onProducts={() => setPageState("products")}
+  //       onContact={() => setPageState("contact")}
+  //     />
+  //   );
+  // }
 
-  if (page === "cookies") {
-    return (
-      <CookiePolicy
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onContact={() => setPageState("contact")}
-      />
-    );
-  }
+  // if (page === "cookies") {
+  //   return (
+  //     <CookiePolicy
+  //       onHome={() => setPageState("home")}
+  //       onAbout={() => setPageState("about")}
+  //       onProducts={() => setPageState("products")}
+  //       onContact={() => setPageState("contact")}
+  //     />
+  //   );
+  // }
 
   // New pages - Resources
-  if (page === "documentation") {
-    return (
-      <Documentation
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onContact={() => setPageState("contact")}
-      />
-    );
-  }
+  // if (page === "documentation") {
+  //   return (
+  //     <Documentation
+  //       onHome={() => setPageState("home")}
+  //       onAbout={() => setPageState("about")}
+  //       onProducts={() => setPageState("products")}
+  //       onContact={() => setPageState("contact")}
+  //     />
+  //   );
+  // }
 
-  if (page === "blog") {
-    return (
-      <Blog
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onContact={() => setPageState("contact")}
-      />
-    );
-  }
+  // if (page === "blog") {
+  //   return (
+  //     <Blog
+  //       onHome={() => setPageState("home")}
+  //       onAbout={() => setPageState("about")}
+  //       onProducts={() => setPageState("products")}
+  //       onContact={() => setPageState("contact")}
+  //     />
+  //   );
+  // }
 
-  if (page === "faq") {
-    return (
-      <FAQ
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onContact={() => setPageState("contact")}
-      />
-    );
-  }
+  // if (page === "faq") {
+  //   return (
+  //     <FAQ
+  //       onHome={() => setPageState("home")}
+  //       onAbout={() => setPageState("about")}
+  //       onProducts={() => setPageState("products")}
+  //       onContact={() => setPageState("contact")}
+  //     />
+  //   );
+  // }
 
   if (page === "products") {
     return (
