@@ -221,18 +221,19 @@ const Footer: React.FC<FooterProps> = ({
             <h4 className="text-sm md:text-base font-semibold text-white mb-2 md:mb-3">Our Location</h4>
             <div className="w-full md:w-72 h-40 md:h-48 rounded-xl overflow-hidden border border-white/10 hover:border-white/20 transition">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.3446744697526!2d80.24838!3d12.9697703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a525d125a9a83f5%3A0xb405ed8eae12f871!2sFondbites%20School%20of%20Sugar%20Art!5e0!3m2!1sen!2sin!4v1708000000000"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.3275462737747!2d80.2468603!3d12.9646836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a525de935894505%3A0x58f547fe15e57e7e!2sZora%20Global%20Ai%20Technologies%20Private%20Limited!5e0!3m2!1sen!2sin!4v1234567890"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
-                allowFullScreen
+                allowFullScreen={true}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                title="Zora Global Ai Technologies Location"
               />
             </div>
-            <p className="text-gray-400 text-xs mt-2">Fondbites School of Sugar Art, Chennai</p>
+            <p className="text-gray-400 text-xs mt-2">Zora Global Ai Technologies Private Limited</p>
             <motion.a
-              href="https://www.google.com/maps/place/Fondbites+School+of+Sugar+Art/@12.9697703,80.2483819,21z"
+              href="https://www.google.com/maps/place/Zora+Global+Ai+Technologies+Private+Limited/@12.9646836,80.2468603,17z/data=!3m1!4b1!4m6!3m5!1s0x3a525de935894505:0x58f547fe15e57e7e!8m2!3d12.9646836!4d80.2468603!16s%2Fg%2F11yzxyxwnz?entry=ttu&g_ep=EgoyMDI2MDIxOC4wIKXMDSoASAFQAw%3D%3D"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ x: 4 }}

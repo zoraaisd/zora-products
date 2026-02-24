@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
+import Navbar from "../layout/Navbar";
 import HeroSection from "./HeroSection";
 import StatsSection from "./StatsSection";
 import MissionSection from "./MissionSection";
@@ -29,6 +30,8 @@ const SplitLine = () => (
 
 interface AboutProps {
   onBack: () => void;
+  onHome: () => void;
+  onAbout: () => void;
   onProduct: () => void;
   onContact: () => void;
   onDocumentation?: () => void;
@@ -41,6 +44,8 @@ interface AboutProps {
 
 const About = ({ 
   onBack, 
+  onHome,
+  onAbout,
   onProduct, 
   onContact,
   onDocumentation,
@@ -63,6 +68,13 @@ const About = ({
       className="bg-black text-white overflow-x-hidden min-h-screen flex flex-col"
       style={{ minHeight: '100vh' }}
     >
+      <Navbar 
+        onHomeClick={onHome}
+        onAboutClick={onAbout}
+        onProductClick={onProduct}
+        onContactClick={onContact}
+        currentPage="about"
+      />
       <HeroSection onExploreProduct={onProduct} />
       <SplitLine />
       <StatsSection />

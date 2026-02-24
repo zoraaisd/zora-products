@@ -50,9 +50,7 @@ const TeamSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.12 }}
               whileHover={{ y: -10 }}
-              className={`group relative rounded-3xl overflow-hidden cursor-default ${
-                i % 2 !== 0 ? "lg:translate-y-10" : ""
-              }`}
+              className="group relative rounded-3xl overflow-hidden cursor-default"
             >
               {/* Glow Layer */}
               <div
@@ -72,7 +70,8 @@ const TeamSection = () => {
                 className="relative border border-white/8
                 group-hover:border-white/20
                 transition-all duration-300
-                rounded-3xl p-6 pb-8 backdrop-blur-sm"
+                rounded-3xl p-6 pb-8 backdrop-blur-sm
+                h-full flex flex-col"
               >
                 {/* Avatar */}
                 <div className="relative mx-auto w-20 h-20 mb-5">
@@ -105,7 +104,7 @@ const TeamSection = () => {
                 </p>
 
                 {/* Bio */}
-                <p className="text-gray-500 text-xs leading-relaxed text-center">
+                <p className="text-gray-500 text-xs leading-relaxed text-center line-clamp-3 flex-1">
                   {member.bio}
                 </p>
               </div>

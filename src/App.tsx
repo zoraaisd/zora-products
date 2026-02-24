@@ -137,24 +137,19 @@ function App() {
 
   if (page === "about") {
     return (
-      <>
-        <Navbar onHomeClick={() => setPageState("home")}
-                onAboutClick={() => setPageState("about")}
-                onProductClick={() => setPageState("products")}
-                onContactClick={() => setPageState("contact")}
-                currentPage={page} />
-        <About
-          onBack={() => setPageState("home")}
-          onProduct={() => setPageState("products")}
-          onContact={() => setPageState("contact")}
-          onDocumentation={() => setPageState("documentation")}
-          onBlog={() => setPageState("blog")}
-          onFAQ={() => setPageState("faq")}
-          onPrivacy={() => setPageState("privacy")}
-          onTerms={() => setPageState("terms")}
-          onCookie={() => setPageState("cookies")}
-        />
-      </>
+      <About
+        onBack={() => setPageState("home")}
+        onHome={() => setPageState("home")}
+        onAbout={() => setPageState("about")}
+        onProduct={() => setPageState("products")}
+        onContact={() => setPageState("contact")}
+        onDocumentation={() => setPageState("documentation")}
+        onBlog={() => setPageState("blog")}
+        onFAQ={() => setPageState("faq")}
+        onPrivacy={() => setPageState("privacy")}
+        onTerms={() => setPageState("terms")}
+        onCookie={() => setPageState("cookies")}
+      />
     );
   }
 
