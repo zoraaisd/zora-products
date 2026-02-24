@@ -43,9 +43,45 @@ const WhyChoose = () => {
   return (
     <section
       id="why"
-      className="relative py-32 bg-gradient-to-b from-black via-[#0f0f1a] to-black"
+      className="relative py-32 bg-gradient-to-b from-black via-[#0f0f1a] to-black overflow-hidden md:pb-2"
     >
-      <div className="max-w-6xl mx-auto px-6 text-center">
+      {/* Floating gradient orbs */}
+      <motion.div
+        animate={{
+          y: [0, -30, 0],
+          x: [0, 15, 0],
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute w-[700px] h-[700px] bg-gradient-to-br from-purple-600/15 to-transparent blur-[150px] rounded-full top-[-200px] left-[-200px] -z-30 pointer-events-none"
+      />
+      
+      <div
+        className="absolute w-[600px] h-[600px] bg-gradient-to-tl from-cyan-600/10 to-transparent blur-[150px] rounded-full bottom-[-200px] right-[-200px] -z-30 pointer-events-none"
+      />
+
+      {/* Floating Particles - Reduced count */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={i}
+          animate={{
+            y: [0, -Math.random() * 60, 0],
+            x: [0, Math.sin(i) * 40, 0],
+            opacity: [0.2, 0.5, 0.2],
+          }}
+          transition={{
+            duration: 10 + i,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute w-1 h-1 rounded-full bg-gradient-to-r from-purple-400 to-cyan-400 pointer-events-none"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+        />
+      ))}
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
 
         {/* Title */}
         <motion.h2

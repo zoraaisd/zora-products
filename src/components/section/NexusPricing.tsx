@@ -1,192 +1,167 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const plans = [
   {
-    name: "Nexus Core",
-    desc: "Essential AI automation for growing businesses.",
-    features: ["Lead Automation", "Basic Analytics", "Email Integration"],
-  },
-  {
-    name: "Nexus Pro",
-    desc: "Advanced AI systems for scaling companies.",
-    features: ["Everything in Core", "CRM Intelligence", "Workflow AI"],
-  },
-  {
-    name: "Nexus Quantum",
+    name: "Zora Quantum",
+    tier: "quantum",
+    badge: "PREMIUM",
     desc: "Enterprise-grade AI ecosystem with full customization.",
+    fullDesc:
+      "The ultimate solution for enterprises. Deploy custom AI models trained on your data, get dedicated support, and unlock unlimited possibilities with our most powerful platform.",
     features: [
       "Everything in Pro",
-      "Custom AI Model",
-      "Dedicated Support",
+      "Custom AI Model Training",
+      "Dedicated Account Manager",
+      "Unlimited Records & Users",
+      "24/7 Enterprise Support",
+      "Custom Integrations",
+      "White-label Options",
+      "Advanced Security & Compliance",
+      "SLA Guarantee",
+      "On-premises Deployment Option",
     ],
+    ideal: "Best for: Enterprises & Corporations",
+  },
+  {
+    name: "Zora Pro",
+    tier: "pro",
+    badge: "PRO",
+    desc: "Advanced AI systems for scaling companies.",
+    fullDesc:
+      "Designed for growing companies that need advanced automation.",
+    features: [
+      "Everything in Core",
+      "CRM Intelligence",
+      "Workflow Automation",
+      "Up to 10,000 Records",
+      "Priority Support",
+      "API Access",
+    ],
+    ideal: "Best for: Growing Companies",
+  },
+  {
+    name: "Zora Core",
+    tier: "core",
+    badge: "CORE",
+    desc: "Essential AI automation for growing businesses.",
+    fullDesc:
+      "Perfect for startups and small teams looking to automate processes.",
+    features: [
+      "Lead Automation",
+      "Basic Analytics",
+      "Email Integration",
+      "Up to 1,000 Records",
+      "Community Support",
+    ],
+    ideal: "Best for: Startups & Small Teams",
   },
 ];
 
 const NexusPricing = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-
-    console.log("Submitted Data:", data);
-
-    setSelectedPlan(null);
-    setShowSuccess(true);
-
-    // Auto hide success message
-    setTimeout(() => {
-      setShowSuccess(false);
-    }, 4000);
+  const getBadgeStyle = (tier: string) => {
+    switch (tier) {
+      case "quantum":
+        return "from-yellow-400 to-amber-500 text-black shadow-yellow-500/40";
+      case "pro":
+        return "from-purple-500 to-indigo-600 text-white shadow-purple-500/40";
+      case "core":
+        return "from-gray-300 to-gray-500 text-black shadow-gray-400/40";
+      default:
+        return "";
+    }
   };
 
   return (
-    <section className="py-40 relative">
+    <section className="relative py-14 md:py-30 bg-black overflow-hidden md:pb-2">
+      <div className="absolute inset-0 bg-black -z-50" />
 
-      <div className="max-w-7xl mx-auto px-6 text-center">
-
-        <h2 className="text-4xl md:text-6xl font-bold mb-16 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-          ZORA Nexus AI Plans
+      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+        <h2
+          className="text-4xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent tracking-wider uppercase"
+          style={{ fontFamily: "'Orbitron', sans-serif" }}
+        >
+          ZORA AI Plans
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-12">
+        <p className="text-gray-300 max-w-3xl mx-auto mb-16 text-base md:text-xl leading-relaxed">
+          Enterprise-grade artificial intelligence platform designed to automate
+          processes, amplify productivity, and drive intelligent decision-making.
+        </p>
 
+        <h3 className="text-3xl font-bold text-white mb-14">
+          Choose Your Plan
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
           {plans.map((plan) => (
             <motion.div
               key={plan.name}
-              whileHover={{ scale: 1.05 }}
-              className="bg-white/5 backdrop-blur-xl rounded-3xl p-12 shadow-xl shadow-purple-500/10 transition-all duration-500"
+              whileHover={{ y: -10 }}
+              transition={{ type: "spring", stiffness: 260 }}
+              className="group relative flex flex-col h-full bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:border-white/25 transition-all duration-300"
             >
-              <h3 className="text-2xl font-semibold text-white mb-4">
-                {plan.name}
-              </h3>
-
-              <p className="text-gray-400 mb-6">
-                {plan.desc}
-              </p>
-
-              <ul className="text-gray-300 space-y-2 mb-8">
-                {plan.features.map((feature) => (
-                  <li key={feature}>• {feature}</li>
-                ))}
-              </ul>
-
-              <button
-                onClick={() => setSelectedPlan(plan.name)}
-                className="px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105 transition-all duration-300 shadow-lg"
+              {/* Floating Tier Badge */}
+              <motion.div
+                // animate={{ y: [0, -5, 0] }}
+                // transition={{ duration: 3, repeat: Infinity }}
+                className={`absolute -top-4 left-1/2 -translate-x-1/2 
+px-5 py-2 
+text-sm md:text-base 
+font-bold rounded-full 
+bg-gradient-to-r ${getBadgeStyle(plan.tier)} 
+shadow-xl`}
               >
-                Talk With Us
-              </button>
+                {plan.badge}
+              </motion.div>
+
+              <div className="relative z-10 flex flex-col h-full text-left mt-4">
+                <div className="mb-6">
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                    {plan.name}
+                  </h3>
+                  <p className="text-base text-cyan-400 font-semibold">
+                    {plan.ideal}
+                  </p>
+                </div>
+
+                <div className="min-h-[140px] mb-6">
+                  <p className="text-gray-200 text-base mb-3 leading-relaxed font-medium">
+                    {plan.desc}
+                  </p>
+                  <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+                    {plan.fullDesc}
+                  </p>
+                </div>
+
+                <div className="bg-white/10 rounded-2xl p-6 mb-6 flex-grow border border-white/5">
+                  <p className="text-white font-bold text-base mb-4">
+                    Features:
+                  </p>
+                  <ul className="space-y-3 text-sm md:text-base text-gray-200">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-3">
+                        <span className="text-purple-400 mt-0.5 text-lg">✓</span>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <motion.button
+                  whileTap={{ scale: 0.96 }}
+                  onClick={() => setSelectedPlan(plan.name)}
+                  className="w-full py-4 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-300 text-white font-bold text-base"
+                >
+                  Talk With Us
+                </motion.button>
+              </div>
             </motion.div>
           ))}
         </div>
       </div>
-
-      {/* Modal Form */}
-      <AnimatePresence>
-        {selectedPlan && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="bg-white/10 backdrop-blur-2xl p-10 rounded-3xl w-full max-w-md relative"
-            >
-              <button
-                onClick={() => setSelectedPlan(null)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white"
-              >
-                ✕
-              </button>
-
-              <h3 className="text-2xl font-semibold text-white mb-6 text-center">
-                Talk With Us
-              </h3>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-
-                <div>
-                  <label className="text-gray-400 text-sm">
-                    Selected Plan
-                  </label>
-                  <input
-                    type="text"
-                    name="plan"
-                    value={selectedPlan}
-                    readOnly
-                    className="w-full mt-1 p-3 rounded-xl bg-white/5 text-white border border-white/10 cursor-not-allowed"
-                  />
-                </div>
-
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  placeholder="Your Name"
-                  className="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none"
-                />
-
-                <input
-                  type="tel"
-                  name="mobile"
-                  required
-                  placeholder="Mobile Number"
-                  className="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none"
-                />
-
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Email Address"
-                  className="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none"
-                />
-
-                <textarea
-                  name="description"
-                  maxLength={100}
-                  required
-                  placeholder="Describe your requirement (max 100 words)"
-                  className="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 h-28 resize-none focus:outline-none"
-                />
-
-                <button
-                  type="submit"
-                  className="w-full py-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105 transition-all duration-300 shadow-lg"
-                >
-                  Submit Request
-                </button>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Success Message */}
-      <AnimatePresence>
-        {showSuccess && (
-          <motion.div
-            initial={{ y: -50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -50, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-10 left-1/2 -translate-x-1/2 z-50 px-8 py-4 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-xl text-white font-medium"
-          >
-            🚀 Our team will contact you soon.
-          </motion.div>
-        )}
-      </AnimatePresence>
-
     </section>
   );
 };

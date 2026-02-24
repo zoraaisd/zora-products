@@ -1,71 +1,161 @@
 import { motion } from "framer-motion";
-import productsBg from "../../assets/products-bg.jpg";
+import { ArrowRight } from "lucide-react";
+import { products } from "../../components/products/data";
+import type { Product } from "../../components/products/data";
 
-const allProducts = [
-  { title: "Secure Messenger", desc: "Enterprise-grade encrypted messaging." },
-  { title: "Telecom Bot", desc: "AI-powered telecom automation." },
-  { title: "Chat Bot", desc: "Advanced conversational AI." },
-  { title: "Workflow Automation", desc: "Streamline business processes." },
-  { title: "Email Automation", desc: "AI-driven email marketing engine." },
-  { title: "WhatsApp Automation", desc: "CRM-integrated WhatsApp automation." },
-];
+// Dark abstract tech background
+const bgImage = "https://images.unsplash.com/photo-1639322537228-f710d846310a?w=1920&q=80";
 
-const AllProducts = () => {
+interface AllProductsProps {
+  onProductClick?: (product: Product) => void;
+}
+
+const AllProducts = ({ onProductClick }: AllProductsProps) => {
   return (
-    <section id="products" className="relative py-40 overflow-hidden">
-
-      {/* Background Image */}
-      <div
-        className="fixed inset-0 -z-40 bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: `url(${productsBg})` }}
-      />
-
-      {/* Dark Overlay */}
-      <div className="fixed inset-0 -z-30 bg-black/70" />
-
-      {/* Moving Aura */}
+    <section id="products" className="relative overflow-hidden">
+      {/* Background Image with Animated Effects - fills entire section top to bottom */}
       <motion.div
-        className="fixed inset-0 -z-20 opacity-40"
-        animate={{ scale: [1, 1.1, 1] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        animate={{
+          scale: [1, 1.05, 1],
+          y: [0, -15, 0],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute inset-0 w-full h-full"
       >
-        <div className="absolute w-[800px] h-[800px] bg-purple-600/20 blur-[250px] rounded-full top-[-200px] left-[-200px]" />
-        <div className="absolute w-[700px] h-[700px] bg-blue-600/20 blur-[250px] rounded-full bottom-[-200px] right-[-200px]" />
+        <img
+          src={bgImage}
+          alt=""
+          className="w-full h-full object-cover object-center"
+        />
       </motion.div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
+      {/* Subtle dark veil — preserves image detail, ensures text readability */}
+      <div className="absolute inset-0 bg-black/70" />
 
-        <motion.h2
-          initial={{ opacity: 0, y: 80 }}
+      {/* Main Content */}
+      <div className="relative z-10 min-h-screen">
+        {/* Section Title */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-4xl md:text-6xl font-bold text-center mb-24 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"
+          transition={{ duration: 0.4 }}
+          viewport={{ once: false }}
+          className="py-15 md:py-16 lg:py-20 px-4 md:px-6"
         >
-          Our Complete AI Product Ecosystem
-        </motion.h2>
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-5xl lg:text-7xl font-black mb-3 md:mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Our AI Product Ecosystem
+            </h2>
+            <p className="text-gray-300 text-xs md:text-base lg:text-lg">
+              Powerful solutions designed to transform your business with cutting-edge AI technology
+            </p>
+          </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-16">
-          {allProducts.map((product, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 100 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.15 }}
-              whileHover={{ scale: 1.03 }}
-              className="group relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-3xl p-12 transition-all duration-500 hover:-translate-y-3"
-            >
-              <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 blur-2xl" />
+        {/* Product Grid */}
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8 lg:py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+            {products.map((product, index) => {
+              return (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  viewport={{ once: false, margin: "-50px" }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg md:rounded-2xl p-4 md:p-6 lg:p-8 overflow-hidden hover:border-white/50 transition-all duration-150`}
+                >
+                  {/* Elegant gradient shine on hover */}
+                  <motion.div
+                    className={`absolute inset-0 bg-gradient-to-br ${product.color} rounded-2xl opacity-0 group-hover:opacity-15 transition-opacity duration-150`}
+                  />
 
-              <h3 className="text-2xl md:text-3xl font-semibold mb-6 text-white tracking-wide">
-                {product.title}
-              </h3>
+                  {/* Product Image */}
+                  <motion.div
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className={`relative z-10 w-full h-20 md:h-24 lg:h-28 rounded-lg md:rounded-xl overflow-hidden mb-4 md:mb-6`}
+                  >
+                    <img 
+                      src={product.image} 
+                      alt={product.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </motion.div>
 
-              <p className="text-gray-300 text-lg leading-relaxed">
-                {product.desc}
-              </p>
-            </motion.div>
-          ))}
+                  {/* Title */}
+                  <h3 className={`relative z-10 text-lg md:text-xl lg:text-2xl font-bold mb-2 md:mb-3 bg-gradient-to-r ${product.color} bg-clip-text text-transparent`}>
+                    {product.title}
+                  </h3>
+
+                  {/* Short Description */}
+                  <p className="relative z-10 text-gray-300 text-xs md:text-sm lg:text-sm mb-4 md:mb-6">
+                    {product.shortDesc}
+                  </p>
+
+                  {/* Features List - Simplified */}
+                  <div className="relative z-10 space-y-1.5 md:space-y-2 mb-4 md:mb-6">
+                    {product.features.slice(0, 3).map((feature, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2 text-xs md:text-xs lg:text-xs text-gray-400"
+                      >
+                        <div className={`w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-gradient-to-r ${product.color}`} />
+                        <span>{feature.title}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => onProductClick?.(product)}
+                    className={`relative z-10 w-full py-2 md:py-2.5 rounded-lg font-semibold bg-gradient-to-r ${product.color} text-white text-xs md:text-sm flex items-center justify-center gap-2 hover:shadow-lg transition-shadow`}
+                  >
+                    Learn More <ArrowRight className="w-3 h-3" />
+                  </motion.button>
+                  
+                  {/* Elegant gradient fade on hover */}
+                  <motion.div
+                    className={`absolute inset-0 rounded-lg md:rounded-2xl opacity-0 group-hover:opacity-10 transition-all duration-150 bg-gradient-to-br ${product.color}`}
+                  />
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
+
+        {/* Final CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          viewport={{ once: false }}
+          className="mt-6 md:mt-8 py-12 md:py-16 lg:py-20 px-4 md:px-6 text-center"
+        >
+          <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 text-white">
+            Ready to Transform Your Business?
+          </h3>
+          <p className="text-gray-300 text-xs md:text-base lg:text-lg mb-6 md:mb-8 max-w-2xl mx-auto">
+            Choose the perfect AI solution for your needs and start your journey today.
+          </p>
+          <motion.a
+            href="https://calendly.com/zoraglobalai/30?month=2026-02"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.02 }}
+            className="inline-block px-6 md:px-8 py-2 md:py-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-sm md:text-base shadow-lg hover:shadow-2xl transition-shadow"
+          >
+            Book Appointment
+          </motion.a>
+        </motion.div>
       </div>
     </section>
   );

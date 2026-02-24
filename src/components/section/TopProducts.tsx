@@ -1,72 +1,100 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import topBg from "../../assets/top-bg.jpg";
+import { topProducts } from "../products/topdata";
 
-const products = [
-  {
-    title: "Orbileads",
-    desc: "AI-powered lead generation and customer acquisition engine.",
-  },
-  {
-    title: "HRMS",
-    desc: "Intelligent Human Resource Management System.",
-  },
-  {
-    title: "CRMS",
-    desc: "Advanced customer relationship intelligence platform.",
-  },
-];
+interface TopProductsProps {
+  onProductClick?: (product: typeof topProducts[0]) => void;
+}
 
-const TopProducts = () => {
+const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+
+  const products = topProducts.slice(0, 3);
 
   useEffect(() => {
     if (paused) return;
 
     const interval = setInterval(() => {
       setActive((prev) => (prev + 1) % products.length);
-    }, 2000);
+    }, 2500);
 
     return () => clearInterval(interval);
+  }, [paused, products.length]);
+
+  useEffect(() => {
+    if (!paused) return;
+
+    const timer = setTimeout(() => setPaused(false), 4000);
+    return () => clearTimeout(timer);
   }, [paused]);
 
   const next = () => {
+    setPaused(true);
     setActive((prev) => (prev + 1) % products.length);
   };
 
   const prev = () => {
+    setPaused(true);
     setActive((prev) =>
       prev === 0 ? products.length - 1 : prev - 1
     );
   };
 
   return (
-    <section
-      className="relative py-40 overflow-hidden"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      {/* SECTION-ONLY Background */}
+    <section className="relative pt-16 md:pt-15 pb-15 md:pb-32 overflow-hidden">
+
+      {/* Background */}
       <div className="absolute inset-0 -z-20">
-        <div
+        <motion.div
+          animate={{ scale: [1, 1.08, 1], y: [0, -20, 0] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
           className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${topBg})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/60 via-black/70 to-blue-900/60" />
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70" /> */}
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-[#0f0617] via-[#140a22] to-[#1a0f2e]" /> */}
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-[#12071f] via-[#1b0f2e] to-[#2a1345]" /> */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#000000] via-[#160a27] to-[#1f0d35]" />
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.15),transparent_60%)]" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      <div className="relative max-w-7xl mx-auto px-4 md:px-6">
 
-        <h2 className="text-4xl md:text-6xl font-bold mb-24 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-          Our Most Requested AI Products
-        </h2>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-12 sm:mb-16 md:mb-28"
+        >
+          <h2 className="text-3xl md:text-5xl lg:text-7xl font-black mb-4 md:mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            AI Products Engineered for Impact
+          </h2>
+          <p className="text-gray-400 text-sm md:text-base lg:text-lg max-w-2xl mx-auto">
+            Cutting-edge solutions powered by artificial intelligence
+          </p>
+        </motion.div>
 
-        <div className="relative h-[420px] flex items-center justify-center">
-
+        {/* Carousel Container */}
+        <div
+  className="
+    relative
+    min-h-[350px]
+    sm:min-h-[480px]
+    md:h-[500px]
+    flex items-center justify-center
+    md:pt-2
+    w-full
+    overflow-hidden
+    lg:overflow-visible
+    px-6 sm:px-6 md:px-10
+    mt-6 md:mt-0
+  "
+>
           {products.map((product, index) => {
             const isActive = index === active;
+
             const offset =
               index === (active - 1 + products.length) % products.length
                 ? -1
@@ -76,55 +104,165 @@ const TopProducts = () => {
 
             return (
               <motion.div
-                key={index}
-                animate={{
-                  x: offset * 280,
-                  scale: isActive ? 1.15 : 0.8,
-                  opacity: isActive ? 1 : 0.4,
-                  rotateY: isActive ? 0 : offset * 25,
-                  zIndex: isActive ? 30 : 10,
-                }}
-                transition={{ duration: 0.6 }}
-                className="absolute w-[420px]"
-              >
-                <div className="relative p-14 rounded-3xl bg-white/10 backdrop-blur-3xl shadow-[0_20px_60px_rgba(168,85,247,0.4)]">
+  key={index}
+  animate={{
+    x: offset * 320,
+    scale: isActive ? 1 : 0.85,
+    opacity: isActive ? 1 : 0.4,
+    y: isActive ? 0 : 40,
+  }}
+  transition={{ 
+    type: "spring",
+    stiffness: 70,
+    damping: 18,
+    mass: 1,
+    restDelta: 0.001
+  }}
+  className="
+    absolute
+    left-1/2
+    -translate-x-1/2
+    w-[75%]
+    sm:w-[80%]
+    md:w-[380px]
+  "
+  style={{
+    zIndex: isActive ? 20 : 10,
+  }}
+  onMouseEnter={() => setPaused(true)}
+  onMouseLeave={() => setPaused(false)}
+>
+                {isActive && (
+                  <div
+                    className="absolute inset-0 rounded-2xl pointer-events-none"
+                    style={{
+                      boxShadow: "0 0 35px rgba(139, 92, 246, 0.35)",
+                    }}
+                  />
+                )}
 
-                  {isActive && (
-                    <div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-r from-purple-600/30 to-blue-600/30 blur-3xl" />
-                  )}
+                <motion.div
+                  whileHover={isActive ? { scale: 1.02, y: -6 } : {}}
+                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                  className={`relative min-h-[280px] sm:min-h-[360px] md:min-h-[420px] p-4 md:p-8 rounded-2xl backdrop-blur-md border overflow-hidden cursor-pointer
+                  ${
+                    isActive
+                      ? `bg-gradient-to-br ${product.color} bg-opacity-10 border-transparent shadow-xl`
+                      : "bg-white/5 border-white/10"
+                  }`}
+                  onClick={() => onProductClick?.(product)}
+                >
+                  {/* Neon Border */}
+                  <div
+                    className={`absolute inset-0 rounded-2xl p-px -z-10 ${
+                      isActive
+                        ? `bg-gradient-to-r ${product.color}`
+                        : "bg-gradient-to-r from-gray-700 to-gray-800"
+                    }`}
+                  >
+                    <div className="w-full h-full bg-black rounded-2xl" />
+                  </div>
 
-                  <h3 className="text-2xl md:text-3xl font-semibold text-white mb-6">
-                    {product.title}
-                  </h3>
+                  <div className="relative z-10 flex flex-col h-full gap-3 md:gap-5">
 
-                  <p className="text-gray-300 mb-8">
-                    {product.desc}
-                  </p>
+                    {/* Product Image */}
+                    <motion.div
+                      animate={isActive ? { y: [-4, 4, -4] } : { y: 0 }}
+                      transition={{ duration: 2.2, repeat: Infinity }}
+                      className={`w-full h-16 sm:h-24 md:h-28 rounded-xl overflow-hidden border border-white/20`}
+                    >
+                      <img 
+                        src={product.image} 
+                        alt={product.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </motion.div>
 
-                  {isActive && (
-                    <button className="px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105 transition-all duration-300 shadow-lg">
-                      Explore More →
-                    </button>
-                  )}
-                </div>
+                    <h3 className="text-base md:text-3xl font-bold text-white">
+                      {product.title}
+                    </h3>
+
+                    <p className="text-gray-300 grow text-xs md:text-base">
+                      {product.shortDesc}
+                    </p>
+
+                    {isActive && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                        className="space-y-2"
+                      >
+                        {product.features.slice(0, 3).map((feature, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.3, delay: idx * 0.08, ease: "easeOut" }}
+                            className="flex items-center gap-2 text-xs md:text-sm text-gray-300"
+                          >
+                            <div
+                              className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${product.color}`}
+                            />
+                            {feature.title}
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    )}
+
+                    {isActive && (
+                      <motion.button
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.35, delay: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                        className={`w-full py-2 md:py-3 rounded-lg font-semibold bg-gradient-to-r ${product.color} text-white text-sm relative overflow-hidden`}
+                        onClick={() => onProductClick?.(product)}
+                      >
+                        Explore More →
+                      </motion.button>
+                    )}
+
+                  </div>
+                </motion.div>
               </motion.div>
             );
           })}
 
-          {/* Manual Arrows */}
-          <button
+          {/* Navigation */}
+          <motion.button
+            whileHover={{ scale: 1.15, x: -5 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300, damping: 15 }}
             onClick={prev}
-            className="absolute left-0 md:-left-10 p-3 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 transition"
+            className="absolute left-2 md:-left-16 z-30 p-2 md:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
           >
-            <ChevronLeft className="text-white" />
-          </button>
+            <ChevronLeft className="w-4 md:w-6 h-4 md:h-6 text-white" />
+          </motion.button>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.15, x: 5 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300, damping: 15 }}
             onClick={next}
-            className="absolute right-0 md:-right-10 p-3 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 transition"
+            className="absolute right-2 md:-right-16 z-30 p-2 md:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
           >
-            <ChevronRight className="text-white" />
-          </button>
+            <ChevronRight className="w-4 md:w-6 h-4 md:h-6 text-white" />
+          </motion.button>
+
+          {/* Indicators */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex gap-3 bottom-0 md:-bottom-16">
+            {products.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setActive(index)}
+                className={`w-2 md:w-3 h-2 md:h-3 rounded-full transition-all duration-300 ease-out ${
+                  active === index
+                    ? "bg-gradient-to-r from-cyan-400 to-purple-400 scale-125"
+                    : "bg-white/30 hover:bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
 
         </div>
       </div>
