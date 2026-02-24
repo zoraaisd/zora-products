@@ -44,27 +44,7 @@ function findProductById(id: string | null): Product | TopProduct | null {
 }
 
 function getInitialState(): AppState {
-  // First check browser history state
-  if (window.history.state?.page) {
-    return {
-      page: window.history.state.page as Page,
-      productId: window.history.state.productId || null,
-    };
-  }
-  // Then fallback to localStorage (for page refresh)
-  try {
-    const saved = localStorage.getItem("zora-app-state");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Restore initial history state on reload
-      const state = {
-        page: parsed.page as Page,
-        productId: parsed.productId || null,
-      };
-      window.history.replaceState(state, "", getUrlForPage(state.page, state.productId));
-      return state;
-    }
-  } catch {}
+  // Always start from home page on initial load
   return { page: "home" as Page, productId: null };
 }
 
