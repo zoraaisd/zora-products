@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
-import { Mail, Phone, MapPin, Send, Sparkles } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Sparkles, CheckCircle } from "lucide-react";
 
 interface ContactPageProps {
   onHome: () => void;
@@ -30,9 +30,37 @@ const ContactPage = ({
   onCookie
 }: ContactPageProps) => {
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const response = await fetch("https://formspree.io/f/mpqjodrv", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setSubmitSuccess(true);
+        e.currentTarget.reset();
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const contactInfo = [
     {
@@ -129,94 +157,120 @@ const ContactPage = ({
             <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur-lg opacity-20 group-hover:opacity-30 transition duration-500" />
             
             <div className="relative bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-xl p-6 md:p-8 rounded-2xl border border-white/10">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                  <Send className="w-5 h-5 text-white" />
+              {submitSuccess ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200 }}
+                    className="mb-6"
+                  >
+                    <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+                  </motion.div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                    Message Sent!
+                  </h2>
+                  <p className="text-gray-400 mb-2">
+                    Thank you for reaching out!
+                  </p>
+                  <p className="text-purple-300 font-medium text-lg">
+                    Our team will reach you soon
+                  </p>
+                  <motion.button
+                    onClick={() => setSubmitSuccess(false)}
+                    whileHover={{ scale: 1.05 }}
+                    className="mt-8 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-all duration-300"
+                  >
+                    Send Another Message
+                  </motion.button>
                 </div>
-                <h2 className="text-xl md:text-2xl font-bold text-white">
-                  Send Us a Message
-                </h2>
-              </div>
-
-              <form
-                action="https://formspree.io/f/mpqjodrv"
-                method="POST"
-                target="_blank"
-                className="space-y-5"
-              >
-                {/* Hidden fields for notification */}
-                <input type="hidden" name="_replyto" value="zoragloballeads@gmail.com" />
-                <input type="hidden" name="_subject" value="New Contact Form Submission" />
-                
-                {/* Name & Phone Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300"
-                      placeholder="Enter Your Name"
-                    />
+              ) : (
+                <>
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                      <Send className="w-5 h-5 text-white" />
+                    </div>
+                    <h2 className="text-xl md:text-2xl font-bold text-white">
+                      Send Us a Message
+                    </h2>
                   </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
-                      Phone
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      required
-                      className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300"
-                      placeholder="Mobile no"
-                    />
-                  </div>
-                </div>
 
-                {/* Email */}
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300"
-                    placeholder="Enter Your Email"
-                  />
-                </div>
+                  <form
+                    onSubmit={handleFormSubmit}
+                    className="space-y-5"
+                  >
+                    {/* Name & Phone Row */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          name="name"
+                          required
+                          className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300"
+                          placeholder="Enter Your Name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
+                          Phone
+                        </label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          required
+                          className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300"
+                          placeholder="Mobile no"
+                        />
+                      </div>
+                    </div>
 
-                {/* Message */}
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
-                    Your Message
-                  </label>
-                  <textarea
-                    name="message"
-                    required
-                    rows={4}
-                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300 resize-none"
-                    placeholder="Leave a message "
-                  />
-                </div>
+                    {/* Email */}
+                    <div>
+                      <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300"
+                        placeholder="Enter Your Email"
+                      />
+                    </div>
 
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25 transition-all duration-300 group"
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    Send Message
-                    <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-700 to-blue-700 opacity-0 hover:opacity-100 transition-opacity" />
-                </motion.button>
-              </form>
+                    {/* Message */}
+                    <div>
+                      <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
+                        Your Message
+                      </label>
+                      <textarea
+                        name="message"
+                        required
+                        rows={4}
+                        className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300 resize-none"
+                        placeholder="Leave a message "
+                      />
+                    </div>
+
+                    <motion.button
+                      type="submit"
+                      disabled={isSubmitting}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/25 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        {isSubmitting ? "Sending..." : "Send Message"}
+                        {!isSubmitting && <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-700 to-blue-700 opacity-0 hover:opacity-100 transition-opacity" />
+                    </motion.button>
+                  </form>
+                </>
+              )}
             </div>
           </motion.div>
 
