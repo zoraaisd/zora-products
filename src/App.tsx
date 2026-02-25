@@ -44,16 +44,29 @@ function findProductById(id: string | null): Product | TopProduct | null {
 }
 
 function getInitialState(): AppState {
-  // Always start from home page on initial load
-  return { page: "home" as Page, productId: null };
+  // Parse the pathname from the URL to determine the initial page
+  const path = window.location.pathname.replace(/^\//, "");
+  if (!path || path === "") return { page: "home", productId: null };
+  if (path.startsWith("products/")) {
+    const productId = path.split("/")[1];
+    return { page: "product-detail", productId };
+  }
+  // Handle known pages
+  const knownPages: Page[] = [
+    "home", "about", "products", "contact", "privacy", "terms", "cookies", "documentation", "blog", "faq"
+  ];
+  if (knownPages.includes(path as Page)) {
+    return { page: path as Page, productId: null };
+  }
+  return { page: "home", productId: null };
 }
 
 function getUrlForPage(page: Page, productId: string | null = null): string {
   if (page === "product-detail" && productId) {
-    return `#/products/${productId}`;
+    return `/products/${productId}`;
   }
-  if (page === "home") return "#/";
-  return `#/${page}`;
+  if (page === "home") return "/";
+  return `/${page}`;
 }
 
 function App() {
@@ -98,10 +111,8 @@ function App() {
   const setPageState = (newPage: Page, productId: string | null = null) => {
     const newState = { page: newPage, productId };
     const url = getUrlForPage(newPage, productId);
-    
     // Push to browser history (enables back/forward navigation)
     window.history.pushState(newState, "", url);
-    
     setState(newState);
     window.scrollTo(0, 0);
   };
