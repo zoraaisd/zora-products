@@ -66,7 +66,7 @@ const ContactPage = ({
     {
       icon: Mail,
       title: "Email",
-      details: "info@zoraglobalai.com",
+      details: "info@zoraai.us",
       description: "Send us an email anytime!",
       color: "from-purple-500 to-pink-500",
     },
@@ -74,7 +74,7 @@ const ContactPage = ({
       icon: Phone,
       title: "Phone",
       details: "+91 9087000345",
-      description: "Mon-Fri from 8am to 5pm.",
+      description: "Mon-Fri from 10am to 6pm.",
       color: "from-blue-500 to-cyan-500",
     },
     {
