@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FaLinkedin, FaTwitter, FaEnvelope, FaArrowRight } from "react-icons/fa";
+import { FaLinkedin, FaTwitter, FaEnvelope, FaArrowRight, FaFacebook, FaYoutube } from "react-icons/fa";
 import zoraLogo from "../../assets/Zora Logo Redesign1.png";
 
 interface FooterProps {
@@ -55,9 +55,10 @@ const Footer: React.FC<FooterProps> = ({
   ];
 
   const socials = [
-    { icon: FaLinkedin, href: "https://linkedin.com", label: "LinkedIn" },
-    { icon: FaTwitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: FaEnvelope, href: "mailto:info@zora.com", label: "Email" },
+    { icon: FaLinkedin, href: "https://www.linkedin.com/company/zora-global-ai-technologies/?viewAsMember=true", label: "LinkedIn" },
+    { icon: FaTwitter, href: "https://x.com/zoraglobalai", label: "Twitter" },
+    { icon: FaFacebook, href: "https://www.facebook.com/ZoraGlobalAiTechnologies/", label: "Facebook" },
+    { icon: FaYoutube, href: "https://www.youtube.com/@zoraglobalaitechnologies", label: "YouTube" },
   ];
 
   return (
@@ -138,6 +139,7 @@ const Footer: React.FC<FooterProps> = ({
                       whileTap={{ scale: 0.95 }}
                       title={social.label}
                       className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:border-purple-500/50 hover:text-purple-400 transition-all duration-200"
+                      onClick={e => e.stopPropagation()}
                     >
                       <Icon className="w-4 h-4" />
                     </motion.a>
