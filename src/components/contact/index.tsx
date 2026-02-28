@@ -133,11 +133,11 @@ const ContactPage = ({
             <span className="text-sm text-purple-300 font-medium">Get in Touch</span>
           </motion.div>
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
             <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
               Contact Us
             </span>
-          </h1>
+          </h2>
           <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
             Ready to transform your business with AI? Get in touch with our experts.
           </p>
