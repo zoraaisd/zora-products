@@ -28,7 +28,7 @@ const AllProducts = ({ onProductClick }: AllProductsProps) => {
       >
         <img
           src={bgImage}
-          alt=""
+          alt="Cubed Bg"
           className="w-full h-full object-cover object-center"
         />
       </motion.div>
