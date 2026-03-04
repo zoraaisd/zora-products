@@ -10,7 +10,7 @@ const Hero = ({ onProductClick }: HeroProps) => {
   return (
     <section
       id="home"
-      className="relative h-[70vh] md:min-h-screen md:h-screen w-full flex items-center justify-center overflow-hidden"
+      className="relative h-[100svh] min-h-screen w-full flex items-center justify-center overflow-hidden"
     >
       {/* 🔥 Silk Animated Background */}
       <div className="absolute inset-0 -z-40">
@@ -58,8 +58,7 @@ const Hero = ({ onProductClick }: HeroProps) => {
               opacity: { duration: 1.1, ease: "easeOut" },
               y: { duration: 7, repeat: Infinity, ease: "easeInOut" },
             }}
-            className="hero-heading relative mx-auto max-w-[90vw] sm:max-w-[18ch] whitespace-pre-line text-[1.78rem] sm:text-5xl md:text-6xl lg:text-7xl mt-20 sm:mt-10 md:mt-28 lg:mt-20 px-0 sm:px-0 leading-[1.5] sm:leading-[1.08] md:leading-[1.04] font-extrabold text-center bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent [text-shadow:0_0_30px_rgba(168,85,247,0.25)] transition-all duration-[400ms] ease-in-out sm:hover:scale-[1.02] sm:hover:brightness-110 will-change-transform"
-            style={{ WebkitTextStroke: "1.2px rgba(10,16,30,0.9)" }}
+            className="hero-heading relative mx-auto w-full max-w-full sm:max-w-[18ch] whitespace-pre-line text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl mt-20 sm:mt-10 md:mt-28 lg:mt-20 mb-8 sm:mb-10 md:mb-12 px-0 sm:px-0 leading-[1.35] sm:leading-[1.08] md:leading-[1.04] font-extrabold text-center bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent [text-shadow:0_0_30px_rgba(168,85,247,0.25)] [-webkit-text-stroke:1px_rgba(255,255,255,0.95)] sm:[-webkit-text-stroke:1.2px_rgba(10,16,30,0.9)] transition-all duration-[400ms] ease-in-out sm:hover:scale-[1.02] sm:hover:brightness-110 will-change-transform"
           >
           <motion.span
             style={{ WebkitTextFillColor: "transparent" }}
