@@ -5,7 +5,6 @@ import HeroSection from "./HeroSection";
 import StatsSection from "./StatsSection";
 import MissionSection from "./MissionSection";
 import ValuesSection from "./ValuesSection";
-import TimelineSection from "./TimelineSection";
 import TeamSection from "./TeamSection";
 import CTASection from "./CTASection";
 import Footer from "../layout/Footer";
@@ -82,8 +81,6 @@ const About = ({
       <MissionSection />
       <SplitLine />
       <ValuesSection />
-      <SplitLine />
-      <TimelineSection />
       <SplitLine />
       <TeamSection />
       <SplitLine />

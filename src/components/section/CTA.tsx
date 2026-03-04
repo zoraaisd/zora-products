@@ -5,7 +5,7 @@ const CTA = () => {
   const benefits = [
     {
       icon: Zap,
-      title: "5x Faster Implementation",
+      title: "3x Faster Implementation",
       desc: "Deploy AI systems in weeks, not months"
     },
     {
@@ -15,8 +15,8 @@ const CTA = () => {
     },
     {
       icon: BarChart3,
-      title: "300% ROI in Year 1",
-      desc: "Proven results from 500+ enterprise clients"
+      title: "3x faster Decision Making",
+      desc: "Proven results from 900+ enterprise clients"
     }
   ];
 

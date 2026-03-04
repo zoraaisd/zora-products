@@ -1,10 +1,10 @@
 import { Users, Shield, Globe, Award, Zap, Heart, TrendingUp } from "lucide-react";
 
 export const stats = [
-  { value: "500+", label: "Enterprise Clients", icon: Users, color: "from-violet-500 to-purple-600" },
+  { value: "900+", label: "Enterprise Clients", icon: Users, color: "from-violet-500 to-purple-600" },
   { value: "99.9%", label: "Uptime Guarantee", icon: Shield, color: "from-blue-500 to-cyan-500" },
-  { value: "50+", label: "Countries Served", icon: Globe, color: "from-emerald-500 to-teal-500" },
-  { value: "4.9★", label: "Average Rating", icon: Award, color: "from-orange-500 to-yellow-500" },
+  { value: "45+", label: "Countries Served", icon: Globe, color: "from-emerald-500 to-teal-500" },
+  { value: "11+", label: "Years of excellence", icon: Award, color: "from-orange-500 to-yellow-500" },
 ];
 
 export const values = [

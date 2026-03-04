@@ -3,10 +3,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const stats = [
-  { label: "Clients Served", value: 150 },
-  { label: "AI Products Built", value: 12 },
-  { label: "Enterprise Solutions", value: 40 },
-  { label: "Success Rate (%)", value: 98 },
+  { label: "Clients", value: 900 },
+  { label: "Years of Excellence", value: 11 },
+  { label: "Ongoing Projects", value: 20 },
+  { label: "Countries Served", value: 45 },
 ];
 
 const Counter = ({ value }: { value: number }) => {
