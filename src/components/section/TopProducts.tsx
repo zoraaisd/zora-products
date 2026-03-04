@@ -68,7 +68,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
           transition={{ duration: 0.8 }}
           className="text-center mb-12 sm:mb-16 md:mb-28"
         >
-          <h2 className="text-3xl md:text-5xl lg:text-7xl font-black mb-4 md:mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-5xl lg:text-7xl font-black font-serif mb-4 md:mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             AI Products Engineered for Impact
           </h2>
           <p className="text-gray-400 text-sm md:text-base lg:text-lg max-w-2xl mx-auto">

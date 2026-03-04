@@ -362,6 +362,7 @@ const ContactPage = ({
 
       </div>
 
+      <div className="pointer-events-none inset-x-0 z-[5] h-16 bg-gradient-to-b from-transparent to-purple-900/60" />
       <Footer
         onHomeClick={onHome}
         onAboutClick={onAbout}

@@ -67,7 +67,7 @@ const HeroSection = ({}: HeroSectionProps) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight mb-8"
+            className="text-5xl md:text-7xl lg:text-8xl font-serif font-semibold leading-tight tracking-wide mb-8"
           >
             <span className="bg-gradient-to-br from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
               Intelligence

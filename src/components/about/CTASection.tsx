@@ -45,7 +45,7 @@ const CTASection = ({ onContact, onExploreProduct }: CTASectionProps) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.7 }}
-          className="text-4xl md:text-6xl font-black text-white mb-5 leading-tight"
+          className="text-4xl md:text-6xl font-serif font-semibold tracking-wide text-white mb-5 leading-tight"
         >
           Ready to Build the
           <br />

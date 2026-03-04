@@ -19,7 +19,7 @@ const ValuesSection = () => {
           className="mb-10 text-center"
         >
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-purple-400">What Drives Us</span>
-          <h2 className="text-4xl md:text-6xl font-black text-white mt-3 mx-auto leading-none flex justify-center gap-3">
+          <h2 className="text-4xl md:text-6xl font-serif font-semibold tracking-wide text-white mt-3 mx-auto leading-none flex justify-center gap-3">
   <span>Core</span>
   <span className="bg-linear-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
     Values.

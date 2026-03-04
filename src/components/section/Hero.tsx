@@ -6,6 +6,7 @@ interface HeroProps {
 }
 
 const Hero = ({ onProductClick }: HeroProps) => {
+  const secondLine = "Built for Modern Enterprises";
   return (
     <section
       id="home"
@@ -33,23 +34,90 @@ const Hero = ({ onProductClick }: HeroProps) => {
       <div className="absolute w-[600px] h-[600px] bg-purple-600/10 blur-[120px] rounded-full top-[-100px] left-[-100px] pointer-events-none -z-10" />
       <div className="absolute w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full bottom-[-100px] right-[-100px] pointer-events-none -z-10" />
 
+      {/* Open Reveal Curtain */}
+      <motion.div
+        initial={{ scaleY: 1 }}
+        animate={{ scaleY: 0 }}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute inset-0 z-20 origin-top bg-gradient-to-b from-black via-black to-black/90 pointer-events-none"
+      />
+
       {/* Content */}
       <div className="relative z-10 text-center px-4 md:px-6 py-10 md:py-20 max-w-4xl">
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-className="text-2xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-purple-300 via-fuchsia-400 to-blue-400 bg-clip-text text-transparent drop-shadow-[0_6px_25px_rgba(0,0,0,0.9)]"        >
-          Intelligent AI Systems
-          <br />
-          Built for Modern Enterprises
-        </motion.h1>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: [0.22, 0.4, 0.22], scale: [0.98, 1.03, 0.98] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[180px] md:w-[560px] md:h-[260px] bg-purple-500/20 blur-[80px] rounded-full pointer-events-none"
+        />
+        <div className="-translate-y-1 sm:translate-y-0 -translate-x-1 sm:translate-x-0 md:-translate-x-16 lg:-translate-x-24 mt-0 sm:mt-1 font-serif font-black tracking-tight leading-tight">
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: [0, -2, 0] }}
+            transition={{
+              opacity: { duration: 1.1, ease: "easeOut" },
+              y: { duration: 7, repeat: Infinity, ease: "easeInOut" },
+            }}
+            className="hero-heading relative mx-auto max-w-[90vw] sm:max-w-[18ch] whitespace-pre-line text-[1.78rem] sm:text-5xl md:text-6xl lg:text-7xl mt-20 sm:mt-10 md:mt-28 lg:mt-20 px-0 sm:px-0 leading-[1.5] sm:leading-[1.08] md:leading-[1.04] font-extrabold text-center bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent [text-shadow:0_0_30px_rgba(168,85,247,0.25)] transition-all duration-[400ms] ease-in-out sm:hover:scale-[1.02] sm:hover:brightness-110 will-change-transform"
+            style={{ WebkitTextStroke: "1.2px rgba(10,16,30,0.9)" }}
+          >
+          <motion.span
+            style={{ WebkitTextFillColor: "transparent" }}
+            className="font-serif relative inline-block bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent"
+          >
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: "120%" }}
+                animate={{ y: "0%" }}
+                transition={{ delay: 0.2, duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
+                className="block whitespace-nowrap text-center"
+              >
+                Intelligent AI Systems
+              </motion.span>
+            </span>
+            <span className="block mt-1">
+              <span className="block text-center sm:hidden">
+                <motion.span
+                  initial={{ y: "120%" }}
+                  animate={{ y: "0%" }}
+                  transition={{ delay: 1.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="block"
+                >
+                  Built for Modern
+                </motion.span>
+                <motion.span
+                  initial={{ y: "120%" }}
+                  animate={{ y: "0%" }}
+                  transition={{ delay: 1.45, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="block"
+                >
+                  Enterprises
+                </motion.span>
+              </span>
+              <span className="hidden whitespace-nowrap text-center sm:block">
+                {secondLine.split("").map((char, idx) => (
+                  <motion.span
+                    key={`${char}-${idx}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.2 + idx * 0.03, duration: 0.22, ease: "easeOut" }}
+                    className="inline-block"
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </motion.span>
+                ))}
+              </span>
+            </span>
+          </motion.span>
+          </motion.h1>
+        </div>
 
         <motion.p
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 1 }}
-          className="mt-3 md:mt-6 text-gray-200 text-sm md:text-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"        >
+          initial={{ opacity: 0, y: 36, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ delay: 0.45, duration: 1.05, ease: "easeOut" }}
+          className="mt-3 md:mt-6 max-w-3xl mx-auto text-center text-gray-100 text-sm md:text-xl drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]"
+        >
           ZORA empowers businesses through automation,
           customer intelligence, and scalable AI-driven solutions.
         </motion.p>

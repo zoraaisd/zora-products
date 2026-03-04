@@ -39,7 +39,7 @@ const MissionSection = () => {
           className="text-center mb-10"
         >
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-purple-400">Who We Are</span>
-          <h2 className="text-4xl md:text-6xl font-black text-white mt-3">Purpose & Direction</h2>
+          <h2 className="text-4xl md:text-6xl font-serif font-semibold tracking-wide text-white mt-3">Purpose & Direction</h2>
         </motion.div>
         <div className="grid md:grid-cols-2 gap-6">
           {missionItems.map((item, i) => {

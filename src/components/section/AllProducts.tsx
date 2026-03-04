@@ -47,7 +47,7 @@ const AllProducts = ({ onProductClick }: AllProductsProps) => {
           className="py-15 md:py-16 lg:py-20 px-4 md:px-6"
         >
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-5xl lg:text-7xl font-black mb-3 md:mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-5xl lg:text-7xl font-black font-serif mb-3 md:mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Our AI Product Ecosystem
             </h2>
             <p className="text-gray-300 text-xs md:text-base lg:text-lg">

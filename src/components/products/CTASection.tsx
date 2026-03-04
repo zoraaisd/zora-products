@@ -11,7 +11,7 @@ const CTASection = () => (
       transition={{ duration: 0.7 }}
       className="relative max-w-2xl mx-auto"
     >
-      <h2 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
+      <h2 className="text-3xl md:text-5xl font-serif font-semibold tracking-wide text-white mb-4 leading-tight">
         Not Sure Where to Start?
       </h2>
       <p className="text-gray-400 text-sm md:text-base mb-8 max-w-lg mx-auto">

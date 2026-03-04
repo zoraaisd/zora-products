@@ -62,7 +62,8 @@ const Footer: React.FC<FooterProps> = ({
   ];
 
   return (
-    <footer className="relative bg-black border-t border-white/10 overflow-hidden">
+    <footer className="relative bg-black overflow-hidden">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-16 bg-gradient-to-b from-purple-900/60 to-transparent" />
       
       {/* Floating gradient orbs */}
       <motion.div

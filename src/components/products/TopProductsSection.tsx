@@ -28,7 +28,7 @@ const TopProductsSection = ({ onProductClick }: TopProductsSectionProps) => {
             </span>
           </div>
 
-          <h2 className="text-4xl md:text-6xl font-black text-white mb-4">
+          <h2 className="text-4xl md:text-6xl font-serif font-semibold tracking-wide text-white mb-4">
             Our{" "}
             <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
               Leading Solutions

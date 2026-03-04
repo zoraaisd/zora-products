@@ -37,7 +37,7 @@ const HeroSection = () => (
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.8 }}
-        className="text-3xl sm:text-5xl md:text-8xl font-black leading-tight mb-3 md:mb-6"
+        className="text-3xl sm:text-5xl md:text-8xl font-serif font-semibold tracking-wide leading-tight mb-3 md:mb-6"
       >
         <span className="bg-gradient-to-br from-white via-purple-100 to-blue-200 bg-clip-text text-transparent">
           Our AI
