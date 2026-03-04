@@ -43,7 +43,7 @@ const Hero = ({ onProductClick }: HeroProps) => {
       />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 md:px-6 py-10 md:py-20 max-w-4xl">
+      <div className="relative z-10 -translate-y-4 md:-translate-y-6 text-center px-4 md:px-6 py-10 md:py-20 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: [0.22, 0.4, 0.22], scale: [0.98, 1.03, 0.98] }}
