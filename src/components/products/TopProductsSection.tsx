@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import type { ComponentType } from "react";
 import { topProducts } from "./topdata";
 import type { TopProduct } from "./topdata";
 
@@ -44,7 +45,7 @@ const TopProductsSection = ({ onProductClick }: TopProductsSectionProps) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
           {topProducts.map((product, index) => {
-            const Icon = product.icon;
+            const Icon = product.icon as ComponentType<{ className?: string }>;
 
             return (
               <motion.div

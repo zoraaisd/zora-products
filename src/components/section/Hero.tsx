@@ -1,4 +1,6 @@
-import { motion } from "framer-motion";
+import type { MouseEvent } from "react";
+import { useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Silk from "../Silk";
 
 interface HeroProps {
@@ -6,134 +8,169 @@ interface HeroProps {
 }
 
 const Hero = ({ onProductClick }: HeroProps) => {
-  const secondLine = "Built for Modern Enterprises";
+  const aiText = "INTELLIGENT AI SYSTEMS";
+  const [typedText, setTypedText] = useState("");
+  const [typingDone, setTypingDone] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    const interval = window.setInterval(() => {
+      i += 1;
+      setTypedText(aiText.slice(0, i));
+      if (i >= aiText.length) {
+        window.clearInterval(interval);
+        setTypingDone(true);
+      }
+    }, 80);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const pointerX = useMotionValue(0);
+  const textShiftX = useSpring(useTransform(pointerX, [-1, 1], [-6, 6]), {
+    stiffness: 80,
+    damping: 18,
+  });
+
+  const textParticles = [
+    { top: "12%", left: "8%", size: "h-1 w-1", delay: 0.2 },
+    { top: "24%", left: "36%", size: "h-1.5 w-1.5", delay: 0.4 },
+    { top: "40%", left: "14%", size: "h-2 w-2", delay: 0.7 },
+    { top: "58%", left: "28%", size: "h-1 w-1", delay: 0.9 },
+    { top: "72%", left: "4%", size: "h-1.5 w-1.5", delay: 1.2 },
+    { top: "84%", left: "42%", size: "h-1 w-1", delay: 1.5 },
+  ];
+
+  const handleMouseMove = (event: MouseEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    pointerX.set(x);
+  };
+
+  const handleMouseLeave = () => {
+    pointerX.set(0);
+  };
+
+  const handleSecondaryCta = () => {
+    const whySection = document.getElementById("why");
+    if (whySection) whySection.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section
       id="home"
-      className="relative h-[100svh] min-h-screen w-full flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen w-full overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {/* 🔥 Silk Animated Background */}
       <div className="absolute inset-0 -z-40">
-        <div className="w-full h-full">
+        <div className="h-full w-full">
           <Silk
             speed={10}
             scale={1.2}
-            color="#6315a8" // Tailwind purple-600
+            color="#6315a8"
             noiseIntensity={1}
             rotation={0}
           />
         </div>
       </div>
 
-      {/* Dark overlays for text readability */}
-      {/* <div className="absolute inset-0 bg-black/50 -z-30" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80 -z-20" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-black/60 -z-20" /> */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/65 via-black/45 to-black/70" />
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_22%_14%,rgba(192,132,252,0.2),transparent_42%),radial-gradient(circle_at_76%_78%,rgba(147,51,234,0.22),transparent_46%),radial-gradient(circle_at_60%_28%,rgba(139,92,246,0.14),transparent_38%)]" />
+      <div className="pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full bg-purple-500/25 blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-20 right-10 h-80 w-80 rounded-full bg-blue-500/20 blur-[120px]" />
 
-      {/* Soft glow accents */}
-      <div className="absolute w-[600px] h-[600px] bg-purple-600/10 blur-[120px] rounded-full top-[-100px] left-[-100px] pointer-events-none -z-10" />
-      <div className="absolute w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full bottom-[-100px] right-[-100px] pointer-events-none -z-10" />
-
-      {/* Open Reveal Curtain */}
       <motion.div
-        initial={{ scaleY: 1 }}
-        animate={{ scaleY: 0 }}
-        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute inset-0 z-20 origin-top bg-gradient-to-b from-black via-black to-black/90 pointer-events-none"
-      />
+        initial={{ opacity: 0, y: 22 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.85, ease: "easeOut" }}
+        className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-6 pb-14 pt-28 md:px-10 lg:pb-16 lg:pt-24"
+      >
+        <motion.div className="relative text-center" style={{ x: textShiftX }}>
+          {textParticles.map((particle, index) => (
+            <motion.span
+              key={`particle-${index}`}
+              className={`pointer-events-none absolute ${particle.size} rounded-full bg-white/70`}
+              style={{ top: particle.top, left: particle.left }}
+              animate={{ y: [0, -16, 0], opacity: [0.15, 0.7, 0.15] }}
+              transition={{
+                delay: particle.delay,
+                duration: 5 + index * 0.8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
 
-      {/* Content */}
-      <div className="relative z-10 -translate-y-4 md:-translate-y-6 text-center px-4 md:px-6 py-10 md:py-20 max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: [0.22, 0.4, 0.22], scale: [0.98, 1.03, 0.98] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[180px] md:w-[560px] md:h-[260px] bg-purple-500/20 blur-[80px] rounded-full pointer-events-none"
-        />
-        <div className="-translate-y-1 sm:translate-y-0 -translate-x-1 sm:translate-x-0 md:-translate-x-16 lg:-translate-x-24 mt-0 sm:mt-1 font-serif font-black tracking-tight leading-tight">
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: [0, -2, 0] }}
-            transition={{
-              opacity: { duration: 1.1, ease: "easeOut" },
-              y: { duration: 7, repeat: Infinity, ease: "easeInOut" },
-            }}
-            className="hero-heading relative mx-auto w-full max-w-full sm:max-w-[18ch] whitespace-pre-line text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl mt-20 sm:mt-10 md:mt-28 lg:mt-20 mb-8 sm:mb-10 md:mb-12 px-0 sm:px-0 leading-[1.35] sm:leading-[1.08] md:leading-[1.04] font-extrabold text-center bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent [text-shadow:0_0_30px_rgba(168,85,247,0.25)] [-webkit-text-stroke:1px_rgba(255,255,255,0.95)] sm:[-webkit-text-stroke:1.2px_rgba(10,16,30,0.9)] transition-all duration-[400ms] ease-in-out sm:hover:scale-[1.02] sm:hover:brightness-110 will-change-transform"
-          >
-          <motion.span
-            style={{ WebkitTextFillColor: "transparent" }}
-            className="font-serif relative inline-block bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent"
-          >
-            <span className="block overflow-hidden">
-              <motion.span
-                initial={{ y: "120%" }}
-                animate={{ y: "0%" }}
-                transition={{ delay: 0.2, duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
-                className="block whitespace-nowrap text-center"
+          <motion.h1 className="mx-auto mt-6 max-w-none font-['Zen_Dots','Space_Grotesk','Inter','SF_Pro_Display','Satoshi',sans-serif] text-[1.7rem] font-extrabold leading-[1.2] tracking-[0.1em] text-white sm:text-[2.25rem] md:text-[2.9rem] lg:text-[3.4rem]">
+            <motion.span
+              initial={{ opacity: 0, y: 22, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)", textShadow: "0 0 36px rgba(168,85,247,0.5)" }}
+              transition={{ delay: 0.22, duration: 0.7 }}
+              className="relative isolate block max-w-[12ch] whitespace-normal pb-[0.1em] font-['Zen_Dots',cursive] bg-gradient-to-r from-[#d9c2ff] via-[#b98aff] to-[#f06dff] bg-clip-text text-transparent [text-shadow:0_0_34px_rgba(168,85,247,0.5)] md:max-w-none md:whitespace-nowrap"
+            >
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/70 via-white/0 to-transparent bg-clip-text text-transparent mix-blend-screen opacity-70"
               >
-                Intelligent AI Systems
-              </motion.span>
-            </span>
-            <span className="block mt-1">
-              <span className="block text-center sm:hidden">
-                <motion.span
-                  initial={{ y: "120%" }}
-                  animate={{ y: "0%" }}
-                  transition={{ delay: 1.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="block"
-                >
-                  Built for Modern
-                </motion.span>
-                <motion.span
-                  initial={{ y: "120%" }}
-                  animate={{ y: "0%" }}
-                  transition={{ delay: 1.45, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="block"
-                >
-                  Enterprises
-                </motion.span>
+                {typedText}
               </span>
-              <span className="hidden whitespace-nowrap text-center sm:block">
-                {secondLine.split("").map((char, idx) => (
-                  <motion.span
-                    key={`${char}-${idx}`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.2 + idx * 0.03, duration: 0.22, ease: "easeOut" }}
-                    className="inline-block"
-                  >
-                    {char === " " ? "\u00A0" : char}
-                  </motion.span>
-                ))}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent bg-clip-text text-transparent opacity-55"
+              >
+                {typedText}
               </span>
-            </span>
-          </motion.span>
+              {typedText}
+              <span className="ml-1 inline-block h-[0.9em] w-[0.08em] bg-cyan-200 align-[-0.08em]" />
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 22, filter: "blur(6px)" }}
+              animate={{ opacity: typingDone ? 1 : 0, y: typingDone ? 0 : 12, filter: typingDone ? "blur(0px)" : "blur(4px)" }}
+              transition={{ duration: 0.5 }}
+              className="mt-2 block font-['Space_Grotesk',sans-serif] text-[0.9em] font-medium tracking-[0.01em] text-white md:mt-3 md:text-[1.02em] md:tracking-[0.015em]"
+            >
+              Built for Modern Enterprises
+            </motion.span>
           </motion.h1>
-        </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 36, filter: "blur(6px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ delay: 0.45, duration: 1.05, ease: "easeOut" }}
-          className="mt-3 md:mt-6 max-w-3xl mx-auto text-center text-gray-100 text-sm md:text-xl drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]"
-        >
-          ZORA empowers businesses through automation,
-          customer intelligence, and scalable AI-driven solutions.
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.7 }}
+            className="mx-auto mt-7 max-w-xl font-['Space_Grotesk',sans-serif] text-base leading-relaxed text-blue-50/90 md:text-lg"
+          >
+            ZORA unifies automation, customer intelligence, and AI orchestration so your teams ship
+            production-ready experiences faster.
+          </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 1 }}
-          className="mt-6 md:mt-10"
-        >
-          <button
-            onClick={onProductClick}
-            className="px-5 py-2 md:px-8 md:py-3 text-sm md:text-base rounded-full border border-white/70 text-white bg-gradient-to-r from-purple-600/90 to-blue-600/90 backdrop-blur-md hover:scale-105 hover:border-white transition-all duration-300 shadow-lg shadow-purple-500/30"          >
-            Explore Products
-          </button>
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55, duration: 0.6 }}
+            className="mt-9 flex flex-wrap items-center justify-center gap-4"
+          >
+            <motion.button
+              onClick={onProductClick}
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 px-7 py-3 font-['Space_Grotesk',sans-serif] text-sm font-semibold text-white shadow-[0_0_35px_rgba(139,92,246,0.45)] transition-shadow duration-300 hover:shadow-[0_0_45px_rgba(59,130,246,0.55)] md:text-base"
+            >
+              Explore Products
+            </motion.button>
+
+            <motion.button
+              onClick={handleSecondaryCta}
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+              className="rounded-xl border border-white/25 bg-white/10 px-7 py-3 font-['Space_Grotesk',sans-serif] text-sm font-medium text-white backdrop-blur-xl transition-all duration-300 hover:border-purple-300/70 hover:bg-white/20 hover:blur-[0.2px] hover:shadow-[0_0_30px_rgba(168,85,247,0.25)] md:text-base"
+            >
+              See Why ZORA
+            </motion.button>
+          </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };

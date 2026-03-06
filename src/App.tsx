@@ -108,6 +108,7 @@ function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
+
   const setPageState = (newPage: Page, productId: string | null = null) => {
     const newState = { page: newPage, productId };
     const url = getUrlForPage(newPage, productId);

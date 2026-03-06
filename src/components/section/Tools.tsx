@@ -53,7 +53,8 @@ const Tools = () => {
           transition={{ duration: 0.6 }}
           className="text-3xl font-serif md:text-5xl lg:text-6xl font-bold mb-10 pb-2 md:mb-20 bg-linear-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent"
         >
-          Tools & Technologies We Master
+          Tools & Technologies
+          <span className="block md:inline"> We Master</span>
         </motion.h2>
 
         <motion.p

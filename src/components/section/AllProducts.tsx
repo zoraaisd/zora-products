@@ -46,8 +46,8 @@ const AllProducts = ({ onProductClick }: AllProductsProps) => {
           viewport={{ once: false }}
           className="py-15 md:py-16 lg:py-20 px-4 md:px-6"
         >
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-5xl lg:text-7xl font-black font-serif mb-3 md:mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <div className="mx-auto w-full max-w-none text-center">
+            <h2 className="mb-3 whitespace-nowrap font-serif font-black leading-tight text-[clamp(1.15rem,5vw,4.5rem)] bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent md:mb-4">
               Our AI Product Ecosystem
             </h2>
             <p className="text-gray-300 text-xs md:text-base lg:text-lg">
