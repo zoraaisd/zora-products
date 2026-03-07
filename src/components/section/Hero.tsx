@@ -85,7 +85,7 @@ const Hero = ({ onProductClick }: HeroProps) => {
         initial={{ opacity: 0, y: 22 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.85, ease: "easeOut" }}
-        className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-6 pb-14 pt-28 md:px-10 lg:pb-16 lg:pt-24"
+        className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-6 pb-24 pt-16 md:items-center md:px-10 md:pt-24 lg:pb-16 lg:pt-24"
       >
         <motion.div className="relative text-center" style={{ x: textShiftX }}>
           {textParticles.map((particle, index) => (
@@ -103,12 +103,12 @@ const Hero = ({ onProductClick }: HeroProps) => {
             />
           ))}
 
-          <motion.h1 className="mx-auto mt-6 max-w-none font-['Zen_Dots','Space_Grotesk','Inter','SF_Pro_Display','Satoshi',sans-serif] text-[1.7rem] font-extrabold leading-[1.2] tracking-[0.1em] text-white sm:text-[2.25rem] md:text-[2.9rem] lg:text-[3.4rem]">
+          <motion.h1 className="mx-auto mt-6 max-w-none font-['Zen_Dots','Space_Grotesk','Inter','SF_Pro_Display','Satoshi',sans-serif] text-[1.7rem] font-extrabold leading-[1.3] tracking-[0.1em] text-white sm:text-[2.25rem] md:text-[2.9rem] md:leading-[1.2] lg:text-[3.4rem]">
             <motion.span
               initial={{ opacity: 0, y: 22, filter: "blur(6px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)", textShadow: "0 0 36px rgba(168,85,247,0.5)" }}
               transition={{ delay: 0.22, duration: 0.7 }}
-              className="relative isolate block max-w-[12ch] whitespace-normal pb-[0.1em] font-['Zen_Dots',cursive] bg-gradient-to-r from-[#d9c2ff] via-[#b98aff] to-[#f06dff] bg-clip-text text-transparent [text-shadow:0_0_34px_rgba(168,85,247,0.5)] md:max-w-none md:whitespace-nowrap"
+              className="relative -top-2 left-6 isolate block max-w-[12ch] whitespace-normal pb-[0.1em] font-['Zen_Dots',cursive] bg-gradient-to-r from-[#d9c2ff] via-[#b98aff] to-[#f06dff] bg-clip-text text-transparent [text-shadow:0_0_34px_rgba(168,85,247,0.5)] md:top-0 md:left-0 md:max-w-none md:whitespace-nowrap"
             >
               <span
                 aria-hidden="true"

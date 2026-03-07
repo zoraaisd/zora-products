@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import zoraLogo from "../../assets/Zora Logo Redesign.png";
 
@@ -19,6 +19,30 @@ interface NavbarProps {
 
 const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, currentPage }: NavbarProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+  const mobileButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handleOutsideTap = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node | null;
+      if (!target) return;
+
+      if (mobileMenuRef.current?.contains(target)) return;
+      if (mobileButtonRef.current?.contains(target)) return;
+
+      setMobileOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleOutsideTap);
+    document.addEventListener("touchstart", handleOutsideTap);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideTap);
+      document.removeEventListener("touchstart", handleOutsideTap);
+    };
+  }, [mobileOpen]);
 
   const handleLinkClick = (link: { name: string; href: string }) => {
     if (link.name === "Home") {
@@ -134,7 +158,8 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
 
   {/* Mobile Menu Button */}
   <button
-    className="md:hidden text-white text-2xl mr-0"
+    ref={mobileButtonRef}
+    className="md:hidden text-white text-2xl mr-6"
     onClick={() => setMobileOpen(!mobileOpen)}
   >
     ☰
@@ -143,47 +168,54 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
 
       {/* Mobile Dropdown */}
       {mobileOpen && (
-        <div className="md:hidden bg-black/90 backdrop-blur-lg border-t border-purple-500/20 px-2 md:px-3 py-4 md:py-6 space-y-3 md:space-y-4">
-          {navLinks.map((link) => {
-            const isHomeActive = link.name === "Home" && currentPage === "home";
-            const isAboutActive = link.name === "About" && currentPage === "about";
-            const isProductActive = link.name === "Product" && (currentPage === "products" || currentPage === "product-detail");
-            const isContactActive = link.name === "Contact Us" && currentPage === "contact";
-            const isMobileActive = isHomeActive || isAboutActive || isProductActive || isContactActive;
-            
-            return (
-            (link.name === "Home" || link.name === "About" || link.name === "Product" || link.name === "Contact Us") ? (
-              <button
-                key={link.href}
-                onClick={() => handleLinkClick(link)}
-                className={`${mobileBtn} w-full justify-start text-left ${
-                  isMobileActive ? mobileBtnActive : mobileBtnInactive
-                }`}
-              >
-                {link.name}
-              </button>
-            ) : (
-              <a
-                key={link.href}
-                href={link.href}
-                className="block text-xs md:text-sm text-gray-300 hover:text-purple-400 transition"
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.name}
-              </a>
-            )
-            );
-          })}
-          <a
-            href="https://calendly.com/zoraglobalai/30?month=2026-02"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full bg-violet-500 text-white px-4 py-3 rounded-lg text-center transition-all duration-300 transform-gpu shadow-[0_3px_0px_rgb(0,0,0,0.25)] hover:bg-violet-400 active:scale-[0.98] active:translate-y-0.5 active:shadow-[0_1px_0px_rgb(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-200/90 mt-3"
-            onClick={() => setMobileOpen(false)}
+        <>
+          <div className="md:hidden fixed inset-0 z-40" onClick={() => setMobileOpen(false)} />
+          <div
+            ref={mobileMenuRef}
+            className="md:hidden absolute top-full left-0 right-0 z-50 bg-black/90 backdrop-blur-lg border-t border-purple-500/20 px-2 md:px-3 py-4 md:py-6 space-y-3 md:space-y-4"
+            onClick={(event) => event.stopPropagation()}
           >
-            Book Appointment
-          </a>
-        </div>
+            {navLinks.map((link) => {
+              const isHomeActive = link.name === "Home" && currentPage === "home";
+              const isAboutActive = link.name === "About" && currentPage === "about";
+              const isProductActive = link.name === "Product" && (currentPage === "products" || currentPage === "product-detail");
+              const isContactActive = link.name === "Contact Us" && currentPage === "contact";
+              const isMobileActive = isHomeActive || isAboutActive || isProductActive || isContactActive;
+              
+              return (
+              (link.name === "Home" || link.name === "About" || link.name === "Product" || link.name === "Contact Us") ? (
+                <button
+                  key={link.href}
+                  onClick={() => handleLinkClick(link)}
+                  className={`${mobileBtn} w-full justify-start text-left ${
+                    isMobileActive ? mobileBtnActive : mobileBtnInactive
+                  }`}
+                >
+                  {link.name}
+                </button>
+              ) : (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="block text-xs md:text-sm text-gray-300 hover:text-purple-400 transition"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.name}
+                </a>
+              )
+              );
+            })}
+            <a
+              href="https://calendly.com/zoraglobalai/30?month=2026-02"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full bg-violet-500 text-white px-4 py-3 rounded-lg text-center transition-all duration-300 transform-gpu shadow-[0_3px_0px_rgb(0,0,0,0.25)] hover:bg-violet-400 active:scale-[0.98] active:translate-y-0.5 active:shadow-[0_1px_0px_rgb(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-200/90 mt-3"
+              onClick={() => setMobileOpen(false)}
+            >
+              Book Appointment
+            </a>
+          </div>
+        </>
       )}
       <style>{`
         @keyframes navPulse {
