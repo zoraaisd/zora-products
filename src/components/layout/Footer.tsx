@@ -1,6 +1,14 @@
 import { motion } from "framer-motion";
-import { FaLinkedin, FaTwitter, FaEnvelope, FaArrowRight, FaFacebook, FaYoutube } from "react-icons/fa";
-import zoraLogo from "../../assets/Zora Logo Redesign1.png";
+import {
+  FaLinkedin,
+  FaTwitter,
+  FaEnvelope,
+  FaArrowRight,
+  FaFacebook,
+  FaYoutube,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+} from "react-icons/fa";
 
 interface FooterProps {
   onAboutClick?: () => void;
@@ -61,6 +69,18 @@ const Footer: React.FC<FooterProps> = ({
     { icon: FaYoutube, href: "https://www.youtube.com/@zoraglobalaitechnologies", label: "YouTube" },
   ];
 
+  const officeLocations = [
+    {
+      title: "Headquarters",
+      address: "128 City Road, London, United Kingdom, EC1V 2NX",
+    },
+    {
+      title: "Regional Office",
+      address:
+        "No:12,Gandhi Salai, Srinivasa Nagar, Kandhanchavadi, Perungudi, Chennai, Tamil Nadu 600096",
+    },
+  ];
+
   return (
     <footer className="relative bg-black overflow-hidden">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-16 bg-gradient-to-b from-purple-900/60 to-transparent" />
@@ -110,7 +130,7 @@ const Footer: React.FC<FooterProps> = ({
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 mb-8 md:mb-16">
           
           {/* Left Side - Links Grid */}
-          <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6">
+          <div className="flex-1 grid grid-cols-2 sm:grid-cols-[1.45fr_1fr_1fr_1fr] gap-4 md:gap-6">
             
             {/* Brand */}
             <motion.div
@@ -119,15 +139,48 @@ const Footer: React.FC<FooterProps> = ({
               transition={{ duration: 0.6 }}
               className="col-span-2 sm:col-span-1"
             >
-              <img 
-                src={zoraLogo} 
-                alt="ZORA" 
-                className="h-8 md:h-12 w-auto object-contain mb-2 md:mb-4"
-              />
-              <p className="text-gray-400 text-xs leading-relaxed max-w-xs mb-3 md:mb-6">
-                Enterprise AI automation platform.
+              <h4 className="font-semibold text-white text-xs md:text-base">Zora Global AI</h4>
+              <p className="text-gray-400 text-xs md:text-sm font-medium leading-relaxed mt-2 md:mt-3">
+                Empowering enterprises with AI-driven solutions, cloud transformation, and strategic consulting.
               </p>
-              <div className="flex gap-2 md:gap-3">
+
+              <div className="mt-3.5 md:mt-4 space-y-3 md:space-y-3.5">
+                {officeLocations.map((office) => (
+                  <div key={office.title} className="flex items-start gap-2">
+                    <FaMapMarkerAlt className="w-3.5 h-3.5 text-purple-400 mt-0.5 shrink-0" />
+                    <div className="min-w-0">
+                      <h5 className="font-semibold text-white text-xs md:text-base">{office.title}</h5>
+                      <p className="mt-1 text-gray-400 text-xs md:text-sm font-medium leading-relaxed break-words">
+                        {office.address}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 md:mt-5">
+                <h5 className="font-semibold text-white text-xs md:text-base">Contact</h5>
+                <div className="mt-2 md:mt-3 space-y-1.5 md:space-y-2">
+                  <a
+                    href="mailto:info@zoraglobalai.com"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 text-gray-400 hover:text-purple-300 transition-colors text-xs md:text-sm font-medium"
+                  >
+                    <FaEnvelope className="w-3 h-3 text-purple-400 shrink-0" />
+                    <span>info@zoraglobalai.com</span>
+                  </a>
+                  <a
+                    href="tel:+919087000345"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center gap-1.5 text-gray-400 hover:text-purple-300 transition-colors text-xs md:text-sm font-medium"
+                  >
+                    <FaPhoneAlt className="w-3 h-3 text-purple-400 shrink-0" />
+                    <span>9087000345</span>
+                  </a>
+                </div>
+              </div>
+
+              <div className="mt-3.5 flex gap-2">
                 {socials.map((social, index) => {
                   const Icon = social.icon;
                   return (
@@ -139,10 +192,10 @@ const Footer: React.FC<FooterProps> = ({
                       whileHover={{ scale: 1.2, y: -4 }}
                       whileTap={{ scale: 0.95 }}
                       title={social.label}
-                      className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:border-purple-500/50 hover:text-purple-400 transition-all duration-200"
+                      className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:border-purple-500/50 hover:text-purple-400 transition-all duration-200"
                       onClick={e => e.stopPropagation()}
                     >
-                      <Icon className="w-4 h-4" />
+                      <Icon className="w-3.5 h-3.5" />
                     </motion.a>
                   );
                 })}
@@ -264,7 +317,7 @@ const Footer: React.FC<FooterProps> = ({
         >
           <div className="text-center md:text-left">
             <p className="text-gray-500 text-xs">
-              © {new Date().getFullYear()} ZORA Technologies. All rights reserved.
+              &copy; {new Date().getFullYear()} ZORA Technologies. All rights reserved.
             </p>
           </div>
           
