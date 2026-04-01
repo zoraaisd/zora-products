@@ -81,9 +81,10 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
         <div
   className="
     relative
-    min-h-[350px]
-    sm:min-h-[480px]
-    md:h-[500px]
+    h-[480px]
+    sm:h-[550px]
+    md:h-[600px]
+    lg:h-[650px]
     flex items-center justify-center
     md:pt-2
     w-full
@@ -123,7 +124,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
     absolute
     left-1/2
     -translate-x-1/2
-    w-[75%]
+    w-[85%]
     sm:w-[80%]
     md:w-[380px]
   "
@@ -145,7 +146,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
                 <motion.div
                   whileHover={isActive ? { scale: 1.02, y: -6 } : {}}
                   transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                  className={`relative min-h-[280px] sm:min-h-[360px] md:min-h-[420px] p-4 md:p-8 rounded-2xl backdrop-blur-md border overflow-hidden cursor-pointer
+                  className={`relative flex flex-col min-h-[280px] sm:min-h-[360px] md:min-h-[420px] p-4 md:p-8 rounded-2xl backdrop-blur-md border overflow-hidden cursor-pointer
                   ${
                     isActive
                       ? `bg-gradient-to-br ${product.color} bg-opacity-10 border-transparent shadow-xl`
@@ -164,7 +165,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
                     <div className="w-full h-full bg-black rounded-2xl" />
                   </div>
 
-                  <div className="relative z-10 flex flex-col h-full gap-3 md:gap-5">
+                  <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left w-full flex-1 justify-between gap-3 lg:gap-5">
 
                     {/* Product Image */}
                     <motion.div
@@ -183,7 +184,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
                       {product.title}
                     </h3>
 
-                    <p className="text-gray-300 grow text-xs md:text-base">
+                    <p className="text-gray-300 w-full flex-none text-xs md:text-sm lg:text-base">
                       {product.shortDesc}
                     </p>
 
@@ -200,7 +201,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.3, delay: idx * 0.08, ease: "easeOut" }}
-                            className="flex items-center gap-2 text-xs md:text-sm text-gray-300"
+                            className="flex items-center justify-center sm:justify-start gap-2 text-xs md:text-sm text-gray-300 w-full"
                           >
                             <div
                               className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${product.color}`}
@@ -216,7 +217,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.35, delay: 0.25, ease: [0.4, 0, 0.2, 1] }}
-                        className={`w-full py-2 md:py-3 rounded-lg font-semibold bg-gradient-to-r ${product.color} text-white text-sm relative overflow-hidden`}
+                        className={`w-full py-2.5 md:py-3 rounded-lg font-semibold bg-gradient-to-r ${product.color} text-white text-sm relative overflow-hidden shrink-0 mt-3`}
                         onClick={() => onProductClick?.(product)}
                       >
                         Explore More →
@@ -235,7 +236,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
             onClick={prev}
-            className="absolute left-2 md:-left-16 z-30 p-2 md:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
+            className="absolute left-2 sm:left-4 md:left-8 lg:-left-16 z-30 p-2 md:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
           >
             <ChevronLeft className="w-4 md:w-6 h-4 md:h-6 text-white" />
           </motion.button>
@@ -245,7 +246,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
             onClick={next}
-            className="absolute right-2 md:-right-16 z-30 p-2 md:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
+            className="absolute right-2 sm:right-4 md:right-8 lg:-right-16 z-30 p-2 md:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
           >
             <ChevronRight className="w-4 md:w-6 h-4 md:h-6 text-white" />
           </motion.button>

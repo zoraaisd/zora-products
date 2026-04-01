@@ -15,7 +15,7 @@ const StatsSection = () => {
           backgroundImage: "repeating-linear-gradient(-45deg,#fff,#fff 1px,transparent 1px,transparent 12px)",
         }}
       />
-      <div className="relative max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      <div className="relative max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {stats.map((stat, i) => {
           const Icon = stat.icon;
           return (

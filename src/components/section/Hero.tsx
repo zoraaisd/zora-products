@@ -85,7 +85,7 @@ const Hero = ({ onProductClick }: HeroProps) => {
         initial={{ opacity: 0, y: 22 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.85, ease: "easeOut" }}
-        className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-6 pb-24 pt-16 md:items-center md:px-10 md:pt-24 lg:pb-16 lg:pt-24"
+        className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-4 sm:px-6 pb-24 pt-16 md:items-center md:px-10 md:pt-24 lg:pb-16 lg:pt-24"
       >
         <motion.div className="relative text-center" style={{ x: textShiftX }}>
           {textParticles.map((particle, index) => (
@@ -103,12 +103,12 @@ const Hero = ({ onProductClick }: HeroProps) => {
             />
           ))}
 
-          <motion.h1 className="mx-auto mt-6 max-w-none font-['Zen_Dots','Space_Grotesk','Inter','SF_Pro_Display','Satoshi',sans-serif] text-[1.7rem] font-extrabold leading-[1.3] tracking-[0.1em] text-white sm:text-[2.25rem] md:text-[2.9rem] md:leading-[1.2] lg:text-[3.4rem]">
+          <motion.h1 className="mx-auto mt-6 max-w-full px-4 font-['Zen_Dots','Space_Grotesk','Inter','SF_Pro_Display','Satoshi',sans-serif] text-[1.7rem] font-extrabold leading-[1.3] tracking-[0.05em] text-white sm:text-[2.25rem] md:text-[2.6rem] lg:text-[3.4rem] break-words">
             <motion.span
               initial={{ opacity: 0, y: 22, filter: "blur(6px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)", textShadow: "0 0 36px rgba(168,85,247,0.5)" }}
               transition={{ delay: 0.22, duration: 0.7 }}
-              className="relative -top-2 left-6 isolate block max-w-[12ch] whitespace-normal pb-[0.1em] font-['Zen_Dots',cursive] bg-gradient-to-r from-[#d9c2ff] via-[#b98aff] to-[#f06dff] bg-clip-text text-transparent [text-shadow:0_0_34px_rgba(168,85,247,0.5)] md:top-0 md:left-0 md:max-w-none md:whitespace-nowrap"
+              className="relative isolate inline-block max-w-[100%] whitespace-normal pb-[0.1em] font-['Zen_Dots',cursive] bg-gradient-to-r from-[#d9c2ff] via-[#b98aff] to-[#f06dff] bg-clip-text text-transparent [text-shadow:0_0_34px_rgba(168,85,247,0.5)] lg:whitespace-nowrap"
             >
               <span
                 aria-hidden="true"
@@ -141,7 +141,7 @@ const Hero = ({ onProductClick }: HeroProps) => {
             transition={{ delay: 0.4, duration: 0.7 }}
             className="mx-auto mt-7 max-w-xl font-['Space_Grotesk',sans-serif] text-base leading-relaxed text-blue-50/90 md:text-lg"
           >
-            ZORA unifies automation, customer intelligence, and AI orchestration so your teams ship
+            ZORA unifies automation, customer intelligence and AI orchestration so your teams ship
             production-ready experiences faster.
           </motion.p>
 
@@ -149,13 +149,13 @@ const Hero = ({ onProductClick }: HeroProps) => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.55, duration: 0.6 }}
-            className="mt-9 flex flex-wrap items-center justify-center gap-4"
+            className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4 w-full px-4 sm:px-0"
           >
             <motion.button
               onClick={onProductClick}
               whileHover={{ scale: 1.04, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              className="rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 px-7 py-3 font-['Space_Grotesk',sans-serif] text-sm font-semibold text-white shadow-[0_0_35px_rgba(139,92,246,0.45)] transition-shadow duration-300 hover:shadow-[0_0_45px_rgba(59,130,246,0.55)] md:text-base"
+              className="w-full sm:w-auto rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 px-7 py-3 font-['Space_Grotesk',sans-serif] text-sm font-semibold text-white shadow-[0_0_35px_rgba(139,92,246,0.45)] transition-shadow duration-300 hover:shadow-[0_0_45px_rgba(59,130,246,0.55)] md:text-base"
             >
               Explore Products
             </motion.button>
@@ -164,7 +164,7 @@ const Hero = ({ onProductClick }: HeroProps) => {
               onClick={handleSecondaryCta}
               whileHover={{ scale: 1.03, y: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="rounded-xl border border-white/25 bg-white/10 px-7 py-3 font-['Space_Grotesk',sans-serif] text-sm font-medium text-white backdrop-blur-xl transition-all duration-300 hover:border-purple-300/70 hover:bg-white/20 hover:blur-[0.2px] hover:shadow-[0_0_30px_rgba(168,85,247,0.25)] md:text-base"
+              className="w-full sm:w-auto rounded-xl border border-white/25 bg-white/10 px-7 py-3 font-['Space_Grotesk',sans-serif] text-sm font-medium text-white backdrop-blur-xl transition-all duration-300 hover:border-purple-300/70 hover:bg-white/20 hover:blur-[0.2px] hover:shadow-[0_0_30px_rgba(168,85,247,0.25)] md:text-base"
             >
               See Why ZORA
             </motion.button>

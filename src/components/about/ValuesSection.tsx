@@ -41,7 +41,7 @@ const ValuesSection = () => {
               >
                 <div className={`absolute inset-0 bg-linear-to-br ${val.color} opacity-[0.07] group-hover:opacity-[0.15] transition-opacity duration-500`} />
                 <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r ${val.color} scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} />
-                <div className="relative border border-white/8 group-hover:border-white/20 transition-all duration-300 rounded-2xl p-7 h-full">
+                <div className="relative border border-white/8 group-hover:border-white/20 transition-all duration-300 rounded-2xl p-7 h-full flex flex-col items-center sm:items-start text-center sm:text-left">
                   <div className={`w-12 h-12 rounded-2xl bg-linear-to-br ${val.color} flex items-center justify-center mb-5 shadow-lg`}>
                     <Icon className="w-6 h-6 text-white" />
                   </div>

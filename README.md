@@ -2,7 +2,7 @@
 
 Enterprise AI Automation & Intelligent Business Solutions Platform.
 
-Zora Global AI delivers comprehensive enterprise-grade artificial intelligence solutions including AI automation, CRM intelligence, workflow automation, security, and scalable business AI systems.
+Zora Global AI delivers comprehensive enterprise-grade artificial intelligence solutions including AI automation, CRM intelligence, workflow automation, security and scalable business AI systems.
 
 ---
 
@@ -22,7 +22,7 @@ Zora Global AI is a modern AI solutions platform designed to:
 - Provide scalable enterprise AI systems
 - Improve decision-making through AI
 
-This project is built with performance, SEO, and scalability in mind.
+This project is built with performance, SEO and scalability in mind.
 
 ---
 

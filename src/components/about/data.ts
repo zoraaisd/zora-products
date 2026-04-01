@@ -11,11 +11,11 @@ export const values = [
   { icon: Zap, title: "Innovation First", desc: "We push the frontier every day building AI that didn't exist yesterday and will define tomorrow.", color: "from-yellow-400 to-orange-500" },
   { icon: Shield, title: "Security by Design", desc: "Enterprise-grade security baked into every product from the ground up never bolted on.", color: "from-blue-400 to-cyan-500" },
   { icon: Heart, title: "Customer Obsessed", desc: "Our success is measured by the impact we create for every business and person we serve.", color: "from-pink-400 to-rose-500" },
-  { icon: TrendingUp, title: "Relentless Growth", desc: "We embrace challenges, iterate fast, and never settle for good enough.", color: "from-emerald-400 to-teal-500" },
+  { icon: TrendingUp, title: "Relentless Growth", desc: "We embrace challenges, iterate fast and never settle for good enough.", color: "from-emerald-400 to-teal-500" },
 ];
 
 export const team = [
-  
+
   { name: "Ansar Ali S", role: "Manager Director & Founder", bio: "Human-centered AI product strategist with 8 years experience.", initials: "RN", color: "from-pink-500 to-rose-500" },
   { name: "Ashik Ali S", role: "CEO & Co-Founder", bio: "10+ years in AI research. Former ML lead at Google DeepMind.", initials: "AM", color: "from-purple-500 to-blue-600" },
   { name: "Harish N", role: "Manager-Bussiness Operations and client strategy", bio: "Built AI systems serving 100M+ users. Ex-Amazon AI.", initials: "PS", color: "from-cyan-500 to-teal-500" },

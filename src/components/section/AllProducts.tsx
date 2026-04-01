@@ -69,7 +69,7 @@ const AllProducts = ({ onProductClick }: AllProductsProps) => {
                   viewport={{ once: false, margin: "-50px" }}
                   whileHover={{ y: -8, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg md:rounded-2xl p-4 md:p-6 lg:p-8 overflow-hidden hover:border-white/50 transition-all duration-150`}
+                  className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg md:rounded-2xl p-4 md:p-6 lg:p-8 overflow-hidden hover:border-white/50 transition-all duration-150 flex flex-col items-center sm:items-start text-center sm:text-left`}
                 >
                   {/* Elegant gradient shine on hover */}
                   <motion.div
@@ -100,7 +100,7 @@ const AllProducts = ({ onProductClick }: AllProductsProps) => {
                   </p>
 
                   {/* Features List - Simplified */}
-                  <div className="relative z-10 space-y-1.5 md:space-y-2 mb-4 md:mb-6">
+                  <div className="relative z-10 space-y-1.5 md:space-y-2 mb-4 md:mb-6 flex flex-col items-center sm:items-start w-full">
                     {product.features.slice(0, 3).map((feature, idx) => (
                       <div
                         key={idx}

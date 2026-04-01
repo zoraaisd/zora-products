@@ -296,7 +296,7 @@ const ContactPage = ({
                   <div className={`absolute -inset-1 bg-gradient-to-r ${info.color} rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-500`} />
                   
                   <div className="relative bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl p-6 rounded-2xl border border-white/10 group-hover:border-white/20 transition-all duration-300">
-                    <div className="flex items-start gap-4">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4">
                       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center shrink-0 shadow-lg`}>
                         <Icon className="w-6 h-6 text-white" />
                       </div>

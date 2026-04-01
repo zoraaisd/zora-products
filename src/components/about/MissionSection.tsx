@@ -8,7 +8,7 @@ const missionItems = [
     icon: Target,
     label: "Our Mission",
     heading: "Empower Every Business with AI",
-    body: "We build enterprise-grade AI tools that are accessible, intuitive, and built to scale. Our mission is to remove the complexity of AI adoption so every business - from startups to Fortune 500s - can automate, innovate, and grow without limits.",
+    body: "We build enterprise-grade AI tools that are accessible, intuitive and built to scale. Our mission is to remove the complexity of AI adoption so every business - from startups to Fortune 500s - can automate, innovate and grow without limits.",
     color: "from-violet-500 to-purple-600",
     pillars: ["Accessible AI", "Scalable Infrastructure", "Zero Learning Curve"],
   },
@@ -16,7 +16,7 @@ const missionItems = [
     icon: Eye,
     label: "Our Vision",
     heading: "A World Powered by Intelligent Systems",
-    body: "We envision AI as a utility - embedded in every business process, driving efficiency, eliminating friction, and unlocking human potential at scale across every industry and continent on Earth.",
+    body: "We envision AI as a utility - embedded in every business process, driving efficiency, eliminating friction and unlocking human potential at scale across every industry and continent on Earth.",
     color: "from-cyan-500 to-blue-600",
     pillars: ["Global Reach", "Industry Agnostic", "Human + AI Synergy"],
   },
@@ -39,7 +39,7 @@ const MissionSection = () => {
           className="text-center mb-10"
         >
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-purple-400">Who We Are</span>
-          <h2 className="text-4xl md:text-6xl font-serif font-semibold tracking-wide text-white mt-3">Purpose & Direction</h2>
+          <h2 className="text-4xl md:text-6xl font-serif font-semibold tracking-wide text-white mt-3">Purpose & <span className="bg-linear-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"> Direction  </span> </h2>
         </motion.div>
         <div className="grid md:grid-cols-2 gap-6">
           {missionItems.map((item, i) => {
@@ -55,7 +55,7 @@ const MissionSection = () => {
               >
                 <div className={`absolute inset-0 bg-linear-to-br ${item.color} opacity-10 group-hover:opacity-20 transition-opacity duration-500`} />
                 <div className={`absolute top-0 left-0 right-0 h-px bg-linear-to-r ${item.color}`} />
-                <div className="relative border border-white/8 rounded-3xl p-8 md:p-10">
+                <div className="relative border border-white/8 rounded-3xl p-8 md:p-10 flex flex-col items-center sm:items-start text-center sm:text-left">
                   <div className={`inline-flex items-center gap-2 bg-linear-to-r ${item.color} rounded-full px-3 py-1 text-white text-xs font-bold uppercase tracking-widest mb-6`}>
                     <Icon className="w-3 h-3" />
                     {item.label}
@@ -64,7 +64,7 @@ const MissionSection = () => {
                   <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">{item.body}</p>
                   <div className="space-y-2">
                     {item.pillars.map((p, j) => (
-                      <div key={j} className="flex items-center gap-2 text-gray-300 text-sm">
+                      <div key={j} className="flex items-center justify-center sm:justify-start gap-2 text-gray-300 text-sm">
                         <CheckCircle className="w-4 h-4 text-purple-400 shrink-0" />
                         {p}
                       </div>

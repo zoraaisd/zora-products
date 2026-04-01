@@ -35,12 +35,18 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
       setMobileOpen(false);
     };
 
+    const handleScroll = () => {
+      setMobileOpen(false);
+    };
+
     document.addEventListener("mousedown", handleOutsideTap);
     document.addEventListener("touchstart", handleOutsideTap);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       document.removeEventListener("mousedown", handleOutsideTap);
       document.removeEventListener("touchstart", handleOutsideTap);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [mobileOpen]);
 
@@ -106,17 +112,17 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
       transition={{ duration: 0.6 }}
       className="fixed top-0 w-full z-50 transition-all duration-300 bg-gradient-to-r from-black via-purple-550 to-purple-950 backdrop-blur-lg border-b border-purple-500/30"
     >
-      <div className="max-w-7xl mx-auto pl-0 pr-0 md:pl-0 md:pr-0 py-3 md:py-3 flex items-center justify-between">
+      <div className="max-w-7xl w-full mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
 
   {/* Logo */}
   <img
     src={zoraLogo}
     alt="Zora"
-    className="h-10 md:h-12 w-auto object-contain ml-3 md:-ml-6 -mt-1"
+    className="h-10 md:h-12 w-auto object-contain -mt-1"
   />
 
   {/* RIGHT SIDE GROUP (Links + Button aligned together) */}
-  <div className="hidden md:flex items-center gap-4 lg:gap-5 -mr-3 md:-mr-4">
+  <div className="hidden lg:flex items-center gap-4 lg:gap-5">
 
     {/* Nav Links */}
     <ul className="flex items-center gap-3 lg:gap-4">
@@ -159,7 +165,7 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
   {/* Mobile Menu Button */}
   <button
     ref={mobileButtonRef}
-    className="md:hidden text-white text-2xl mr-6"
+    className="lg:hidden text-white text-3xl"
     onClick={() => setMobileOpen(!mobileOpen)}
   >
     ☰
@@ -169,10 +175,10 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
       {/* Mobile Dropdown */}
       {mobileOpen && (
         <>
-          <div className="md:hidden fixed inset-0 z-40" onClick={() => setMobileOpen(false)} />
+          <div className="lg:hidden fixed inset-0 z-40" onClick={() => setMobileOpen(false)} />
           <div
             ref={mobileMenuRef}
-            className="md:hidden absolute top-full left-0 right-0 z-50 bg-black/90 backdrop-blur-lg border-t border-purple-500/20 px-2 md:px-3 py-4 md:py-6 space-y-3 md:space-y-4"
+            className="lg:hidden absolute top-full left-0 right-0 z-50 bg-black/95 backdrop-blur-xl shadow-2xl border-t border-purple-500/20 px-4 md:px-8 py-6 md:py-8 space-y-4 md:space-y-6"
             onClick={(event) => event.stopPropagation()}
           >
             {navLinks.map((link) => {

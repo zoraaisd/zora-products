@@ -100,7 +100,7 @@ const CTA = () => {
                               'radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%)'
                 }} />
 
-                <div className="relative z-10">
+                <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left w-full">
                   <motion.div
                     animate={{ y: [0, -6, 0] }}
                     transition={{ duration: 3, repeat: Infinity }}

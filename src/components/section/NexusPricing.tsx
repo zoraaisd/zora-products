@@ -4,26 +4,22 @@ import { Send, CheckCircle, X } from "lucide-react";
 
 const plans = [
   {
-    name: "Zora Quantum",
-    tier: "quantum",
-    badge: "PREMIUM",
-    desc: "Enterprise-grade AI ecosystem with full customization.",
+    name: "Zora Core",
+    tier: "core",
+    badge: "CORE",
+    desc: "Essential AI automation for growing businesses.",
     fullDesc:
-      "The ultimate solution for enterprises. Deploy custom AI models trained on your data, get dedicated support, and unlock unlimited possibilities with our most powerful platform.",
+      "Perfect for startups and small teams looking to automate processes.",
     features: [
-      "Everything in Pro",
-      "Custom AI Model Training",
-      "Dedicated Account Manager",
-      "Unlimited Records & Users",
-      "24/7 Enterprise Support",
-      "Custom Integrations",
-      "White-label Options",
-      "Advanced Security & Compliance",
-      "SLA Guarantee",
-      "On-premises Deployment Option",
+      "Lead Automation",
+      "Basic Analytics",
+      "Email Integration",
+      "Up to 1,000 Records",
+      "Community Support",
     ],
-    ideal: "Best for: Enterprises & Corporations",
+    ideal: "Best for: Startups & Small Teams",
   },
+  
   {
     name: "Zora Pro",
     tier: "pro",
@@ -42,21 +38,27 @@ const plans = [
     ideal: "Best for: Growing Companies",
   },
   {
-    name: "Zora Core",
-    tier: "core",
-    badge: "CORE",
-    desc: "Essential AI automation for growing businesses.",
+    name: "Zora Quantum",
+    tier: "quantum",
+    badge: "PREMIUM",
+    desc: "Enterprise-grade AI ecosystem with full customization.",
     fullDesc:
-      "Perfect for startups and small teams looking to automate processes.",
+      "The ultimate solution for enterprises. Deploy custom AI models trained on your data, get dedicated support and unlock unlimited possibilities with our most powerful platform.",
     features: [
-      "Lead Automation",
-      "Basic Analytics",
-      "Email Integration",
-      "Up to 1,000 Records",
-      "Community Support",
+      "Everything in Pro",
+      "Custom AI Model Training",
+      "Dedicated Account Manager",
+      "Unlimited Records & Users",
+      "24/7 Enterprise Support",
+      "Custom Integrations",
+      "White-label Options",
+      "Advanced Security & Compliance",
+      "SLA Guarantee",
+      "On-premises Deployment Option",
     ],
-    ideal: "Best for: Startups & Small Teams",
+    ideal: "Best for: Enterprises & Corporations",
   },
+  
 ];
 
 const NexusPricing = () => {
@@ -150,7 +152,7 @@ const NexusPricing = () => {
 
         <p className="text-gray-300 max-w-3xl mx-auto mb-16 text-base md:text-xl leading-relaxed">
           Enterprise-grade artificial intelligence platform designed to automate
-          processes, amplify productivity, and drive intelligent decision-making.
+          processes, amplify productivity and drive intelligent decision-making.
         </p>
 
         <h3 className="text-3xl font-bold text-white mb-14">

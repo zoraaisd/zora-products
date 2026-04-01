@@ -94,13 +94,13 @@ const WhyChoose = () => {
         </motion.h2>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-12">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
-              className="bg-white/5 backdrop-blur-xl border border-purple-500/20 rounded-3xl p-10 shadow-md shadow-purple-500/10"
+              className="bg-white/5 backdrop-blur-xl border border-purple-500/20 rounded-3xl p-6 sm:p-10 shadow-md shadow-purple-500/10 flex flex-col items-center sm:items-center text-center"
             >
               <Counter value={stat.value} />
               <p className="mt-4 text-gray-400 text-sm md:text-base">

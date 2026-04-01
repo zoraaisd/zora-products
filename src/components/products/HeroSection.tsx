@@ -73,9 +73,9 @@ const HeroSection = ({ onContact }: HeroSectionProps) => (
       >
         A complete ecosystem of enterprise-grade AI tools designed to work independently or as one unified intelligence platform.
         <br />
-        Designed to transform how modern organizations operate by integrating automation, predictive intelligence, and scalable technology.
+        Designed to transform how modern organizations operate by integrating automation, predictive intelligence and scalable technology.
         <br />
-        From managing workflows to generating powerful insights, our AI products help teams move faster, work smarter, and innovate without limits.
+        From managing workflows to generating powerful insights, our AI products help teams move faster, work smarter and innovate without limits.
       </motion.p>
 
       <motion.button

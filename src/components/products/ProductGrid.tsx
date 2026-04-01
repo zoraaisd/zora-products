@@ -30,11 +30,11 @@ const ProductGrid = ({ onProductClick }: ProductGridProps) => {
             All Solutions
           </span>
         </div>
-        <h2 
-          className="text-3xl md:text-5xl font-black mb-3 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
-          style={{ fontFamily: "'Orbitron', sans-serif" }}
+       
+<h2 
+          className="text-3xl md:text-5xl font-serif font-semibold font-black mb-3 tracking-wide text-white mb-4"
         >
-          Explore More Products
+          Explore <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"> More Products </span>
         </h2>
         <p className="text-gray-300 text-base max-w-2xl mx-auto">
           Discover our complete suite of business automation tools

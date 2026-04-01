@@ -23,9 +23,9 @@ interface FooterProps {
   onCookieClick?: () => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ 
-  onAboutClick, 
-  onProductClick, 
+const Footer: React.FC<FooterProps> = ({
+  onAboutClick,
+  onProductClick,
   onContactClick,
   onHomeClick,
   onDocumentationClick,
@@ -84,7 +84,7 @@ const Footer: React.FC<FooterProps> = ({
   return (
     <footer className="relative bg-black overflow-hidden">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-16 bg-gradient-to-b from-purple-900/60 to-transparent" />
-      
+
       {/* Floating gradient orbs */}
       <motion.div
         animate={{
@@ -94,7 +94,7 @@ const Footer: React.FC<FooterProps> = ({
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         className="absolute w-[700px] h-[700px] bg-gradient-to-br from-purple-600/15 to-transparent blur-[150px] rounded-full top-[-200px] left-[-200px] -z-30 pointer-events-none"
       />
-      
+
       <div
         className="absolute w-[600px] h-[600px] bg-gradient-to-tl from-cyan-600/10 to-transparent blur-[150px] rounded-full bottom-[-200px] right-[-200px] -z-30 pointer-events-none"
       />
@@ -120,28 +120,28 @@ const Footer: React.FC<FooterProps> = ({
           }}
         />
       ))}
-      
+
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-20">
 
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-8 md:mb-16" />
-        
+
         {/* Main Footer Content with Map */}
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 mb-8 md:mb-16">
-          
+
           {/* Left Side - Links Grid */}
-          <div className="flex-1 grid grid-cols-2 sm:grid-cols-[1.45fr_1fr_1fr_1fr] gap-4 md:gap-6">
-            
+          <div className="flex-1 flex flex-col sm:grid sm:grid-cols-[1.45fr_1fr_1fr_1fr] gap-8 md:gap-6 text-center sm:text-left">
+
             {/* Brand */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="col-span-2 sm:col-span-1"
+              className="w-full sm:col-span-1 flex flex-col items-center sm:items-start"
             >
-              <h4 className="font-semibold text-white text-xs md:text-base">Zora Global AI</h4>
+              <h4 className="font-semibold text-white text-sm md:text-base">Zora Global AI</h4>
               <p className="text-gray-400 text-xs md:text-sm font-medium leading-relaxed mt-2 md:mt-3">
-                Empowering enterprises with AI-driven solutions, cloud transformation, and strategic consulting.
+                Empowering enterprises with AI-driven solutions, cloud transformation and strategic consulting.
               </p>
 
               <div className="mt-3.5 md:mt-4 space-y-3 md:space-y-3.5">
@@ -158,8 +158,8 @@ const Footer: React.FC<FooterProps> = ({
                 ))}
               </div>
 
-              <div className="mt-4 md:mt-5">
-                <h5 className="font-semibold text-white text-xs md:text-base">Contact</h5>
+              <div className="mt-4 md:mt-5 flex flex-col items-center sm:items-start">
+                <h5 className="font-semibold text-white text-sm md:text-base">Contact</h5>
                 <div className="mt-2 md:mt-3 space-y-1.5 md:space-y-2">
                   <a
                     href="mailto:info@zoraglobalai.com"
@@ -208,7 +208,7 @@ const Footer: React.FC<FooterProps> = ({
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <h4 className="font-semibold text-white text-xs md:text-base mb-2 md:mb-4">Company</h4>
+              <h4 className="font-semibold text-white text-sm md:text-base mb-2 md:mb-4">Company</h4>
               <div className="space-y-1.5 md:space-y-2.5">
                 {mainLinks.map((link) => (
                   <motion.button
@@ -229,7 +229,7 @@ const Footer: React.FC<FooterProps> = ({
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <h4 className="font-semibold text-white text-xs md:text-base mb-2 md:mb-4">Products</h4>
+              <h4 className="font-semibold text-white text-sm md:text-base mb-2 md:mb-4">Products</h4>
               <div className="space-y-1.5 md:space-y-2.5">
                 {productLinks.map((link) => (
                   <motion.button
@@ -251,7 +251,7 @@ const Footer: React.FC<FooterProps> = ({
               transition={{ duration: 0.6, delay: 0.3 }}
               className="hidden sm:block"
             >
-              <h4 className="font-semibold text-white text-xs md:text-base mb-2 md:mb-4">Resources</h4>
+              <h4 className="font-semibold text-white text-sm md:text-base mb-2 md:mb-4">Resources</h4>
               <div className="space-y-1.5 md:space-y-2.5">
                 {resourceLinks.map((link) => (
                   <motion.button
@@ -272,7 +272,7 @@ const Footer: React.FC<FooterProps> = ({
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
-            className="shrink-0"
+            className="shrink-0 flex flex-col items-center sm:items-start text-center sm:text-left mt-4 sm:mt-0"
           >
             <h4 className="text-sm md:text-base font-semibold text-white mb-2 md:mb-3">Our Location</h4>
             <div className="w-full md:w-72 h-40 md:h-48 rounded-xl overflow-hidden border border-white/10 hover:border-white/20 transition">
@@ -320,7 +320,7 @@ const Footer: React.FC<FooterProps> = ({
               &copy; {new Date().getFullYear()} ZORA Technologies. All rights reserved.
             </p>
           </div>
-          
+
           {/* Legal Links */}
           <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {legalLinks.map((link) => (
