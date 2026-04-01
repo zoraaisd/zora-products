@@ -42,6 +42,26 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
     );
   };
 
+  const handleProductSelect = (product: typeof topProducts[0]) => {
+    // Scroll to top immediately before calling onProductClick
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+    
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      onProductClick?.(product);
+    }, 50);
+  };
+
   return (
     <section className="relative pt-16 md:pt-15 pb-15 md:pb-32 overflow-hidden">
 
@@ -152,7 +172,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
                       ? `bg-gradient-to-br ${product.color} bg-opacity-10 border-transparent shadow-xl`
                       : "bg-white/5 border-white/10"
                   }`}
-                  onClick={() => onProductClick?.(product)}
+                  onClick={() => handleProductSelect(product)}
                 >
                   {/* Neon Border */}
                   <div
@@ -218,7 +238,10 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.35, delay: 0.25, ease: [0.4, 0, 0.2, 1] }}
                         className={`w-full py-2.5 md:py-3 rounded-lg font-semibold bg-gradient-to-r ${product.color} text-white text-sm relative overflow-hidden shrink-0 mt-3`}
-                        onClick={() => onProductClick?.(product)}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleProductSelect(product);
+                        }}
                       >
                         Explore More →
                       </motion.button>

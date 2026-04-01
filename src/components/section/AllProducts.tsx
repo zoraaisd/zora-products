@@ -11,6 +11,26 @@ interface AllProductsProps {
 }
 
 const AllProducts = ({ onProductClick }: AllProductsProps) => {
+  const handleProductSelect = (product: Product) => {
+    // Scroll to top immediately before calling onProductClick
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+    
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      onProductClick?.(product);
+    }, 50);
+  };
+
   return (
     <section id="products" className="relative overflow-hidden">
       {/* Background Image with Animated Effects - fills entire section top to bottom */}
@@ -69,6 +89,7 @@ const AllProducts = ({ onProductClick }: AllProductsProps) => {
                   viewport={{ once: false, margin: "-50px" }}
                   whileHover={{ y: -8, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  onClick={() => handleProductSelect(product)}
                   className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg md:rounded-2xl p-4 md:p-6 lg:p-8 overflow-hidden hover:border-white/50 transition-all duration-150 flex flex-col items-center sm:items-start text-center sm:text-left`}
                 >
                   {/* Elegant gradient shine on hover */}
@@ -116,7 +137,10 @@ const AllProducts = ({ onProductClick }: AllProductsProps) => {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => onProductClick?.(product)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleProductSelect(product);
+                    }}
                     className={`relative z-10 w-full py-2 md:py-2.5 rounded-lg font-semibold bg-gradient-to-r ${product.color} text-white text-xs md:text-sm flex items-center justify-center gap-2 hover:shadow-lg transition-shadow`}
                   >
                     Learn More <ArrowRight className="w-3 h-3" />

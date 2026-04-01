@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import Lenis from "lenis";
 import { motion } from "framer-motion";
 import Navbar from "../../../layout/Navbar";
@@ -22,10 +22,14 @@ interface Props {
 }
 
 const HRMSPage = ({ onBack, onHome, onAbout, onProducts, onContact, onDocumentation, onBlog, onFAQ, onPrivacy, onTerms, onCookie }: Props) => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     const lenis = new Lenis({ duration: 1.3, smoothWheel: true });
     lenis.scrollTo(0, { immediate: true });
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      lenis.scrollTo(0, { immediate: true });
+    });
     const raf = (t: number) => { lenis.raf(t); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
     return () => lenis.destroy();

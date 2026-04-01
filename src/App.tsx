@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useLayoutEffect } from "react";
 import Navbar from "./components/layout/Navbar";
 import Hero from "./components/section/Hero";
 import TopProducts from "./components/section/TopProducts";
@@ -69,15 +69,48 @@ function getUrlForPage(page: Page, productId: string | null = null): string {
   return `/${page}`;
 }
 
+function forceScrollToTop() {
+  // Scroll all possible scroll targets to ensure it works
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  });
+  
+  setTimeout(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, 50);
+}
+
 function App() {
   const [{ page, productId }, setState] = useState<AppState>(() => getInitialState());
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    forceScrollToTop();
+
+    return () => {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "auto";
+      }
+    };
+  }, []);
 
   // Derive selectedProduct from productId
   const selectedProduct = useMemo(() => findProductById(productId), [productId]);
 
-  // Scroll to top whenever page or product changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  // Scroll before paint whenever page or product changes.
+  useLayoutEffect(() => {
+    forceScrollToTop();
   }, [page, productId]);
 
   // Persist state to localStorage
@@ -91,16 +124,17 @@ function App() {
   // Handle browser back/forward buttons
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
+      // Scroll to top before updating state
+      forceScrollToTop();
+      
       if (event.state?.page) {
         setState({
           page: event.state.page,
           productId: event.state.productId || null,
         });
-        window.scrollTo(0, 0);
       } else {
         // No state means we're at the initial entry, go home
         setState({ page: "home", productId: null });
-        window.scrollTo(0, 0);
       }
     };
 
@@ -112,10 +146,18 @@ function App() {
   const setPageState = (newPage: Page, productId: string | null = null) => {
     const newState = { page: newPage, productId };
     const url = getUrlForPage(newPage, productId);
-    // Push to browser history (enables back/forward navigation)
-    window.history.pushState(newState, "", url);
+    const isSameState = page === newPage && productId === newState.productId;
+
+    // Scroll BEFORE state change to ensure scroll happens before render
+    forceScrollToTop();
+
+    if (isSameState) {
+      window.history.replaceState(newState, "", url);
+    } else {
+      window.history.pushState(newState, "", url);
+    }
+
     setState(newState);
-    window.scrollTo(0, 0);
   };
 
   const handleProductClick = (product: Product) => {

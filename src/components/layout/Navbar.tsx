@@ -22,6 +22,25 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
   const mobileButtonRef = useRef<HTMLButtonElement | null>(null);
 
+  const forceScrollToTop = () => {
+    // Scroll all possible scroll targets to ensure it works
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+    
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 50);
+  };
+
   useEffect(() => {
     if (!mobileOpen) return;
 
@@ -51,46 +70,23 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
   }, [mobileOpen]);
 
   const handleLinkClick = (link: { name: string; href: string }) => {
-    if (link.name === "Home") {
-      onHomeClick();
-      setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 0);
+    // Scroll to top immediately
+    forceScrollToTop();
+    
+    // Delay navigation until scroll completes (50ms buffer)
+    setTimeout(() => {
+      if (link.name === "Home") {
+        onHomeClick();
+      } else if (link.name === "About") {
+        onAboutClick();
+      } else if (link.name === "Product") {
+        onProductClick();
+      } else if (link.name === "Contact Us") {
+        onContactClick();
+      }
+      
       setMobileOpen(false);
-    } else if (link.name === "About") {
-      onAboutClick();
-      setTimeout(() => {
-        const section = document.querySelector("#about");
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth" });
-        } else {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-      }, 100);
-      setMobileOpen(false);
-    } else if (link.name === "Product") {
-      onProductClick();
-      setTimeout(() => {
-        const section = document.querySelector("#products");
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth" });
-        } else {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-      }, 100);
-      setMobileOpen(false);
-    } else if (link.name === "Contact Us") {
-      onContactClick();
-      setTimeout(() => {
-        const section = document.querySelector("#contact");
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth" });
-        } else {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-      }, 100);
-      setMobileOpen(false);
-    } else {
-      setMobileOpen(false);
-    }
+    }, 60);
   };
 
   const desktopBtn =

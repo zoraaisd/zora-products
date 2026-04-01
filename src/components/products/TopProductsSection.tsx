@@ -9,6 +9,26 @@ interface TopProductsSectionProps {
 }
 
 const TopProductsSection = ({ onProductClick }: TopProductsSectionProps) => {
+  const handleProductSelect = (product: TopProduct) => {
+    // Scroll to top immediately before calling onProductClick
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+    
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      onProductClick?.(product);
+    }, 50);
+  };
+
   return (
     <section className="relative py-20 md:py-32 bg-black overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/5 to-transparent" />
@@ -59,6 +79,7 @@ const TopProductsSection = ({ onProductClick }: TopProductsSectionProps) => {
                   rotateY: -3,
                   transition: { duration: 0.3 }
                 }}
+                onClick={() => handleProductSelect(product)}
                 className="group relative flex flex-col bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl p-8 overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-[0_0_40px_rgba(139,92,246,0.15)]"
                 style={{ transformStyle: "preserve-3d" }}
               >
@@ -117,7 +138,10 @@ const TopProductsSection = ({ onProductClick }: TopProductsSectionProps) => {
                 <div className="mt-auto relative z-10">
                   <motion.button
                     whileTap={{ scale: 0.96 }}
-                    onClick={() => onProductClick?.(product)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleProductSelect(product);
+                    }}
                     className={`w-full py-3 rounded-lg font-semibold bg-gradient-to-r ${product.color} text-white flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/30`}
                   >
                     Learn More

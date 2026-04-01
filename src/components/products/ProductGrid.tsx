@@ -12,6 +12,26 @@ const ProductGrid = ({ onProductClick }: ProductGridProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
+  const handleProductSelect = (product: Product) => {
+    // Scroll to top immediately before calling onProductClick
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+    
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      onProductClick(product);
+    }, 50);
+  };
+
   return (
     <section
       ref={ref}
@@ -50,7 +70,7 @@ const ProductGrid = ({ onProductClick }: ProductGridProps) => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.06 }}
               whileHover={{ y: -8, scale: 1.02 }}
-              onClick={() => onProductClick(product)}
+              onClick={() => handleProductSelect(product)}
               className="group relative rounded-2xl overflow-hidden border border-white/15 hover:border-white/40 transition-all duration-300 bg-white/[0.06] backdrop-blur-sm cursor-pointer"
             >
               {/* Hover tint overlay */}
@@ -105,7 +125,10 @@ const ProductGrid = ({ onProductClick }: ProductGridProps) => {
                 {/* Spacer pushes button to bottom */}
                 <div className="mt-auto">
                   <button
-                    onClick={() => onProductClick(product)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleProductSelect(product);
+                    }}
                     className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-bold bg-gradient-to-r ${product.color} text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30`}
                   >
                     Explore Product
