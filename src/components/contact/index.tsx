@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import { Mail, Phone, MapPin, Send, Sparkles, CheckCircle } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface ContactPageProps {
   onHome: () => void;
@@ -15,6 +16,16 @@ interface ContactPageProps {
   onPrivacy?: () => void;
   onTerms?: () => void;
   onCookie?: () => void;
+}
+
+interface ContactInfoItem {
+  icon: LucideIcon;
+  title: string;
+  details: string;
+  description?: string;
+  color: string;
+  href: string;
+  openInNewTab?: boolean;
 }
 
 const ContactPage = ({ 
@@ -62,13 +73,18 @@ const ContactPage = ({
     }
   };
 
-  const contactInfo = [
+  const gmailComposeUrl = "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=info@zoraglobalai.com";
+  const officeMapUrl = "https://www.google.com/maps/place/Zora+Global+Ai+Technologies+Private+Limited/@12.9646836,80.2468603,17z/data=!3m1!4b1!4m6!3m5!1s0x3a525de935894505:0x58f547fe15e57e7e!8m2!3d12.9646836!4d80.2468603!16s%2Fg%2F11yzxyxwnz?entry=ttu&g_ep=EgoyMDI2MDIxOC4wIKXMDSoASAFQAw%3D%3D";
+
+  const contactInfo: ContactInfoItem[] = [
     {
       icon: Mail,
       title: "Email",
-      details: "info@zoraai.us",
+      details: "info@zoraglobalai.com",
       description: "Send us an email anytime!",
       color: "from-purple-500 to-pink-500",
+      href: gmailComposeUrl,
+      openInNewTab: true,
     },
     {
       icon: Phone,
@@ -76,13 +92,16 @@ const ContactPage = ({
       details: "+91 9087000345",
       description: "Mon-Fri from 10am to 6pm.",
       color: "from-blue-500 to-cyan-500",
+      href: "tel:+919087000345",
     },
     {
       icon: MapPin,
       title: "Office",
       details: "Ground Floor, 12, Rajiv Gandhi Salai, Srinivasa Nagar, Kandhanchavadi, Perungudi, Chennai, Tamil Nadu 600096",
-      // description: "Come say hello at our HQ.",
+      description: "Open our office location in Google Maps.",
       color: "from-emerald-500 to-teal-500",
+      href: officeMapUrl,
+      openInNewTab: true,
     },
   ];
 
@@ -284,13 +303,16 @@ const ContactPage = ({
             {contactInfo.map((info, index) => {
               const Icon = info.icon;
               return (
-                <motion.div
+                <motion.a
                   key={index}
+                  href={info.href}
+                  target={info.openInNewTab ? "_blank" : undefined}
+                  rel={info.openInNewTab ? "noopener noreferrer" : undefined}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
                   whileHover={{ scale: 1.02, x: 8 }}
-                  className="relative group cursor-pointer"
+                  className="relative group block cursor-pointer"
                 >
                   {/* Hover Glow */}
                   <div className={`absolute -inset-1 bg-gradient-to-r ${info.color} rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-500`} />
@@ -305,11 +327,13 @@ const ContactPage = ({
                           {info.title}
                         </h3>
                         <p className="text-purple-300 font-medium mb-1">{info.details}</p>
-                        <p className="text-gray-500 text-sm">{info.description}</p>
+                        {info.description ? (
+                          <p className="text-gray-500 text-sm">{info.description}</p>
+                        ) : null}
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </motion.a>
               );
             })}
           </motion.div>

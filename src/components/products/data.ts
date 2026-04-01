@@ -2,7 +2,15 @@ import {
   MessageSquare, Phone, Bot, Workflow, Mail, MessageCircle,
   BarChart3, Sparkles, Brain, Shield,
 } from "lucide-react";
-
+import securemessenger from "../../assets/secure-messenger.webp";
+import emailauto from "../../assets/email-automation.webp";
+import chatbot from "../../assets/chat-bot.webp";
+import aiintelligencehubpage from "../../assets/ai-intelligence-hub.webp";
+import securityshield from "../../assets/security-shield.webp";
+import smartassistant from "../../assets/smart-assistant.webp";
+import whatsapp from "../../assets/whatsapp-automation.webp";
+import workflow from "../../assets/workflow-automation.webp";
+import telecom from "../../assets/telecom-bot.webp";
 export interface ProductFeature {
   title: string;
   desc: string;
@@ -40,7 +48,7 @@ export const products: Product[] = [
     id: "secure-messenger",
     title: "Secure Messenger",
     icon: MessageSquare,
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&h=300&fit=crop",
+    image: securemessenger,
     tagline: "Military-Grade Encrypted Team Communication",
     shortDesc: "Enterprise-grade encrypted messaging.",
     fullDesc:
@@ -73,7 +81,7 @@ export const products: Product[] = [
     id: "telecom-bot",
     title: "Telecom Bot",
     icon: Phone,
-    image: "https://plus.unsplash.com/premium_photo-1681380409783-2dde259bfe47?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAxfHxib3R8ZW58MHx8MHx8fDA%3D",
+    image: telecom,
     tagline: "AI-Powered Voice & SMS Automation at Scale",
     shortDesc: "AI-powered telecom automation.",
     fullDesc:
@@ -106,7 +114,7 @@ export const products: Product[] = [
     id: "chat-bot",
     title: "Chat Bot",
     icon: Bot,
-    image: "https://plus.unsplash.com/premium_photo-1700483267294-eb01387a17a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzR8fENoYXQlMjBib3R8ZW58MHx8MHx8fDA%3D",
+    image: chatbot,
     tagline: "Conversational AI That Feels Genuinely Human",
     shortDesc: "Advanced conversational AI.",
     fullDesc:
@@ -139,7 +147,7 @@ export const products: Product[] = [
     id: "workflow-automation",
     title: "Workflow Automation",
     icon: Workflow,
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+    image: workflow,
     tagline: "Transform Repetitive Processes into Intelligent Flows",
     shortDesc: "Streamline business processes.",
     fullDesc:
@@ -172,7 +180,7 @@ export const products: Product[] = [
     id: "email-automation",
     title: "Email Automation",
     icon: Mail,
-    image: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=400&h=300&fit=crop",
+    image: emailauto,
     tagline: "AI-Driven Campaigns That Convert",
     shortDesc: "AI-driven email marketing engine.",
     fullDesc:
@@ -205,7 +213,7 @@ export const products: Product[] = [
     id: "whatsapp-automation",
     title: "WhatsApp Automation",
     icon: MessageCircle,
-    image: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=400&h=300&fit=crop",
+    image: whatsapp,
     tagline: "CRM-Integrated WhatsApp at Enterprise Scale",
     shortDesc: "CRM-integrated WhatsApp automation.",
     fullDesc:
@@ -238,7 +246,7 @@ export const products: Product[] = [
     id: "smart-assistant",
     title: "Smart Assistant",
     icon: Sparkles,
-    image: "https://media.istockphoto.com/id/1646708089/photo/business-chatting-a-smart-ai-using-an-artificial-intelligence-chatbot-developed-with-ai-robot.webp?a=1&b=1&s=612x612&w=0&k=20&c=tgn0kQY0xWmICNuX0GeQtawqgnNKD8MWlnSqWodMUjY=",
+    image: smartassistant,
     tagline: "Your Personal AI that Gets Smarter Every Day",
     shortDesc: "Intelligent personal AI assistant.",
     fullDesc:
@@ -271,7 +279,7 @@ export const products: Product[] = [
     id: "ai-intelligence-hub",
     title: "AI Intelligence Hub",
     icon: Brain,
-    image: "https://media.istockphoto.com/id/918951042/photo/super-computer-server-racks-in-datacenter-3d-illustration.webp?a=1&b=1&s=612x612&w=0&k=20&c=_A3FImmZJT7sMQEHvlWCE6ekpOUqz03W_G6Lynam4mI=",
+    image: aiintelligencehubpage,
     tagline: "The Central Nervous System for All Your AI",
     shortDesc: "Central AI processing & orchestration.",
     fullDesc:
@@ -304,7 +312,7 @@ export const products: Product[] = [
     id: "security-shield",
     title: "Security Shield",
     icon: Shield,
-    image: "https://media.istockphoto.com/id/2191833269/photo/protected-network-security-system-concept-copy-space.webp?a=1&b=1&s=612x612&w=0&k=20&c=FFXRrwfZM74Rjed3zBz1m_053ERpZAkj8Yep0yN7fUQ=",
+    image: securityshield,
     tagline: "Adaptive AI Security for the Modern Enterprise",
     shortDesc: "Enterprise-level AI security solution.",
     fullDesc:

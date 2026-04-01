@@ -1,4 +1,7 @@
 import { Zap, Users, BarChart3 } from "lucide-react";
+import crms from "../../assets/crms.webp";
+import hrms from "../../assets/hrms.webp";
+import orbileads from "../../assets/orbileads.webp";
 
 export interface TopProductFeature {
   title: string;
@@ -36,7 +39,7 @@ export const topProducts: TopProduct[] = [
     id: "orbileads",
     title: "Orbileads",
     icon: Zap,
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop",
+    image: orbileads,
     tagline: "AI-Powered Lead Generation & Customer Acquisition Engine",
     shortDesc: "AI-powered lead generation and customer acquisition engine.",
     fullDesc:
@@ -68,7 +71,7 @@ export const topProducts: TopProduct[] = [
     id: "hrms",
     title: "HRMS",
     icon: Users,
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop",
+    image: hrms,
     tagline: "Intelligent Human Resource Management System",
     shortDesc: "Intelligent Human Resource Management System.",
     fullDesc:
@@ -100,7 +103,7 @@ export const topProducts: TopProduct[] = [
     id: "crms",
     title: "CRMS",
     icon: BarChart3,
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+    image: crms,
     tagline: "Advanced Customer Relationship Intelligence Platform",
     shortDesc: "Advanced customer relationship intelligence platform.",
     fullDesc:

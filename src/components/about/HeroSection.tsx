@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import zoraLogo from "../../assets/Zora Logo Redesign.png";
+import zoraLogo from "../../assets/Zora Logo Redesign.webp";
 
 interface HeroSectionProps {
   onExploreProduct: () => void;

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import zoraLogo from "../../assets/Zora Logo Redesign.png";
+import zoraLogo from "../../assets/Zora Logo Redesign.webp";
 
 const navLinks = [
   { name: "Home", href: "#home" },

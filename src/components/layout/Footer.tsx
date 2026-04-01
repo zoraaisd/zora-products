@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import {
   FaLinkedin,
-  FaTwitter,
   FaEnvelope,
   FaArrowRight,
   FaFacebook,
@@ -9,6 +8,8 @@ import {
   FaMapMarkerAlt,
   FaPhoneAlt,
 } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import zoraLogo from "../../assets/Zora Logo Redesign.webp";
 
 interface FooterProps {
   onAboutClick?: () => void;
@@ -79,7 +80,7 @@ const Footer: React.FC<FooterProps> = ({
 
   const socials = [
     { icon: FaLinkedin, href: "https://www.linkedin.com/company/zora-global-ai-technologies/?viewAsMember=true", label: "LinkedIn" },
-    { icon: FaTwitter, href: "https://x.com/zoraglobalai", label: "Twitter" },
+    { icon: FaXTwitter, href: "https://x.com/zoraglobalai", label: "X" },
     { icon: FaFacebook, href: "https://www.facebook.com/ZoraGlobalAiTechnologies/", label: "Facebook" },
     { icon: FaYoutube, href: "https://www.youtube.com/@zoraglobalaitechnologies", label: "YouTube" },
   ];
@@ -154,7 +155,11 @@ const Footer: React.FC<FooterProps> = ({
               transition={{ duration: 0.6 }}
               className="w-full flex flex-col items-center min-[520px]:items-start md:max-w-sm"
             >
-              <h4 className="font-semibold text-white text-sm md:text-base">Zora Global AI</h4>
+              <img
+                src={zoraLogo}
+                alt="Zora Global AI"
+                className="h-12 w-auto object-contain sm:h-14"
+              />
               <p className="text-gray-400 text-xs md:text-sm font-medium leading-relaxed mt-2 md:mt-3">
                 Empowering enterprises with AI-driven solutions, cloud transformation and strategic consulting.
               </p>
@@ -189,6 +194,7 @@ const Footer: React.FC<FooterProps> = ({
                     <FaEnvelope className="w-3 h-3 text-purple-400 shrink-0" />
                     <span>info@zoraglobalai.com</span>
                   </a>
+                  <br />
                   <a
                     href="tel:+919087000345"
                     onClick={(e) => e.stopPropagation()}
