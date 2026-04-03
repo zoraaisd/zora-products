@@ -109,7 +109,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
     md:pt-2
     w-full
     overflow-hidden
-    lg:overflow-visible
+    2xl:overflow-visible
     px-6 sm:px-6 md:px-10
     mt-6 md:mt-0
   "
@@ -128,7 +128,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
               <motion.div
   key={index}
   animate={{
-    x: offset * 320,
+    x: offset * 260,
     scale: isActive ? 1 : 0.85,
     opacity: isActive ? 1 : 0.4,
     y: isActive ? 0 : 40,
@@ -146,7 +146,8 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
     -translate-x-1/2
     w-[85%]
     sm:w-[80%]
-    md:w-[380px]
+    md:w-[340px]
+    xl:w-[380px]
   "
   style={{
     zIndex: isActive ? 20 : 10,
@@ -259,7 +260,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
             onClick={prev}
-            className="absolute left-2 sm:left-4 md:left-8 lg:-left-16 z-30 p-2 md:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
+            className="absolute left-2 sm:left-4 md:left-5 lg:left-6 xl:left-8 2xl:-left-16 z-30 p-2 md:p-3 xl:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
           >
             <ChevronLeft className="w-4 md:w-6 h-4 md:h-6 text-white" />
           </motion.button>
@@ -269,7 +270,7 @@ const TopProducts: React.FC<TopProductsProps> = ({ onProductClick }) => {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
             onClick={next}
-            className="absolute right-2 sm:right-4 md:right-8 lg:-right-16 z-30 p-2 md:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
+            className="absolute right-2 sm:right-4 md:right-5 lg:right-6 xl:right-8 2xl:-right-16 z-30 p-2 md:p-3 xl:p-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-md border border-white/20 hover:from-cyan-500/40 hover:to-purple-500/40 transition-colors duration-300"
           >
             <ChevronRight className="w-4 md:w-6 h-4 md:h-6 text-white" />
           </motion.button>

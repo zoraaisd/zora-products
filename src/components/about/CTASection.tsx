@@ -60,7 +60,7 @@ const CTASection = ({ onContact, onExploreProduct }: CTASectionProps) => {
           transition={{ delay: 0.4 }}
           className="text-gray-400 text-sm md:text-lg mb-10 max-w-xl mx-auto"
         >
-          Join 500+ enterprises already transforming their operations with Zora AI.
+          Join 500+ enterprises already transforming their operations with Zora AI
         </motion.p>
         <motion.div
   initial={{ opacity: 0, y: 20 }}

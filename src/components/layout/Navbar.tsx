@@ -152,7 +152,7 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
       href="https://calendly.com/zoraglobalai/30?month=2026-02"
       target="_blank"
       rel="noopener noreferrer"
-      className="bg-violet-500 text-white px-4 py-2 rounded-lg transition-all duration-300 transform-gpu shadow-[0_4px_0px_rgb(0,0,0,0.25)] hover:bg-violet-400 hover:-translate-y-0.5 hover:shadow-[0_6px_0px_rgb(0,0,0,0.22),0_0_26px_rgba(192,132,252,0.55)] active:translate-y-0.5 active:shadow-[0_1px_0px_rgb(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-200/90"
+      className="bg-violet-500 text-white text-sm font-bold px-4 py-2 rounded-lg transition-all duration-300 transform-gpu shadow-[0_4px_0px_rgb(0,0,0,0.25)] hover:bg-violet-400 hover:-translate-y-0.5 hover:shadow-[0_6px_0px_rgb(0,0,0,0.22),0_0_26px_rgba(192,132,252,0.55)] active:translate-y-0.5 active:shadow-[0_1px_0px_rgb(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-200/90"
     >
       Book Appointment
     </a>
@@ -211,7 +211,7 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
               href="https://calendly.com/zoraglobalai/30?month=2026-02"
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full bg-violet-500 text-white px-4 py-3 rounded-lg text-center transition-all duration-300 transform-gpu shadow-[0_3px_0px_rgb(0,0,0,0.25)] hover:bg-violet-400 active:scale-[0.98] active:translate-y-0.5 active:shadow-[0_1px_0px_rgb(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-200/90 mt-3"
+              className="block w-full bg-violet-500 text-white text-base font-semibold px-4 py-3 rounded-lg text-center transition-all duration-300 transform-gpu shadow-[0_3px_0px_rgb(0,0,0,0.25)] hover:bg-violet-400 active:scale-[0.98] active:translate-y-0.5 active:shadow-[0_1px_0px_rgb(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-200/90 mt-3"
               onClick={() => setMobileOpen(false)}
             >
               Book Appointment

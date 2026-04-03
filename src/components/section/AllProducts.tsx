@@ -168,7 +168,7 @@ const AllProducts = ({ onProductClick }: AllProductsProps) => {
             Ready to Transform Your Business?
           </h3>
           <p className="text-gray-300 text-xs md:text-base lg:text-lg mb-6 md:mb-8 max-w-2xl mx-auto">
-            Choose the perfect AI solution for your needs and start your journey today.
+            Choose the perfect AI solution for your needs and start your journey today
           </p>
           <motion.a
             href="https://calendly.com/zoraglobalai/30?month=2026-02"

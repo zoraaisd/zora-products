@@ -158,7 +158,7 @@ const ContactPage = ({
             </span>
           </h2>
           <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Ready to transform your business with AI? Get in touch with our experts.
+            Ready to transform your business with AI? Get in touch with our experts
           </p>
         </motion.div>
 
@@ -228,6 +228,12 @@ const ContactPage = ({
                           type="text"
                           name="name"
                           required
+                          maxLength={30}
+                          pattern="[A-Za-z ]{1,30}"
+                          onInput={(e) => {
+                            const input = e.currentTarget;
+                            input.value = input.value.replace(/[^A-Za-z ]/g, "").slice(0, 30);
+                          }}
                           className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300"
                           placeholder="Enter Your Name"
                         />
@@ -240,6 +246,13 @@ const ContactPage = ({
                           type="tel"
                           name="phone"
                           required
+                          inputMode="numeric"
+                          pattern="[0-9]{10}"
+                          maxLength={10}
+                          onInput={(e) => {
+                            const input = e.currentTarget;
+                            input.value = input.value.replace(/\D/g, "").slice(0, 10);
+                          }}
                           className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300"
                           placeholder="Mobile no"
                         />

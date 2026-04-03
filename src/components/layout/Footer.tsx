@@ -161,7 +161,7 @@ const Footer: React.FC<FooterProps> = ({
                 className="h-12 w-auto object-contain sm:h-14"
               />
               <p className="text-gray-400 text-xs md:text-sm font-medium leading-relaxed mt-2 md:mt-3">
-                Empowering enterprises with AI-driven solutions, cloud transformation and strategic consulting.
+                Empowering enterprises with AI-driven solutions, cloud transformation and strategic consulting
               </p>
 
               <div className="mt-3.5 md:mt-4 space-y-3 md:space-y-3.5 w-full">

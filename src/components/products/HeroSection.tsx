@@ -62,7 +62,7 @@ const HeroSection = ({ onContact }: HeroSectionProps) => (
         className="text-white-400 hidden md:block text-sm md:text-lg max-w-2xl mx-auto leading-relaxed"
       >
         A complete ecosystem of enterprise-grade AI tools designed
-        to work independently or as one unified intelligence platform.
+        to work independently or as one unified intelligence platform
       </motion.p>
 
       <motion.p
@@ -71,11 +71,11 @@ const HeroSection = ({ onContact }: HeroSectionProps) => (
         transition={{ delay: 0.6 }}
         className="text-justify text-white-400 md:hidden text-base font-extrabold max-w-2xl mx-auto leading-relaxed"
       >
-        A complete ecosystem of enterprise-grade AI tools designed to work independently or as one unified intelligence platform.
+        A complete ecosystem of enterprise-grade AI tools designed to work independently or as one unified intelligence platform
         <br />
-        Designed to transform how modern organizations operate by integrating automation, predictive intelligence and scalable technology.
+        Designed to transform how modern organizations operate by integrating automation, predictive intelligence and scalable technology
         <br />
-        From managing workflows to generating powerful insights, our AI products help teams move faster, work smarter and innovate without limits.
+        From managing workflows to generating powerful insights, our AI products help teams move faster, work smarter and innovate without limits
       </motion.p>
 
       <motion.button

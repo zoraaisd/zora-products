@@ -15,7 +15,7 @@ const CTASection = () => (
         Not Sure Where to Start?
       </h2>
       <p className="text-gray-400 text-sm md:text-base mb-8 max-w-lg mx-auto">
-        Talk to our AI specialists and we'll recommend the perfect combination of products for your business.
+        Talk to our AI specialists and we'll recommend the perfect combination of products for your business
       </p>
       <motion.button
       

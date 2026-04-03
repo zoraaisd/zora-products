@@ -52,7 +52,7 @@ export const products: Product[] = [
     tagline: "Military-Grade Encrypted Team Communication",
     shortDesc: "Enterprise-grade encrypted messaging.",
     fullDesc:
-      "A powerful encrypted messaging platform built for enterprise security. Enable seamless team communication with end-to-end encryption, ensuring sensitive data stays protected. Perfect for organizations handling confidential information across departments, borders and regulated industries.",
+      "A powerful encrypted messaging platform built for enterprise security Enable seamless team communication with end-to-end encryption, ensuring sensitive data stays protected Perfect for organizations handling confidential information across departments, borders and regulated industries",
     color: "from-blue-500 to-cyan-500",
     accentColor: "#06b6d4",
     bgPattern: "hex",

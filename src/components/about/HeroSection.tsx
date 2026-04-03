@@ -86,7 +86,7 @@ const HeroSection = ({}: HeroSectionProps) => {
             className="text-white/400 text-base md:text-lg max-w-2xl leading-relaxed"
           >
             Zora builds enterprise grade AI systems that think, adapt,
-            and evolve powering the next generation of digital transformation.
+            and evolve powering the next generation of digital transformation
           </motion.p>
 
         </div>

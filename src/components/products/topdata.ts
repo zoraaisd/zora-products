@@ -41,7 +41,7 @@ export const topProducts: TopProduct[] = [
     icon: Zap,
     image: orbileads,
     tagline: "AI-Powered Lead Generation & Customer Acquisition Engine",
-    shortDesc: "AI-powered lead generation and customer acquisition engine.",
+    shortDesc: "AI-powered lead generation and customer acquisition engine",
     fullDesc:
       "Revolutionize your sales pipeline with intelligent lead generation and acquisition. Orbileads combines AI-driven targeting, real-time analytics and automated follow-up to turn prospects into customers at scale. Get high-quality leads while your competitors are still manually searching.",
     color: "from-cyan-500 to-blue-600",
@@ -73,7 +73,7 @@ export const topProducts: TopProduct[] = [
     icon: Users,
     image: hrms,
     tagline: "Intelligent Human Resource Management System",
-    shortDesc: "Intelligent Human Resource Management System.",
+    shortDesc: "Intelligent Human Resource Management System",
     fullDesc:
       "Streamline every aspect of human resources with an intelligent, end-to-end HRMS platform. From employee onboarding and payroll to talent analytics and succession planning, HRMS automates routine tasks and gives you insights to build a better workplace.",
     color: "from-purple-500 to-pink-600",
@@ -105,7 +105,7 @@ export const topProducts: TopProduct[] = [
     icon: BarChart3,
     image: crms,
     tagline: "Advanced Customer Relationship Intelligence Platform",
-    shortDesc: "Advanced customer relationship intelligence platform.",
+    shortDesc: "Advanced customer relationship intelligence platform",
     fullDesc:
       "Transform customer relationships with enterprise-grade CRM powered by AI. CRMS provides a 360-degree view of every customer, automates sales processes and delivers predictive insights that accelerate deals and reduce churn.",
     color: "from-orange-500 to-red-600",
