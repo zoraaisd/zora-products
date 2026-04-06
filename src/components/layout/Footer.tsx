@@ -201,7 +201,16 @@ const Footer: React.FC<FooterProps> = ({
                     className="inline-flex items-center justify-center min-[520px]:justify-start gap-1.5 text-gray-400 hover:text-purple-300 transition-colors text-xs md:text-sm font-medium"
                   >
                     <FaPhoneAlt className="w-3 h-3 text-purple-400 shrink-0" />
-                    <span>9087000345</span>
+                    <span>Phn No : 9087000345</span>
+                  </a>
+                  <br />
+                  <a
+                    href="tel:+914446254744"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center justify-center min-[520px]:justify-start gap-1.5 text-gray-400 hover:text-purple-300 transition-colors text-xs md:text-sm font-medium"
+                  >
+                    <FaPhoneAlt className="w-3 h-3 text-purple-400 shrink-0" />
+                    <span>Tel No : 044-4625 4744</span>
                   </a>
                 </div>
               </div>
