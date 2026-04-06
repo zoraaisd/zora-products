@@ -142,7 +142,7 @@ const Hero = ({ onProductClick }: HeroProps) => {
             className="mx-auto mt-7 max-w-xl font-['Space_Grotesk',sans-serif] text-base leading-relaxed text-blue-50/90 md:text-lg"
           >
             ZORA unifies automation, customer intelligence and AI orchestration so your teams ship
-            production-ready experiences faster.
+            production-ready experiences faster
           </motion.p>
 
           <motion.div
