@@ -164,13 +164,13 @@ const Footer: React.FC<FooterProps> = ({
                 Empowering enterprises with AI-driven solutions, cloud transformation and strategic consulting
               </p>
 
-              <div className="mt-3.5 md:mt-4 space-y-3 md:space-y-3.5 w-full">
+              <div className="mt-3.5 md:mt-4 space-y-3 md:space-y-3.5 w-full max-w-[18rem] mx-auto min-[520px]:max-w-none min-[520px]:mx-0">
                 {officeLocations.map((office) => (
                   <div
                     key={office.title}
-                    className="flex items-start justify-center min-[520px]:justify-start gap-2 text-left"
+                    className="grid grid-cols-[16px_minmax(0,1fr)] items-start gap-x-2.5 text-left"
                   >
-                    <FaMapMarkerAlt className="w-3.5 h-3.5 text-purple-400 mt-1.5 shrink-0" />
+                    <FaMapMarkerAlt className="w-3.5 h-3.5 text-purple-400 mt-1 shrink-0" />
                     <div className="min-w-0">
                       <h5 className="font-semibold text-white text-xs md:text-base">{office.title}</h5>
                       <p className="mt-1 text-gray-400 text-xs md:text-sm font-medium leading-relaxed break-words">
