@@ -60,6 +60,7 @@ const Footer: React.FC<FooterProps> = ({
 
   const productLinks = [
     { label: "CRMS", productId: "crms" },
+    { label: "HRMS", productId: "hrms" },
     { label: "Chat Bot", productId: "chat-bot" },
     { label: "Email Automation", productId: "email-automation" },
     { label: "Security Shield", productId: "security-shield" },
@@ -93,7 +94,7 @@ const Footer: React.FC<FooterProps> = ({
     {
       title: "Regional Office",
       address:
-        "No:12,Gandhi Salai, Srinivasa Nagar, Kandhanchavadi, Perungudi, Chennai, Tamil Nadu 600096",
+        "No:12,Gandhi Salai, Srinivasa Nagar, Kandhanchavadi, Perungudi, Chennai, Tamil Nadu-600096",
     },
   ];
 
@@ -192,7 +193,7 @@ const Footer: React.FC<FooterProps> = ({
                     className="inline-flex items-center justify-center min-[520px]:justify-start gap-1.5 text-gray-400 hover:text-purple-300 transition-colors text-xs md:text-sm font-medium break-all"
                   >
                     <FaEnvelope className="w-3 h-3 text-purple-400 shrink-0" />
-                    <span>info@zoraglobalai.com</span>
+                    <span> info@zoraai.us</span>
                   </a>
                   <br />
                   <a
@@ -309,8 +310,8 @@ const Footer: React.FC<FooterProps> = ({
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
-            className="w-full max-w-md mx-auto lg:mx-0 lg:w-full flex flex-col items-center lg:items-start text-center lg:text-left mt-2 lg:mt-0"
-          >
+            className="w-full max-w-md mx-auto lg:mx-0 lg:w-full flex flex-col items-center lg:items-start text-center lg:text-left mt-2 lg:mt-[4.75rem]"
+            >
             <h4 className="text-sm md:text-base font-semibold text-white mb-2 md:mb-3">Our Location</h4>
             <div className="w-full h-48 sm:h-56 lg:h-48 rounded-xl overflow-hidden border border-white/10 hover:border-white/20 transition">
               <iframe
