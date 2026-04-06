@@ -12,8 +12,26 @@ interface Props {
   onAbout: () => void;
   onProducts: () => void;
   onContact: () => void;
+  onDocumentation?: () => void;
+  onBlog?: () => void;
+  onFAQ?: () => void;
+  onPrivacy?: () => void;
+  onTerms?: () => void;
+  onCookie?: () => void;
 }
-const SecurityShieldPage = ({ onBack, onHome, onAbout, onProducts, onContact }: Props) => {
+const SecurityShieldPage = ({
+  onBack,
+  onHome,
+  onAbout,
+  onProducts,
+  onContact,
+  onDocumentation,
+  onBlog,
+  onFAQ,
+  onPrivacy,
+  onTerms,
+  onCookie,
+}: Props) => {
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     const lenis = new Lenis({ duration: 1.3, smoothWheel: true });
@@ -28,11 +46,22 @@ const SecurityShieldPage = ({ onBack, onHome, onAbout, onProducts, onContact }: 
   }, []);
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
-      <Navbar onHomeClick={onHome} onAboutClick={onAbout} onProductClick={onProducts} onContactClick={onContact} currentPage="product-detail" />
+      <Navbar onHomeClick={onHome} onAboutClick={onAbout} onProductClick={onProducts} onBlogClick={onBlog} onContactClick={onContact} currentPage="product-detail" />
       <HeroSection />
       <FeaturesSection />
       <OverviewSection onContact={onContact} />
-      <Footer onAboutClick={onAbout} onProductClick={onProducts} onContactClick={onContact} />
+      <Footer
+        onHomeClick={onHome}
+        onAboutClick={onAbout}
+        onProductClick={onProducts}
+        onContactClick={onContact}
+        onDocumentationClick={onDocumentation}
+        onBlogClick={onBlog}
+        onFAQClick={onFAQ}
+        onPrivacyClick={onPrivacy}
+        onTermsClick={onTerms}
+        onCookieClick={onCookie}
+      />
     </motion.div>
   );
 };

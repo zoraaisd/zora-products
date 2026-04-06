@@ -77,7 +77,7 @@ const ProductsPage = ({
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      <Navbar onHomeClick={onHome} onAboutClick={onAbout} onProductClick={onProducts} onContactClick={onContact} currentPage="products" />
+      <Navbar onHomeClick={onHome} onAboutClick={onAbout} onProductClick={onProducts} onBlogClick={onBlog} onContactClick={onContact} currentPage="products" />
       <HeroSection onContact={onContact} />
       <TopProductsSection onProductClick={onTopProductClick} />
       <SplitLine />
@@ -88,7 +88,7 @@ const ProductsPage = ({
       <Footer 
         onHomeClick={onHome}
         onAboutClick={onAbout} 
-        onProductClick={onProducts} 
+        onProductClick={onProducts}
         onContactClick={onContact}
         onDocumentationClick={onDocumentation}
         onBlogClick={onBlog}

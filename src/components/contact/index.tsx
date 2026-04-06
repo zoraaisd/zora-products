@@ -128,8 +128,7 @@ const ContactPage = ({
       <Navbar
         onHomeClick={onHome}
         onAboutClick={onAbout}
-        onProductClick={onProducts}
-        onContactClick={onContact}
+        onProductClick={onProducts} onBlogClick={onBlog} onContactClick={onContact}
         currentPage="contact"
       />
 

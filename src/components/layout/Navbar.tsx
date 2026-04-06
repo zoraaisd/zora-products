@@ -6,6 +6,7 @@ const navLinks = [
   { name: "Home", href: "#home" },
   { name: "About", href: "#about" },
   { name: "Product", href: "#products" },
+  { name: "Blog", href: "#blog" },
   { name: "Contact Us", href: "#contact" },
 ];
 
@@ -13,11 +14,12 @@ interface NavbarProps {
   onHomeClick: () => void;
   onAboutClick: () => void;
   onProductClick: () => void;
+  onBlogClick?: () => void;
   onContactClick: () => void;
   currentPage: "home" | "about" | "products" | "product-detail" | "contact" | "privacy" | "terms" | "cookies" | "documentation" | "blog" | "faq";
 }
 
-const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, currentPage }: NavbarProps) => {
+const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onBlogClick, onContactClick, currentPage }: NavbarProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
   const mobileButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -81,6 +83,8 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
         onAboutClick();
       } else if (link.name === "Product") {
         onProductClick();
+      } else if (link.name === "Blog") {
+        onBlogClick?.();
       } else if (link.name === "Contact Us") {
         onContactClick();
       }
@@ -128,11 +132,12 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
         const isProductActive =
           link.name === "Product" &&
           (currentPage === "products" || currentPage === "product-detail");
+        const isBlogActive = link.name === "Blog" && currentPage === "blog";
         const isContactActive =
           link.name === "Contact Us" && currentPage === "contact";
 
         const isActive =
-          isHomeActive || isAboutActive || isProductActive || isContactActive;
+          isHomeActive || isAboutActive || isProductActive || isBlogActive || isContactActive;
 
         return (
           <li key={link.href}>
@@ -181,11 +186,12 @@ const Navbar = ({ onHomeClick, onAboutClick, onProductClick, onContactClick, cur
               const isHomeActive = link.name === "Home" && currentPage === "home";
               const isAboutActive = link.name === "About" && currentPage === "about";
               const isProductActive = link.name === "Product" && (currentPage === "products" || currentPage === "product-detail");
+              const isBlogActive = link.name === "Blog" && currentPage === "blog";
               const isContactActive = link.name === "Contact Us" && currentPage === "contact";
-              const isMobileActive = isHomeActive || isAboutActive || isProductActive || isContactActive;
+              const isMobileActive = isHomeActive || isAboutActive || isProductActive || isBlogActive || isContactActive;
               
               return (
-              (link.name === "Home" || link.name === "About" || link.name === "Product" || link.name === "Contact Us") ? (
+              (link.name === "Home" || link.name === "About" || link.name === "Product" || link.name === "Blog" || link.name === "Contact Us") ? (
                 <button
                   key={link.href}
                   onClick={() => handleLinkClick(link)}

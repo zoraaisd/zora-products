@@ -38,15 +38,15 @@ const SecureMessengerPage = ({ onBack, onHome, onAbout, onProducts, onContact, o
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}
       className="bg-black text-white overflow-x-hidden">
-      <Navbar onHomeClick={onHome} onAboutClick={onAbout} onProductClick={onProducts} onContactClick={onContact} currentPage="product-detail" />
+      <Navbar onHomeClick={onHome} onAboutClick={onAbout} onProductClick={onProducts} onBlogClick={onBlog} onContactClick={onContact} currentPage="product-detail" />
       <HeroSection />
       <FeaturesSection />
       <OverviewSection onContact={onContact} />
       <Footer 
           onHomeClick={onHome}
           onAboutClick={onAbout} 
-          onProductClick={onProducts} 
-          onContactClick={onContact}
+          onProductClick={onProducts}
+        onContactClick={onContact}
           onDocumentationClick={onDocumentation}
           onBlogClick={onBlog}
           onFAQClick={onFAQ}
