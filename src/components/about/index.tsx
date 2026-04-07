@@ -70,8 +70,7 @@ const About = ({
       <Navbar 
         onHomeClick={onHome}
         onAboutClick={onAbout}
-        onProductClick={onProduct}
-        onContactClick={onContact}
+        onProductClick={onProduct} onBlogClick={onBlog} onContactClick={onContact}
         currentPage="about"
       />
       <HeroSection onExploreProduct={onProduct} />
@@ -89,7 +88,7 @@ const About = ({
       <Footer 
         onHomeClick={onBack}
         onAboutClick={onBack} 
-        onProductClick={onProduct} 
+        onProductClick={onProduct}
         onContactClick={onContact}
         onDocumentationClick={onDocumentation}
         onBlogClick={onBlog}

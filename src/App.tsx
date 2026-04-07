@@ -11,6 +11,8 @@ import NexusPricing from "./components/section/NexusPricing";
 import About from "./components/about";
 import ProductsPage from "./components/products";
 import ContactPage from "./components/contact";
+import BlogPage from "./components/blog/blog";
+import BlogPostPage from "./components/blog/blogPost";
 import { products, type Product } from "./components/products/data";
 import { topProducts, type TopProduct } from "./components/products/topdata";
 import SecureMessengerPage from "./components/products/detail/secure-messenger";
@@ -26,13 +28,16 @@ import SecurityShieldPage from "./components/products/detail/security-shield";
 import OrbiLeadsPage from "./components/products/detail/orbileads";
 import HRMSPage from "./components/products/detail/hrms";
 import CRMSPage from "./components/products/detail/crms";
+import { mockBlogPosts } from "./data/blogdata";
 
-type Page = "home" | "about" | "products" | "product-detail" | "contact" | 
-            "privacy" | "terms" | "cookies" | "documentation" | "blog" | "faq";
+type Page = "home" | "about" | "products" | "product-detail" | "contact" |
+            "privacy" | "terms" | "cookies" | "documentation" | "blog" | "blog-post" | "faq";
 
 interface AppState {
   page: Page;
   productId: string | null;
+  blogSlug?: string | null;
+  blogPage?: number;
 }
 
 function findProductById(id: string | null): Product | TopProduct | null {
@@ -47,6 +52,20 @@ function getInitialState(): AppState {
   // Parse the pathname from the URL to determine the initial page
   const path = window.location.pathname.replace(/^\//, "");
   if (!path || path === "") return { page: "home", productId: null };
+  if (path === "blog") {
+    return { page: "blog", productId: null, blogPage: 1 };
+  }
+  if (path.startsWith("blog/page/")) {
+    const rawPageNumber = Number(path.split("/")[2]);
+    const blogPage = Number.isFinite(rawPageNumber) && rawPageNumber > 0
+      ? Math.floor(rawPageNumber)
+      : 1;
+    return { page: "blog", productId: null, blogPage };
+  }
+  if (path.startsWith("blog/")) {
+    const blogSlug = path.split("/").slice(1).join("/");
+    return { page: "blog-post", productId: null, blogSlug, blogPage: 1 };
+  }
   if (path.startsWith("products/")) {
     const productId = path.split("/")[1];
     return { page: "product-detail", productId };
@@ -62,6 +81,13 @@ function getInitialState(): AppState {
 }
 
 function getUrlForPage(page: Page, productId: string | null = null): string {
+  if (page === "blog-post") {
+    return productId ? `/blog/${productId}` : "/blog";
+  }
+  if (page === "blog") {
+    const nextPage = productId ? Number(productId) : 1;
+    return nextPage > 1 ? `/blog/page/${nextPage}` : "/blog";
+  }
   if (page === "product-detail" && productId) {
     return `/products/${productId}`;
   }
@@ -89,7 +115,7 @@ function forceScrollToTop() {
 }
 
 function App() {
-  const [{ page, productId }, setState] = useState<AppState>(() => getInitialState());
+  const [{ page, productId, blogSlug, blogPage }, setState] = useState<AppState>(() => getInitialState());
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -107,19 +133,23 @@ function App() {
 
   // Derive selectedProduct from productId
   const selectedProduct = useMemo(() => findProductById(productId), [productId]);
+  const selectedBlogPost = useMemo(
+    () => mockBlogPosts.find((post) => post.slug === blogSlug) ?? null,
+    [blogSlug]
+  );
 
   // Scroll before paint whenever page or product changes.
   useLayoutEffect(() => {
     forceScrollToTop();
-  }, [page, productId]);
+  }, [page, productId, blogSlug, blogPage]);
 
   // Persist state to localStorage
   useEffect(() => {
-    localStorage.setItem(
+      localStorage.setItem(
       "zora-app-state",
-      JSON.stringify({ page, productId })
+      JSON.stringify({ page, productId, blogSlug, blogPage })
     );
-  }, [page, productId]);
+  }, [page, productId, blogSlug, blogPage]);
 
   // Handle browser back/forward buttons
   useEffect(() => {
@@ -131,10 +161,12 @@ function App() {
         setState({
           page: event.state.page,
           productId: event.state.productId || null,
+          blogSlug: event.state.blogSlug || null,
+          blogPage: event.state.blogPage || 1,
         });
       } else {
         // No state means we're at the initial entry, go home
-        setState({ page: "home", productId: null });
+        setState({ page: "home", productId: null, blogSlug: null, blogPage: 1 });
       }
     };
 
@@ -143,10 +175,32 @@ function App() {
   }, []);
 
 
-  const setPageState = (newPage: Page, productId: string | null = null) => {
-    const newState = { page: newPage, productId };
-    const url = getUrlForPage(newPage, productId);
-    const isSameState = page === newPage && productId === newState.productId;
+  const setPageState = (
+    newPage: Page,
+    productId: string | null = null,
+    nextBlogSlug: string | null = null,
+    nextBlogPage: number = 1
+  ) => {
+    const normalizedBlogPage = nextBlogPage > 0 ? Math.floor(nextBlogPage) : 1;
+    const newState = {
+      page: newPage,
+      productId,
+      blogSlug: nextBlogSlug,
+      blogPage: normalizedBlogPage,
+    };
+    const url = getUrlForPage(
+      newPage,
+      newPage === "blog-post"
+        ? nextBlogSlug
+        : newPage === "blog"
+          ? String(normalizedBlogPage)
+          : productId
+    );
+    const isSameState =
+      page === newPage &&
+      productId === newState.productId &&
+      blogSlug === newState.blogSlug &&
+      blogPage === newState.blogPage;
 
     // Scroll BEFORE state change to ensure scroll happens before render
     forceScrollToTop();
@@ -168,6 +222,14 @@ function App() {
     setPageState("product-detail", product.id);
   };
 
+  const handleBlogPostClick = (slug: string) => {
+    setPageState("blog-post", null, slug, blogPage ?? 1);
+  };
+
+  const handleBlogPageChange = (nextBlogPage: number) => {
+    setPageState("blog", null, null, nextBlogPage);
+  };
+
 
   if (page === "about") {
     return (
@@ -178,7 +240,7 @@ function App() {
         onProduct={() => setPageState("products")}
         onContact={() => setPageState("contact")}
         onDocumentation={() => setPageState("documentation")}
-        onBlog={() => setPageState("blog")}
+        onBlog={() => setPageState("blog", null, null, 1)}
         onFAQ={() => setPageState("faq")}
         onPrivacy={() => setPageState("privacy")}
         onTerms={() => setPageState("terms")}
@@ -195,7 +257,46 @@ function App() {
         onProducts={() => setPageState("products")}
         onContact={() => setPageState("contact")}
         onDocumentation={() => setPageState("documentation")}
-        onBlog={() => setPageState("blog")}
+        onBlog={() => setPageState("blog", null, null, 1)}
+        onFAQ={() => setPageState("faq")}
+        onPrivacy={() => setPageState("privacy")}
+        onTerms={() => setPageState("terms")}
+        onCookie={() => setPageState("cookies")}
+      />
+    );
+  }
+  if (page === "blog") {
+    return (
+      <BlogPage
+        onHome={() => setPageState("home")}
+        onAbout={() => setPageState("about")}
+        onProducts={() => setPageState("products")}
+        onBlog={() => setPageState("blog", null, null, 1)}
+        onPostClick={handleBlogPostClick}
+        currentPage={blogPage ?? 1}
+        onPageChange={handleBlogPageChange}
+        onContact={() => setPageState("contact")}
+        onDocumentation={() => setPageState("documentation")}
+        onFAQ={() => setPageState("faq")}
+        onPrivacy={() => setPageState("privacy")}
+        onTerms={() => setPageState("terms")}
+        onCookie={() => setPageState("cookies")}
+      />
+    );
+  }
+  if (page === "blog-post") {
+    return (
+      <BlogPostPage
+        post={selectedBlogPost}
+        onBack={() => setPageState("blog", null, null, blogPage ?? 1)}
+        onPostClick={handleBlogPostClick}
+        onHome={() => setPageState("home")}
+        onAbout={() => setPageState("about")}
+        onProducts={() => setPageState("products")}
+        onProductClick={(id) => setPageState("product-detail", id)}
+        onBlog={() => setPageState("blog", null, null, 1)}
+        onContact={() => setPageState("contact")}
+        onDocumentation={() => setPageState("documentation")}
         onFAQ={() => setPageState("faq")}
         onPrivacy={() => setPageState("privacy")}
         onTerms={() => setPageState("terms")}
@@ -213,7 +314,7 @@ function App() {
         onProducts={() => setPageState("products")}
         onContact={() => setPageState("contact")}
         onDocumentation={() => setPageState("documentation")}
-        onBlog={() => setPageState("blog")}
+        onBlog={() => setPageState("blog", null, null, 1)}
         onFAQ={() => setPageState("faq")}
         onPrivacy={() => setPageState("privacy")}
         onTerms={() => setPageState("terms")}
@@ -229,7 +330,7 @@ function App() {
     const goProducts = () => setPageState("products");
     const goContact = () => setPageState("contact");
     const goDocumentation = () => setPageState("documentation");
-    const goBlog = () => setPageState("blog");
+    const goBlog = () => setPageState("blog", null, null, 1);
     const goFAQ = () => setPageState("faq");
     const goPrivacy = () => setPageState("privacy");
     const goTerms = () => setPageState("terms");
@@ -279,6 +380,7 @@ function App() {
       <Navbar onHomeClick={() => setPageState("home")}
               onAboutClick={() => setPageState("about")}
               onProductClick={() => setPageState("products")}
+              onBlogClick={() => setPageState("blog", null, null, 1)}
               onContactClick={() => setPageState("contact")}
               currentPage={page} />
       <Hero onProductClick={() => setPageState("products")} />
@@ -294,7 +396,7 @@ function App() {
         onProductClick={() => setPageState("products")} 
         onContactClick={() => setPageState("contact")}
         onDocumentationClick={() => setPageState("documentation")}
-        onBlogClick={() => setPageState("blog")}
+        onBlogClick={() => setPageState("blog", null, null, 1)}
         onFAQClick={() => setPageState("faq")}
         onPrivacyClick={() => setPageState("privacy")}
         onTermsClick={() => setPageState("terms")}
