@@ -146,31 +146,31 @@ const Footer: React.FC<FooterProps> = ({
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,360px)] lg:items-start xl:gap-12 mb-8 md:mb-16">
 
           {/* Left Side - Links Grid */}
-          <div className="grid gap-8 min-[520px]:grid-cols-2 md:grid-cols-[minmax(0,1.5fr)_minmax(0,0.9fr)_minmax(0,1fr)] md:gap-x-8 md:gap-y-10 text-center min-[520px]:text-left">
+          <div className="grid gap-8 min-[520px]:grid-cols-[minmax(0,1.35fr)_minmax(0,0.8fr)_minmax(0,0.9fr)] min-[520px]:gap-x-5 md:grid-cols-[minmax(0,1.5fr)_minmax(0,0.9fr)_minmax(0,1fr)] md:gap-x-8 md:gap-y-10 text-center min-[520px]:text-left">
 
             {/* Brand */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="w-full flex flex-col items-center min-[520px]:items-start md:max-w-sm"
+              className="w-full flex flex-col items-center min-[520px]:items-start min-[520px]:max-w-[240px] md:max-w-sm"
             >
               <img
                 src={zoraLogo}
                 alt="Zora Global AI"
-                className="h-12 w-auto object-contain sm:h-14"
+                className="h-16 w-auto object-contain sm:h-[4.5rem]"
               />
               <p className="text-gray-400 text-xs md:text-sm font-medium leading-relaxed mt-2 md:mt-3">
                 Empowering enterprises with AI-driven solutions, cloud transformation and strategic consulting
               </p>
 
-              <div className="mt-3.5 md:mt-4 space-y-3 md:space-y-3.5 w-full">
+              <div className="mt-3.5 md:mt-4 space-y-3 md:space-y-3.5 w-full max-w-[18rem] mx-auto min-[520px]:max-w-none min-[520px]:mx-0">
                 {officeLocations.map((office) => (
                   <div
                     key={office.title}
-                    className="flex items-start justify-center min-[520px]:justify-start gap-2 text-left"
+                    className="grid grid-cols-[16px_minmax(0,1fr)] items-start gap-x-2.5 text-left"
                   >
-                    <FaMapMarkerAlt className="w-3.5 h-3.5 text-purple-400 mt-0.5 shrink-0" />
+                    <FaMapMarkerAlt className="w-3.5 h-3.5 text-purple-400 mt-1 shrink-0" />
                     <div className="min-w-0">
                       <h5 className="font-semibold text-white text-xs md:text-base">{office.title}</h5>
                       <p className="mt-1 text-gray-400 text-xs md:text-sm font-medium leading-relaxed break-words">
@@ -233,10 +233,10 @@ const Footer: React.FC<FooterProps> = ({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="min-[520px]:justify-self-start"
+              className="min-[520px]:justify-self-start min-[520px]:mt-[4.25rem] md:mt-[4.75rem]"
             >
               <h4 className="font-semibold text-white text-sm md:text-base mb-2 md:mb-4">Company</h4>
-              <div className="space-y-1.5 md:space-y-2.5">
+              <div className="mt-3 md:mt-4 space-y-1.5 md:space-y-2.5">
                 {mainLinks.map((link) => (
                   <motion.button
                     key={link.label}
@@ -255,10 +255,10 @@ const Footer: React.FC<FooterProps> = ({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="min-[520px]:justify-self-start"
+              className="min-[520px]:justify-self-start min-[520px]:mt-[4.25rem] md:mt-[4.75rem]"
             >
               <h4 className="font-semibold text-white text-sm md:text-base mb-2 md:mb-4">Products</h4>
-              <div className="space-y-1.5 md:space-y-2.5">
+              <div className="mt-3 md:mt-4 space-y-1.5 md:space-y-2.5">
                 {productLinks.map((link) => (
                   <motion.button
                     key={link.label}
