@@ -1,10 +1,16 @@
-import { mockBlogPosts, type MockBlogPost, type MockBlogSection } from "../data/blogdata";
+import type { BlogPost, BlogSection } from "../types/blog";
 
 type UnknownRecord = Record<string, unknown>;
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() ?? "";
-const DEFAULT_POSTS_ENDPOINT = (import.meta.env.VITE_BLOG_POSTS_ENDPOINT as string | undefined)?.trim() || "/api/blog-posts";
-const DEFAULT_POST_ENDPOINT = (import.meta.env.VITE_BLOG_POST_ENDPOINT as string | undefined)?.trim() || "/api/blog-posts";
+const API_BASE_URL =
+  (import.meta.env.VITE_BLOG_API_URL as string | undefined)?.trim() ||
+  (import.meta.env.VITE_PUBLIC_API_BASE_URL as string | undefined)?.trim() ||
+  "http://localhost:4000/api/v1";
+const WEBSITE_SLUG =
+  (import.meta.env.VITE_PUBLIC_WEBSITE_SLUG as string | undefined)?.trim() ||
+  (import.meta.env.VITE_BLOG_WEBSITE_SLUG as string | undefined)?.trim() ||
+  "zora-products";
+const POSTS_ENDPOINT = `public/websites/${WEBSITE_SLUG}/blogs`;
 
 function isRecord(value: unknown): value is UnknownRecord {
   return typeof value === "object" && value !== null;
@@ -34,6 +40,10 @@ function slugify(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+function normalizeBaseUrl(baseUrl: string): string {
+  return baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+}
+
 function resolveUrl(value: unknown): string {
   const rawValue = toStringValue(value).trim();
 
@@ -56,7 +66,83 @@ function resolveUrl(value: unknown): string {
   return rawValue;
 }
 
-function normalizeSection(section: unknown, fallbackTitle: string): MockBlogSection | null {
+function stripHtml(value: string): string {
+  if (!value) {
+    return "";
+  }
+
+  if (typeof DOMParser !== "undefined" && /<[^>]+>/.test(value)) {
+    const doc = new DOMParser().parseFromString(value, "text/html");
+    return (doc.body.textContent ?? "").replace(/\s+/g, " ").trim();
+  }
+
+  return value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function estimateReadTime(text: string): string {
+  const wordCount = stripHtml(text).split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(wordCount / 180));
+  return `${minutes} min read`;
+}
+
+function inferDepartment(post: UnknownRecord): string {
+  const title = toStringValue(post.title ?? post.name ?? post.heading).toLowerCase();
+  const slug = toStringValue(post.slug ?? post.url_slug ?? post.permalink).toLowerCase();
+  const excerpt = toStringValue(post.excerpt ?? post.summary ?? post.short_description).toLowerCase();
+  const content = toStringValue(post.content ?? post.body ?? post.description).toLowerCase();
+  const haystack = `${title} ${slug} ${excerpt} ${content}`;
+
+  if (/(hrms|recruit|attendance|onboard|leave|workforce|talent|hiring)/i.test(haystack)) {
+    return "Recruitment";
+  }
+
+  if (/(crms|crm|sales|pipeline|forecast|customer|deal)/i.test(haystack)) {
+    return "Sales Automation";
+  }
+
+  if (/(orbileads|lead|outbound|sequence|prospect|campaign|reply)/i.test(haystack)) {
+    return "Lead Generation";
+  }
+
+  const tagNames = Array.isArray(post.tags)
+    ? post.tags
+        .map((tag) => (isRecord(tag) ? toStringValue(tag.name ?? tag.slug) : ""))
+        .filter(Boolean)
+    : [];
+
+  const websiteName = isRecord(post.website) ? toStringValue(post.website.name) : "";
+  return tagNames[0] || websiteName || "General";
+}
+
+function buildPlaceholderImage(title: string, department: string) {
+  const safeTitle = title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const safeDepartment = department.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="${safeTitle}">
+      <defs>
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1d1630" />
+          <stop offset="55%" stop-color="#40235d" />
+          <stop offset="100%" stop-color="#0f172a" />
+        </linearGradient>
+        <radialGradient id="glow" cx="50%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.55" />
+          <stop offset="100%" stop-color="#7c3aed" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <rect width="1200" height="800" fill="url(#bg)" />
+      <circle cx="960" cy="150" r="220" fill="url(#glow)" />
+      <circle cx="180" cy="650" r="220" fill="#22d3ee" fill-opacity="0.12" />
+      <rect x="70" y="70" width="240" height="48" rx="24" fill="rgba(255,255,255,0.15)" />
+      <text x="102" y="103" font-family="Arial, sans-serif" font-size="20" fill="#f8fafc">${safeDepartment}</text>
+      <text x="70" y="360" font-family="Arial, sans-serif" font-size="68" font-weight="700" fill="#ffffff">${safeTitle}</text>
+      <text x="70" y="430" font-family="Arial, sans-serif" font-size="28" fill="#cbd5e1">ZORA Product Blog</text>
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function normalizeSection(section: unknown, fallbackTitle: string): BlogSection | null {
   if (!isRecord(section)) {
     return null;
   }
@@ -89,7 +175,7 @@ function normalizeSection(section: unknown, fallbackTitle: string): MockBlogSect
   };
 }
 
-function normalizeSections(post: UnknownRecord): MockBlogSection[] {
+function normalizeSections(post: UnknownRecord, title: string, fallbackText: string): BlogSection[] {
   const rawSections = post.sections ?? post.content_sections ?? post.blocks;
 
   if (Array.isArray(rawSections)) {
@@ -97,28 +183,128 @@ function normalizeSections(post: UnknownRecord): MockBlogSection[] {
       .map((section, index) =>
         normalizeSection(section, `Section ${index + 1}`)
       )
-      .filter((section): section is MockBlogSection => section !== null);
+      .filter((section): section is BlogSection => section !== null);
 
     if (sections.length > 0) {
       return sections;
     }
   }
 
-  const body = toStringValue(post.content ?? post.body ?? post.description);
+  const body = toStringValue(post.content ?? post.body ?? fallbackText);
+  const introVideo = resolveUrl(post.introVideo ?? post.intro_video);
+  const image = resolveUrl(post.featuredImage ?? post.featured_image ?? post.bannerImage ?? post.banner_image ?? post.ogImage ?? post.og_image);
 
-  if (!body) {
+  const sectionsFromBody = buildSectionsFromBody(body, title, image, introVideo);
+  if (sectionsFromBody.length > 0) {
+    return sectionsFromBody;
+  }
+
+  const plainTextBody = stripHtml(body);
+  if (!plainTextBody) {
     return [];
   }
 
   return [
     {
       subtitle: "Overview",
-      paragraph: body,
+      paragraph: plainTextBody,
+      image: image || undefined,
+      imageAlt: title ? `${title} cover image` : undefined,
+      video: introVideo || undefined,
+      mediaCaption: introVideo ? `${title} video` : undefined,
     },
   ];
 }
 
-function normalizePost(post: unknown, index = 0): MockBlogPost | null {
+function buildSectionsFromBody(body: string, title: string, image: string, introVideo: string): BlogSection[] {
+  const trimmedBody = body.trim();
+  if (!trimmedBody) {
+    return [];
+  }
+
+  const hasHtml = /<\/?[a-z][\s\S]*>/i.test(trimmedBody);
+  if (hasHtml && typeof DOMParser !== "undefined") {
+    const doc = new DOMParser().parseFromString(trimmedBody, "text/html");
+    const sections: BlogSection[] = [];
+    let currentTitle = "Overview";
+    let currentParagraphs: string[] = [];
+
+    const flush = () => {
+      const paragraph = currentParagraphs.join("\n\n").trim();
+      if (!paragraph && sections.length > 0) {
+        currentParagraphs = [];
+        return;
+      }
+
+      if (paragraph) {
+        sections.push({
+          subtitle: currentTitle,
+          paragraph,
+          image: sections.length === 0 ? image || undefined : undefined,
+          imageAlt: sections.length === 0 && title ? `${title} cover image` : undefined,
+          video: sections.length === 0 ? introVideo || undefined : undefined,
+          mediaCaption: sections.length === 0 && introVideo ? `${title} video` : undefined,
+        });
+      }
+
+      currentParagraphs = [];
+    };
+
+    Array.from(doc.body.children).forEach((node) => {
+      const tagName = node.tagName.toLowerCase();
+      const text = (node.textContent ?? "").replace(/\s+/g, " ").trim();
+      if (!text) {
+        return;
+      }
+
+      if (/^h[1-4]$/.test(tagName)) {
+        flush();
+        currentTitle = text;
+        return;
+      }
+
+      currentParagraphs.push(text);
+    });
+
+    flush();
+
+    if (sections.length > 0) {
+      return sections;
+    }
+  }
+
+  const blocks = trimmedBody
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean);
+
+  if (blocks.length === 0) {
+    const text = stripHtml(trimmedBody);
+    return text
+      ? [
+          {
+            subtitle: "Overview",
+            paragraph: text,
+            image: image || undefined,
+            imageAlt: title ? `${title} cover image` : undefined,
+            video: introVideo || undefined,
+            mediaCaption: introVideo ? `${title} video` : undefined,
+          },
+        ]
+      : [];
+  }
+
+  return blocks.map((block, index) => ({
+    subtitle: index === 0 ? "Overview" : `Section ${index + 1}`,
+    paragraph: stripHtml(block),
+    image: index === 0 ? image || undefined : undefined,
+    imageAlt: index === 0 && title ? `${title} cover image` : undefined,
+    video: index === 0 ? introVideo || undefined : undefined,
+    mediaCaption: index === 0 && introVideo ? `${title} video` : undefined,
+  }));
+}
+
+function normalizePost(post: unknown, index = 0): BlogPost | null {
   if (!isRecord(post)) {
     return null;
   }
@@ -126,26 +312,48 @@ function normalizePost(post: unknown, index = 0): MockBlogPost | null {
   const title = toStringValue(post.title ?? post.name ?? post.heading, `Blog Post ${index + 1}`);
   const slugSource = toStringValue(post.slug ?? post.url_slug ?? post.permalink ?? title);
   const slug = slugify(slugSource) || `blog-post-${index + 1}`;
-  const description = toStringValue(
-    post.description ?? post.excerpt ?? post.summary ?? post.short_description
+  const descriptionSource =
+    post.description ??
+    post.excerpt ??
+    post.summary ??
+    post.short_description ??
+    stripHtml(toStringValue(post.content ?? post.body));
+  const description = toStringValue(descriptionSource);
+  const department = inferDepartment(post);
+  const featuredImage = resolveUrl(
+    post.featuredImage ??
+      post.featured_image
   );
-  const department = toStringValue(post.department ?? post.category ?? post.topic, "General");
-  const image = resolveUrl(
-    post.image ?? post.imageUrl ?? post.banner_image ?? post.thumbnail ?? post.cover_image
+  const bannerImage = resolveUrl(
+    post.bannerImage ??
+      post.banner_image
+  );
+  const ogImage = resolveUrl(post.ogImage ?? post.og_image);
+  const image = featuredImage || bannerImage || ogImage || resolveUrl(
+    post.featuredImage ??
+      post.featured_image ??
+      post.bannerImage ??
+      post.banner_image ??
+      post.image ??
+      post.imageUrl ??
+      post.thumbnail ??
+      post.cover_image
   );
   const date = toStringValue(
-    post.date ?? post.publishDate ?? post.publish_date ?? post.created_at,
+    post.date ?? post.publishDate ?? post.publish_date ?? post.publishedAt ?? post.published_at ?? post.createdAt ?? post.created_at,
     new Date().toISOString()
   );
-  const readTime = toStringValue(post.readTime ?? post.read_time, "5 min read");
-  const sections = normalizeSections(post);
+  const readTime = toStringValue(post.readTime ?? post.read_time, estimateReadTime(`${description} ${toStringValue(post.content ?? post.body)}`));
+  const sections = normalizeSections(post, title, description);
 
   return {
     slug,
     title,
     description,
     department,
-    image,
+    image: image || buildPlaceholderImage(title, department),
+    featuredImage: featuredImage || undefined,
+    bannerImage: bannerImage || undefined,
     date,
     readTime,
     sections,
@@ -153,21 +361,30 @@ function normalizePost(post: unknown, index = 0): MockBlogPost | null {
   };
 }
 
-function extractPosts(payload: unknown): unknown[] {
-  if (Array.isArray(payload)) {
-    return payload;
+function extractPayloadData(payload: unknown): unknown {
+  if (isRecord(payload) && "data" in payload) {
+    return payload.data;
   }
 
-  if (!isRecord(payload)) {
+  return payload;
+}
+
+function extractPosts(payload: unknown): unknown[] {
+  const data = extractPayloadData(payload);
+
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (!isRecord(data)) {
     return [];
   }
 
   const candidates = [
-    payload.data,
-    payload.posts,
-    payload.results,
-    payload.items,
-    payload.blogs,
+    data.posts,
+    data.results,
+    data.items,
+    data.blogs,
   ];
 
   for (const candidate of candidates) {
@@ -179,8 +396,26 @@ function extractPosts(payload: unknown): unknown[] {
   return [];
 }
 
+async function fetchAllPages(signal?: AbortSignal): Promise<unknown[]> {
+  const firstPagePath = `${POSTS_ENDPOINT}?page=1&limit=100`;
+  const firstPayload = await requestJson(firstPagePath, signal);
+  const firstPosts = extractPosts(firstPayload);
+  const meta = isRecord(firstPayload) && isRecord(firstPayload.meta) ? firstPayload.meta : null;
+  const totalPages = Number(meta?.totalPages ?? 1);
+
+  if (!Number.isFinite(totalPages) || totalPages <= 1) {
+    return firstPosts;
+  }
+
+  const extraPages = await Promise.all(
+    Array.from({ length: totalPages - 1 }, (_, index) => requestJson(`${POSTS_ENDPOINT}?page=${index + 2}&limit=100`, signal))
+  );
+
+  return extraPages.reduce<unknown[]>((all, payload) => all.concat(extractPosts(payload)), firstPosts);
+}
+
 async function requestJson(path: string, signal?: AbortSignal): Promise<unknown> {
-  const response = await fetch(API_BASE_URL ? new URL(path, API_BASE_URL).toString() : path, {
+  const response = await fetch(new URL(path, normalizeBaseUrl(API_BASE_URL)).toString(), {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -195,26 +430,29 @@ async function requestJson(path: string, signal?: AbortSignal): Promise<unknown>
   return response.json();
 }
 
-export async function fetchBlogPosts(signal?: AbortSignal): Promise<MockBlogPost[]> {
+export async function fetchBlogPosts(signal?: AbortSignal): Promise<BlogPost[]> {
   try {
-    const payload = await requestJson(DEFAULT_POSTS_ENDPOINT, signal);
-    const posts = extractPosts(payload)
+    const payload = await fetchAllPages(signal);
+    return payload
       .map((post, index) => normalizePost(post, index))
-      .filter((post): post is MockBlogPost => post !== null);
-
-    return posts.length > 0 ? posts : mockBlogPosts;
-  } catch {
-    return mockBlogPosts;
+      .filter((post): post is BlogPost => post !== null);
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      return [];
+    }
+    console.error("Failed to load blog posts from backend", error);
+    return [];
   }
 }
 
 export async function fetchBlogPostBySlug(
   slug: string,
   signal?: AbortSignal
-): Promise<MockBlogPost | null> {
+): Promise<BlogPost | null> {
   try {
-    const payload = await requestJson(`${DEFAULT_POST_ENDPOINT}/${encodeURIComponent(slug)}`, signal);
-    return normalizePost(payload) ?? null;
+    const payload = await requestJson(`${POSTS_ENDPOINT}/${encodeURIComponent(slug)}`, signal);
+    const data = extractPayloadData(payload);
+    return normalizePost(data, 0);
   } catch {
     const posts = await fetchBlogPosts(signal);
     return posts.find((post) => post.slug === slug) ?? null;

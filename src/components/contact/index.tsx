@@ -4,6 +4,7 @@ import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import { Mail, Phone, MapPin, Send, Sparkles, CheckCircle } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { submitEnquiry } from "../../lib/enquiryApi";
 
 interface ContactPageProps {
   onHome: () => void;
@@ -54,18 +55,24 @@ const ContactPage = ({
 
     try {
       const formData = new FormData(e.currentTarget);
-      const response = await fetch("https://formspree.io/f/mpqjodrv", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
+      await submitEnquiry({
+        form_type: "CONTACT_FORM",
+        name: String(formData.get("name") ?? "").trim(),
+        email: String(formData.get("email") ?? "").trim(),
+        phone: String(formData.get("phone") ?? "").trim(),
+        subject: "Website contact request",
+        enquiry_type: "Contact",
+        message: String(formData.get("message") ?? "").trim(),
+        source_page_title: "Contact Us",
+        source_page_url: window.location.href,
+        metadata: {
+          origin: "zora-products-contact",
+          channel: "website"
+        }
       });
 
-      if (response.ok) {
-        setSubmitSuccess(true);
-        e.currentTarget.reset();
-      }
+      setSubmitSuccess(true);
+      e.currentTarget.reset();
     } catch (error) {
       console.error("Form submission error:", error);
     } finally {

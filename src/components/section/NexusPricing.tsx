@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle, X } from "lucide-react";
+import { submitEnquiry } from "../../lib/enquiryApi";
 
 const plans = [
   {
@@ -92,25 +93,26 @@ const NexusPricing = () => {
     setIsSubmitting(true);
 
     try {
-      const form = new FormData();
-      form.append("name", formData.name);
-      form.append("phone", formData.phone);
-      form.append("email", formData.email);
-      form.append("plan", selectedPlan || "");
-      form.append("_subject", "New Plan Inquiry - Pricing");
-
-      const response = await fetch("https://formspree.io/f/mpqjodrv", {
-        method: "POST",
-        body: form,
-        headers: {
-          Accept: "application/json",
-        },
+      await submitEnquiry({
+        form_type: "PRICING_INQUIRY",
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        subject: `Plan inquiry - ${selectedPlan || "Unknown plan"}`,
+        enquiry_type: "Pricing",
+        service_interested_in: selectedPlan,
+        message: `Interested in ${selectedPlan || "a pricing plan"}.`,
+        source_page_title: "Pricing Plans",
+        source_page_url: window.location.href,
+        metadata: {
+          origin: "zora-products-pricing",
+          channel: "website",
+          plan: selectedPlan
+        }
       });
 
-      if (response.ok) {
-        setSubmitSuccess(true);
-        setFormData({ name: "", phone: "", email: "" });
-      }
+      setSubmitSuccess(true);
+      setFormData({ name: "", phone: "", email: "" });
     } catch (error) {
       console.error("Form submission error:", error);
     } finally {

@@ -1,13 +1,14 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Clock, RefreshCw, Send, Tag, TrendingUp, User } from "lucide-react";
 import Footer from "../layout/Footer";
 import Navbar from "../layout/Navbar";
-import type { MockBlogPost, MockBlogSection } from "../../data/blogdata";
+import type { BlogPost, BlogSection } from "../../types/blog";
+import { submitEnquiry } from "../../lib/enquiryApi";
 
 interface BlogPostPageProps {
-  posts: MockBlogPost[];
-  post?: MockBlogPost | null;
+  posts: BlogPost[];
+  post?: BlogPost | null;
   loading?: boolean;
   onBack: () => void;
   onPostClick?: (slug: string) => void;
@@ -59,7 +60,7 @@ function getYouTubeEmbedUrl(url: string) {
   return null;
 }
 
-function ArticleMedia({ section, postTitle }: { section: MockBlogSection; postTitle: string }) {
+function ArticleMedia({ section, postTitle }: { section: BlogSection; postTitle: string }) {
   if (!section.image && !section.video) return null;
 
   const youtubeEmbedUrl = section.video ? getYouTubeEmbedUrl(section.video) : null;
@@ -102,7 +103,7 @@ function ArticleMedia({ section, postTitle }: { section: MockBlogSection; postTi
   );
 }
 
-function SectionBody({ section, postTitle }: { section: MockBlogSection; postTitle: string }) {
+function SectionBody({ section, postTitle }: { section: BlogSection; postTitle: string }) {
   const hasMedia = Boolean(section.image || section.video);
 
   if (!hasMedia) {
@@ -125,11 +126,34 @@ function SectionBody({ section, postTitle }: { section: MockBlogSection; postTit
   );
 }
 
+function FeaturedImagePanel({ post }: { post?: BlogPost | null }) {
+  const featuredImage = post?.featuredImage || post?.image;
+
+  if (!featuredImage) {
+    return null;
+  }
+
+  return (
+    <figure className="overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.03] shadow-[0_18px_45px_rgba(7,4,22,0.35)]">
+      <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+        <span className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Featured image</span>
+      </div>
+      <img
+        src={featuredImage}
+        alt={`${post?.title ?? "Blog"} featured image`}
+        className="h-[220px] w-full object-cover md:h-[320px]"
+      />
+    </figure>
+  );
+}
+
 function RecentArticlesSidebar({
   recentArticles,
+  currentPost,
   onPostClick,
 }: {
-  recentArticles: MockBlogPost[];
+  recentArticles: BlogPost[];
+  currentPost?: BlogPost | null;
   onPostClick?: (slug: string) => void;
 }) {
   const [consultationForm, setConsultationForm] = useState({
@@ -139,6 +163,48 @@ function RecentArticlesSidebar({
     service: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const blogTitle = currentPost?.title?.trim() || consultationForm.service.trim() || "General inquiry";
+      await submitEnquiry({
+        form_type: "BLOG_CONSULTATION",
+        name: consultationForm.fullName.trim(),
+        email: consultationForm.email.trim(),
+        phone: consultationForm.phone.trim(),
+        subject: `Blog consultation - ${blogTitle}`,
+        enquiry_type: "Consultation",
+        service_interested_in: consultationForm.service.trim() || null,
+        message: consultationForm.message.trim(),
+        source_page_title: currentPost?.title ?? "Blog Post",
+        source_page_url: window.location.href,
+        metadata: {
+          origin: "zora-products-blog-consultation",
+          blogSlug: currentPost?.slug ?? null,
+          blogTitle: currentPost?.title ?? null,
+          department: currentPost?.department ?? null
+        }
+      });
+
+      setSubmitSuccess(true);
+      setConsultationForm({
+        fullName: "",
+        email: "",
+        phone: "",
+        service: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Consultation form submission error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <aside className="lg:-mt-[292px] lg:self-start lg:sticky lg:top-8">
@@ -185,77 +251,92 @@ function RecentArticlesSidebar({
           <p className="mb-5 text-sm leading-relaxed text-gray-400">
             Fill out the form and our team will get back to you within 24 hours.
           </p>
-          <form className="space-y-4">
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={consultationForm.fullName}
-              onChange={(event) =>
-                setConsultationForm((current) => ({
-                  ...current,
-                  fullName: event.target.value,
-                }))
-              }
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
-            />
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={consultationForm.email}
-            onChange={(event) =>
-              setConsultationForm((current) => ({
-                ...current,
-                email: event.target.value,
-              }))
-            }
-            className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
-          />
-          <input
-            type="tel"
-            placeholder="Phone Number"
-            value={consultationForm.phone}
-            onChange={(event) =>
-              setConsultationForm((current) => ({
-                ...current,
-                phone: event.target.value,
-              }))
-            }
-            className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
-          />
-          <input
-            type="text"
-            placeholder="Service Interested In"
-            value={consultationForm.service}
-            onChange={(event) =>
-              setConsultationForm((current) => ({
-                ...current,
-                service: event.target.value,
-              }))
-            }
-            className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
-          />
-          <textarea
-            rows={4}
-            placeholder="Your Message"
-            value={consultationForm.message}
-            onChange={(event) =>
-              setConsultationForm((current) => ({
-                ...current,
-                message: event.target.value,
-              }))
-            }
-            className="w-full resize-none rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
-          />
-          <button
-            type="button"
-            className="w-full rounded-2xl bg-gradient-to-r from-purple-600 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:from-purple-500 hover:to-fuchsia-400"
-          >
-            <span className="inline-flex items-center justify-center gap-2">
-              <Send className="h-4 w-4" />
-              Send Message
-            </span>
-          </button>
-        </form>
+          {submitSuccess ? (
+            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-6 text-center text-sm text-emerald-100">
+              <p className="text-base font-semibold">Your enquiry has been submitted successfully.</p>
+              <p className="mt-2 text-emerald-100/80">The form has been cleared.</p>
+              <button
+                type="button"
+                onClick={() => setSubmitSuccess(false)}
+                className="mt-5 rounded-xl border border-emerald-400/20 bg-white/5 px-4 py-2 text-sm font-semibold text-emerald-50 transition hover:bg-white/10"
+              >
+                Submit another enquiry
+              </button>
+            </div>
+          ) : (
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={consultationForm.fullName}
+                onChange={(event) =>
+                  setConsultationForm((current) => ({
+                    ...current,
+                    fullName: event.target.value,
+                  }))
+                }
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={consultationForm.email}
+                onChange={(event) =>
+                  setConsultationForm((current) => ({
+                    ...current,
+                    email: event.target.value,
+                  }))
+                }
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
+              />
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                value={consultationForm.phone}
+                onChange={(event) =>
+                  setConsultationForm((current) => ({
+                    ...current,
+                    phone: event.target.value,
+                  }))
+                }
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
+              />
+              <input
+                type="text"
+                placeholder="Service Interested In"
+                value={consultationForm.service}
+                onChange={(event) =>
+                  setConsultationForm((current) => ({
+                    ...current,
+                    service: event.target.value,
+                  }))
+                }
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
+              />
+              <textarea
+                rows={4}
+                placeholder="Your Message"
+                value={consultationForm.message}
+                onChange={(event) =>
+                  setConsultationForm((current) => ({
+                    ...current,
+                    message: event.target.value,
+                  }))
+                }
+                className="w-full resize-none rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
+              />
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full rounded-2xl bg-gradient-to-r from-purple-600 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:from-purple-500 hover:to-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <span className="inline-flex items-center justify-center gap-2">
+                  <Send className="h-4 w-4" />
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                </span>
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </aside>
@@ -357,19 +438,9 @@ const BlogPostPage = ({
                 ) : null}
               </motion.div>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="mb-5 max-w-full text-4xl font-extrabold leading-tight tracking-tight text-white md:text-[3.2rem]"
-              >
-                {pageTitle}
-              </motion.h1>
-              <p className="mb-6 max-w-full text-left text-base leading-relaxed text-gray-300 md:text-[1.05rem]">
-                {loading
-                  ? "Preparing the full article content for you."
-                  : post?.description ?? "The requested blog post could not be found."}
-              </p>
+              <div className="mt-6">
+                <FeaturedImagePanel post={post} />
+              </div>
             </div>
           </div>
         </div>
@@ -383,15 +454,6 @@ const BlogPostPage = ({
             transition={{ duration: 0.55, delay: 0.25 }}
             className="max-w-[860px]"
           >
-            {post?.image ? (
-              <div className="mt-1 overflow-hidden border border-white/10 bg-white/[0.03] shadow-[0_18px_45px_rgba(7,4,22,0.35)]">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="h-[210px] w-full object-cover md:h-[300px]"
-                />
-              </div>
-            ) : null}
             {post?.date ? (
               <div className="mt-5 flex items-center gap-2 text-sm text-gray-400">
                 <Calendar size={14} className="text-purple-300" />
@@ -446,6 +508,7 @@ const BlogPostPage = ({
 
           <RecentArticlesSidebar
             recentArticles={recentArticles}
+            currentPost={post}
             onPostClick={onPostClick}
           />
         </div>

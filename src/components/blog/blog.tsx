@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Clock3, Search } from "lucide-react";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
-import type { MockBlogPost } from "../../data/blogdata";
+import type { BlogPost } from "../../types/blog";
+import { fetchBlogPosts } from "../../lib/blogApi";
 
 interface BlogPageProps {
-  posts: MockBlogPost[];
+  posts: BlogPost[];
   loading?: boolean;
   onHome: () => void;
   onAbout: () => void;
@@ -50,12 +51,36 @@ const BlogPage = ({
   onCookie,
 }: BlogPageProps) => {
   const [loadingPosts, setLoadingPosts] = useState(true);
+  const [livePosts, setLivePosts] = useState<BlogPost[]>([]);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [liveFetchComplete, setLiveFetchComplete] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const blogSectionRef = useRef<HTMLDivElement | null>(null);
   const previousSearchQueryRef = useRef(searchQuery);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    void fetchBlogPosts(controller.signal)
+      .then((items) => {
+        setLivePosts(items);
+        setFetchError(null);
+      })
+      .catch((error) => {
+        setFetchError(error instanceof Error ? error.message : "Failed to load blog posts.");
+        setLivePosts([]);
+      })
+      .finally(() => {
+        setLiveFetchComplete(true);
+      });
+
+    return () => controller.abort();
+  }, []);
+
   const featuredProducts = useMemo(() => {
-    return posts.map((post, index) => ({
+    const sourcePosts = livePosts.length > 0 ? livePosts : posts;
+
+    return sourcePosts.map((post, index) => ({
       ...post,
       productName:
         post.department === "Lead Generation"
@@ -69,7 +94,7 @@ const BlogPage = ({
         "from-emerald-500/80 via-teal-500/70 to-cyan-500/70",
       ][index % 3],
     }));
-  }, [posts]);
+  }, [livePosts, posts]);
 
   const scrollToBlogSection = () => {
     blogSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -80,7 +105,7 @@ const BlogPage = ({
     return () => window.clearTimeout(timeoutId);
   }, []);
 
-  const showLoading = loading || loadingPosts;
+  const showLoading = loading || loadingPosts || (!liveFetchComplete && livePosts.length === 0 && posts.length === 0 && !fetchError);
 
   const filteredPosts = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -95,7 +120,7 @@ const BlogPage = ({
 
       return matchesSearch;
     });
-  }, [searchQuery]);
+  }, [featuredProducts, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / POSTS_PER_PAGE));
   const page = Math.min(Math.max(currentPage, 1), totalPages);
@@ -213,7 +238,7 @@ const BlogPage = ({
                   <div className="relative overflow-hidden">
                     <div className={`absolute inset-x-0 top-0 z-10 h-1.5 bg-gradient-to-r ${post.accent}`} />
                     <img
-                      src={post.image}
+                      src={post.bannerImage || post.featuredImage || post.image}
                       alt={post.title}
                       className="h-56 w-full object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-105"
                     />
@@ -254,7 +279,7 @@ const BlogPage = ({
               ))
             ) : (
               <div className="col-span-full rounded-[26px] border border-white/10 bg-white/[0.03] px-6 py-12 text-center text-slate-400 backdrop-blur-xl">
-                No blogs match your current search.
+                {fetchError ? `Backend blog load failed: ${fetchError}` : "No blogs match your current search."}
               </div>
             )}
           </motion.div>
