@@ -28,8 +28,8 @@ import SecurityShieldPage from "./components/products/detail/security-shield";
 import OrbiLeadsPage from "./components/products/detail/orbileads";
 import HRMSPage from "./components/products/detail/hrms";
 import CRMSPage from "./components/products/detail/crms";
-import { mockBlogPosts } from "./data/blogdata";
 import { fetchBlogPostBySlug, fetchBlogPosts } from "./lib/blogApi";
+import type { BlogPost } from "./types/blog";
 
 type Page = "home" | "about" | "products" | "product-detail" | "contact" |
             "privacy" | "terms" | "cookies" | "documentation" | "blog" | "blog-post" | "faq";
@@ -117,7 +117,7 @@ function forceScrollToTop() {
 
 function App() {
   const [{ page, productId, blogSlug, blogPage }, setState] = useState<AppState>(() => getInitialState());
-  const [blogPosts, setBlogPosts] = useState(mockBlogPosts);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [blogLoading, setBlogLoading] = useState(true);
 
   useEffect(() => {

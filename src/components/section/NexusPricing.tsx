@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, X } from "lucide-react";
+import { ArrowRight, CalendarDays, CheckCircle, Clock3, Send, X } from "lucide-react";
+import { submitEnquiry } from "../../lib/enquiryApi";
+import { fetchBlogPosts } from "../../lib/blogApi";
+import type { BlogPost } from "../../types/blog";
 
 const plans = [
   {
@@ -66,11 +69,33 @@ const NexusPricing = () => {
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [blogLoading, setBlogLoading] = useState(true);
+  const [blogError, setBlogError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
   });
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    void fetchBlogPosts(controller.signal)
+      .then((posts) => {
+        setBlogPosts(posts);
+        setBlogError(null);
+      })
+      .catch((error) => {
+        setBlogError(error instanceof Error ? error.message : "Failed to load blog posts.");
+        setBlogPosts([]);
+      })
+      .finally(() => {
+        setBlogLoading(false);
+      });
+
+    return () => controller.abort();
+  }, []);
 
   const handlePlanSelect = (planName: string) => {
     setSelectedPlan(planName);
@@ -92,25 +117,26 @@ const NexusPricing = () => {
     setIsSubmitting(true);
 
     try {
-      const form = new FormData();
-      form.append("name", formData.name);
-      form.append("phone", formData.phone);
-      form.append("email", formData.email);
-      form.append("plan", selectedPlan || "");
-      form.append("_subject", "New Plan Inquiry - Pricing");
-
-      const response = await fetch("https://formspree.io/f/mpqjodrv", {
-        method: "POST",
-        body: form,
-        headers: {
-          Accept: "application/json",
-        },
+      await submitEnquiry({
+        form_type: "PRICING_INQUIRY",
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        subject: `Plan inquiry - ${selectedPlan || "Unknown plan"}`,
+        enquiry_type: "Pricing",
+        service_interested_in: selectedPlan,
+        message: `Interested in ${selectedPlan || "a pricing plan"}.`,
+        source_page_title: "Pricing Plans",
+        source_page_url: window.location.href,
+        metadata: {
+          origin: "zora-products-pricing",
+          channel: "website",
+          plan: selectedPlan
+        }
       });
 
-      if (response.ok) {
-        setSubmitSuccess(true);
-        setFormData({ name: "", phone: "", email: "" });
-      }
+      setSubmitSuccess(true);
+      setFormData({ name: "", phone: "", email: "" });
     } catch (error) {
       console.error("Form submission error:", error);
     } finally {
@@ -137,6 +163,16 @@ const NexusPricing = () => {
         return "";
     }
   };
+
+  const latestBlogPosts = useMemo(() => blogPosts.slice(0, 3), [blogPosts]);
+
+  function formatDate(iso: string) {
+    return new Date(iso).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
 
   return (
     <section className="relative py-14 md:py-30 bg-black overflow-hidden md:pb-2">
@@ -224,6 +260,98 @@ shadow-xl`}
               </div>
             </motion.div>
           ))}
+        </div>
+
+        <div className="mt-20 text-left">
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.35em] text-cyan-300/80">
+                Live blog feed
+              </p>
+              <h3 className="mt-3 text-3xl font-bold text-white md:text-4xl">
+                Latest posts from the blog admin
+              </h3>
+            </div>
+            <p className="hidden max-w-xl text-sm leading-7 text-gray-400 md:block">
+              These cards render real content from the backend blog API, so updates in the admin panel appear here automatically.
+            </p>
+          </div>
+
+          {blogLoading ? (
+            <div className="grid gap-6 lg:grid-cols-3">
+              {[...Array(3)].map((_, index) => (
+                <div
+                  key={index}
+                  className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.05] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.25)] backdrop-blur-xl"
+                >
+                  <div className="h-44 animate-pulse rounded-2xl bg-white/10" />
+                  <div className="mt-5 h-5 w-20 animate-pulse rounded-full bg-white/10" />
+                  <div className="mt-4 h-7 w-4/5 animate-pulse rounded bg-white/10" />
+                  <div className="mt-3 h-4 w-full animate-pulse rounded bg-white/10" />
+                  <div className="mt-2 h-4 w-11/12 animate-pulse rounded bg-white/10" />
+                </div>
+              ))}
+            </div>
+          ) : blogError ? (
+            <div className="rounded-[28px] border border-rose-400/20 bg-rose-500/10 px-6 py-8 text-sm text-rose-100">
+              {blogError}
+            </div>
+          ) : latestBlogPosts.length > 0 ? (
+            <div className="grid gap-6 lg:grid-cols-3">
+              {latestBlogPosts.map((post) => (
+                <motion.article
+                  key={post.slug}
+                  whileHover={{ y: -8 }}
+                  transition={{ type: "spring", stiffness: 240, damping: 22 }}
+                  className="group overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.05] shadow-[0_18px_45px_rgba(0,0,0,0.25)] backdrop-blur-xl"
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={post.bannerImage || post.featuredImage || post.image}
+                      alt={post.title}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80`} />
+                    <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/35 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/85 backdrop-blur-md">
+                      {post.department}
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-cyan-200/80">
+                      <span className="inline-flex items-center gap-1.5">
+                        <CalendarDays className="h-3.5 w-3.5" />
+                        {formatDate(post.date)}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <Clock3 className="h-3.5 w-3.5" />
+                        {post.readTime}
+                      </span>
+                    </div>
+
+                    <h4 className="mt-4 text-xl font-semibold leading-tight text-white transition-colors duration-300 group-hover:text-cyan-100">
+                      {post.title}
+                    </h4>
+                    <p className="mt-3 line-clamp-3 text-sm leading-7 text-gray-300">
+                      {post.description}
+                    </p>
+
+                    <a
+                      href={`/blog/${post.slug}`}
+                      className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition-colors duration-300 group-hover:text-white"
+                    >
+                      Read article
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </a>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[28px] border border-white/10 bg-white/[0.04] px-6 py-10 text-center text-gray-400">
+              No blog posts are available yet.
+            </div>
+          )}
         </div>
       </div>
 

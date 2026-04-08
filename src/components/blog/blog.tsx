@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Clock3, Search } from "lucide-react";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
-import type { MockBlogPost } from "../../data/blogdata";
+import type { BlogPost } from "../../types/blog";
 
 interface BlogPageProps {
-  posts: MockBlogPost[];
+  posts: BlogPost[];
   loading?: boolean;
   onHome: () => void;
   onAbout: () => void;
@@ -95,7 +95,7 @@ const BlogPage = ({
 
       return matchesSearch;
     });
-  }, [searchQuery]);
+  }, [featuredProducts, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / POSTS_PER_PAGE));
   const page = Math.min(Math.max(currentPage, 1), totalPages);
@@ -213,7 +213,7 @@ const BlogPage = ({
                   <div className="relative overflow-hidden">
                     <div className={`absolute inset-x-0 top-0 z-10 h-1.5 bg-gradient-to-r ${post.accent}`} />
                     <img
-                      src={post.image}
+                      src={post.bannerImage || post.featuredImage || post.image}
                       alt={post.title}
                       className="h-56 w-full object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-105"
                     />
@@ -254,7 +254,7 @@ const BlogPage = ({
               ))
             ) : (
               <div className="col-span-full rounded-[26px] border border-white/10 bg-white/[0.03] px-6 py-12 text-center text-slate-400 backdrop-blur-xl">
-                No blogs match your current search.
+                {posts.length === 0 ? "No blog posts are available yet." : "No blogs match your current search."}
               </div>
             )}
           </motion.div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -10,10 +10,9 @@ import {
 } from "lucide-react";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
-import hrmsImage from "../../assets/hrms.webp";
-import crmsImage from "../../assets/crms.webp";
-import orbileadsImage from "../../assets/orbileads.webp";
 import blogHeroVideo from "../../assets/blog-hero.mp4";
+import type { BlogPost } from "../../types/blog";
+import { fetchBlogPosts } from "../../lib/blogApi";
 
 interface BlogPageProps {
   onHome: () => void;
@@ -28,130 +27,37 @@ interface BlogPageProps {
   onCookie?: () => void;
 }
 
-interface BlogPost {
-  id: number;
-  name: string;
-  slug: string;
-  url: string;
-  description: string;
-  banner_image: string;
-  intro_video: string | null;
-  is_active: boolean;
-  sort_order: number;
-  seo_title: string;
-  seo_description: string;
-  seo_keywords: string;
-  canonical_url: string;
-  og_title: string;
-  og_description: string;
-  og_image: string;
-  created_at: string;
-  updated_at: string;
-  category: string;
-  readTime: string;
-  publishDate: string;
+type DisplayPost = BlogPost & {
   accent: string;
   kicker: string;
+};
+
+const insightPills = ["Interactive Stories", "AI Strategy", "Automation Notes", "Launch Ready"];
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
-const posts: BlogPost[] = [
-  {
-    id: 1,
-    name: "HRMS",
-    slug: "hrms",
-    url: "/blog/hrms",
-    description:
-      "Streamline every aspect of human resources with an intelligent, end-to-end HRMS platform. From employee onboarding and payroll to talent analytics and succession planning, HRMS automates routine tasks and gives you insights to build a better workplace.",
-    banner_image: hrmsImage,
-    intro_video: null,
-    is_active: true,
-    sort_order: 1,
-    seo_title: "HRMS | ZORA Blog",
-    seo_description:
-      "Discover how ZORA HRMS simplifies onboarding, payroll, talent analytics and performance management for modern teams.",
-    seo_keywords:
-      "HRMS, human resource management, payroll automation, talent analytics, ZORA",
-    canonical_url: "/blog/hrms",
-    og_title: "HRMS | ZORA Blog",
-    og_description:
-      "Explore ZORA HRMS and see how intelligent HR automation supports hiring, payroll and employee growth.",
-    og_image: hrmsImage,
-    created_at: "2026-04-03T00:00:00Z",
-    updated_at: "2026-04-03T00:00:00Z",
-    category: "HR Product",
-    readTime: "6 min read",
-    publishDate: "Apr 2026",
-    accent: "from-fuchsia-500/80 via-violet-500/60 to-cyan-400/70",
-    kicker: "People Systems",
-  },
-  {
-    id: 2,
-    name: "CRMS",
-    slug: "crms",
-    url: "/blog/crms",
-    description:
-      "Transform customer relationships with enterprise-grade CRM powered by AI. CRMS provides a 360-degree view of every customer, automates sales processes and delivers predictive insights that accelerate deals and reduce churn.",
-    banner_image: crmsImage,
-    intro_video: null,
-    is_active: true,
-    sort_order: 2,
-    seo_title: "CRMS | ZORA Blog",
-    seo_description:
-      "Learn how ZORA CRMS improves customer visibility, sales acceleration and churn reduction with AI-powered relationship intelligence.",
-    seo_keywords:
-      "CRMS, customer relationship management, AI CRM, sales automation, ZORA",
-    canonical_url: "/blog/crms",
-    og_title: "CRMS | ZORA Blog",
-    og_description:
-      "See how ZORA CRMS delivers customer intelligence, pipeline acceleration and smarter revenue growth.",
-    og_image: crmsImage,
-    created_at: "2026-04-03T00:00:00Z",
-    updated_at: "2026-04-03T00:00:00Z",
-    category: "Sales Product",
-    readTime: "5 min read",
-    publishDate: "Apr 2026",
-    accent: "from-cyan-500/80 via-blue-500/65 to-violet-500/70",
-    kicker: "Revenue Systems",
-  },
-  {
-    id: 3,
-    name: "OrbiLeads",
-    slug: "orbileads",
-    url: "/blog/orbileads",
-    description:
-      "Revolutionize your sales pipeline with intelligent lead generation and acquisition. OrbiLeads combines AI-driven targeting, real-time analytics and automated follow-up to turn prospects into customers at scale.",
-    banner_image: orbileadsImage,
-    intro_video: null,
-    is_active: true,
-    sort_order: 3,
-    seo_title: "OrbiLeads | ZORA Blog",
-    seo_description:
-      "Discover how OrbiLeads helps teams generate better leads, automate follow-ups and improve conversion performance.",
-    seo_keywords:
-      "OrbiLeads, lead generation, sales pipeline, AI targeting, ZORA",
-    canonical_url: "/blog/orbileads",
-    og_title: "OrbiLeads | ZORA Blog",
-    og_description:
-      "Explore how OrbiLeads powers lead generation, prospect targeting and conversion-focused outreach.",
-    og_image: orbileadsImage,
-    created_at: "2026-04-03T00:00:00Z",
-    updated_at: "2026-04-03T00:00:00Z",
-    category: "Lead Gen Product",
-    readTime: "7 min read",
-    publishDate: "Apr 2026",
-    accent: "from-violet-500/80 via-purple-500/65 to-pink-500/75",
-    kicker: "Growth Engine",
-  },
-];
+function getKicker(department: string) {
+  if (department === "Recruitment") return "People Systems";
+  if (department === "Sales Automation") return "Revenue Systems";
+  if (department === "Lead Generation") return "Growth Engine";
+  return department;
+}
 
-const insightPills = [
-  "Interactive Stories",
-  "AI Strategy",
-  "Automation Notes",
-  "Launch Ready",
-];
+function getAccent(index: number) {
+  return [
+    "from-fuchsia-500/80 via-violet-500/60 to-cyan-400/70",
+    "from-cyan-500/80 via-blue-500/65 to-violet-500/70",
+    "from-violet-500/80 via-purple-500/65 to-pink-500/75",
+  ][index % 3];
+}
 
-const BlogCardMedia = ({ post }: { post: BlogPost }) => (
+const BlogCardMedia = ({ post }: { post: DisplayPost }) => (
   <div className="relative h-60 overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/40">
     <div className={`absolute inset-0 bg-gradient-to-br ${post.accent}`} />
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.22),transparent_22%),radial-gradient(circle_at_80%_18%,rgba(255,255,255,0.12),transparent_20%),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_40%,rgba(0,0,0,0.28))]" />
@@ -165,8 +71,8 @@ const BlogCardMedia = ({ post }: { post: BlogPost }) => (
       className="absolute -left-10 top-0 h-44 w-44 rounded-full bg-white/15 blur-3xl"
     />
     <motion.img
-      src={post.banner_image}
-      alt={post.name}
+      src={post.bannerImage || post.featuredImage || post.image}
+      alt={post.title}
       whileHover={{ scale: 1.06 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
       className="absolute inset-0 h-full w-full object-cover opacity-25 mix-blend-screen"
@@ -184,7 +90,7 @@ const BlogCardMedia = ({ post }: { post: BlogPost }) => (
           </span>
         </div>
         <h3 className="max-w-[14rem] font-['Orbitron','Space_Grotesk',sans-serif] text-2xl font-semibold tracking-[0.08em] text-white">
-          {post.name}
+          {post.title}
         </h3>
       </div>
     </div>
@@ -204,19 +110,51 @@ const BlogPage = ({
   onCookie,
 }: BlogPageProps) => {
   const [spotlight, setSpotlight] = useState({ x: 50, y: 50 });
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    void fetchBlogPosts(controller.signal)
+      .then((items) => {
+        setPosts(items);
+        setError(null);
+      })
+      .catch((fetchError) => {
+        setError(fetchError instanceof Error ? fetchError.message : "Failed to load blog posts.");
+        setPosts([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleHeroPointerMove = (
-    event: React.MouseEvent<HTMLElement, MouseEvent>,
-  ) => {
+  const decoratedPosts = useMemo<DisplayPost[]>(
+    () =>
+      posts.map((post, index) => ({
+        ...post,
+        kicker: getKicker(post.department),
+        accent: getAccent(index),
+      })),
+    [posts]
+  );
+
+  const handleHeroPointerMove = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
     setSpotlight({ x, y });
   };
+
+  const featuredPosts = decoratedPosts.slice(0, 3);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
@@ -240,17 +178,14 @@ const BlogPage = ({
       />
 
       <main className="relative z-10 pb-20 pt-0">
-        <section
-          onMouseMove={handleHeroPointerMove}
-          className="relative min-h-[76vh] overflow-hidden"
-        >
+        <section onMouseMove={handleHeroPointerMove} className="relative min-h-[76vh] overflow-hidden">
           <video
             className="absolute inset-0 h-full w-full object-cover opacity-40"
             autoPlay
             muted
             loop
             playsInline
-            poster={hrmsImage}
+            poster={decoratedPosts[0]?.image}
           >
             <source src={blogHeroVideo} type="video/mp4" />
           </video>
@@ -279,9 +214,7 @@ const BlogPage = ({
                 Ideas in motion for AI products, launches and enterprise growth
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-7 text-white/70 md:text-lg">
-                Move around the screen to shift the light field This page now opens
-                with a live video stage and a more editorial blog layout instead of a
-                standard hero card
+                Live blog content from the backend, presented in the same editorial layout.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 {insightPills.map((pill) => (
@@ -310,41 +243,51 @@ const BlogPage = ({
                     Featured Signals
                   </p>
                   <h2 className="mt-1 text-xl font-semibold text-white">
-                    What teams are reading now
+                    {featuredPosts.length > 0 ? "What teams are reading now" : "No featured stories yet"}
                   </h2>
                 </div>
                 <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60">
-                  03 stories
+                  {String(featuredPosts.length).padStart(2, "0")} stories
                 </div>
               </div>
               <div className="space-y-3">
-                {posts.map((post) => (
-                  <motion.div
-                    key={post.id}
-                    whileHover={{ x: 8, scale: 1.015 }}
-                    transition={{ duration: 0.25, ease: "easeOut" }}
-                    className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4 transition-all duration-300 hover:border-cyan-300/30 hover:bg-white/[0.08] hover:shadow-[0_0_28px_rgba(34,211,238,0.14)]"
-                  >
-                    <div className="flex items-start gap-4">
-                      <img
-                        src={post.banner_image}
-                        alt={post.name}
-                        className="h-20 w-20 rounded-2xl object-cover"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[11px] uppercase tracking-[0.24em] text-white/45">
-                          {post.kicker}
-                        </p>
-                        <h3 className="mt-2 text-lg font-semibold text-white">
-                          {post.name}
-                        </h3>
-                        <p className="mt-1 text-sm text-white/60">
-                          {post.readTime} | {post.publishDate}
-                        </p>
-                      </div>
+                {loading ? (
+                  [...Array(3)].map((_, index) => (
+                    <div key={index} className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4">
+                      <div className="h-20 animate-pulse rounded-2xl bg-white/10" />
                     </div>
-                  </motion.div>
-                ))}
+                  ))
+                ) : error ? (
+                  <div className="rounded-[1.5rem] border border-rose-400/20 bg-rose-500/10 p-4 text-sm text-rose-100">
+                    {error}
+                  </div>
+                ) : (
+                  featuredPosts.map((post) => (
+                    <motion.div
+                      key={post.slug}
+                      whileHover={{ x: 8, scale: 1.015 }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                      className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4 transition-all duration-300 hover:border-cyan-300/30 hover:bg-white/[0.08] hover:shadow-[0_0_28px_rgba(34,211,238,0.14)]"
+                    >
+                      <div className="flex items-start gap-4">
+                          <img
+                          src={post.bannerImage || post.featuredImage || post.image}
+                          alt={post.title}
+                          className="h-20 w-20 rounded-2xl object-cover"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[11px] uppercase tracking-[0.24em] text-white/45">
+                            {post.kicker}
+                          </p>
+                          <h3 className="mt-2 text-lg font-semibold text-white">{post.title}</h3>
+                          <p className="mt-1 text-sm text-white/60">
+                            {post.readTime} | {formatDate(post.date)}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))
+                )}
               </div>
             </motion.div>
           </div>
@@ -352,60 +295,74 @@ const BlogPage = ({
 
         <section className="mx-auto mt-12 grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[minmax(0,1.7fr)_minmax(320px,0.85fr)] lg:px-8">
           <div className="space-y-8">
-            {posts.map((post, index) => (
-              <motion.article
-                key={post.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.12 * index }}
-                whileHover={{ y: -10, scale: 1.01 }}
-                className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.03] p-5 backdrop-blur-xl md:p-6"
-              >
-                <div className={`pointer-events-none absolute -inset-3 rounded-[2.25rem] bg-gradient-to-br ${post.accent} opacity-0 blur-2xl transition-all duration-300 group-hover:opacity-30`} />
-                <div className="pointer-events-none absolute inset-0 rounded-[2rem] border border-cyan-300/0 transition-colors duration-300 group-hover:border-cyan-300/25" />
-                <div className="grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-center">
-                  <BlogCardMedia post={post} />
+            {loading ? (
+              [...Array(3)].map((_, index) => (
+                <div
+                  key={index}
+                  className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.03] p-5 backdrop-blur-xl md:p-6"
+                >
+                  <div className="h-60 animate-pulse rounded-[1.5rem] bg-white/10" />
+                  <div className="mt-5 h-8 w-2/3 animate-pulse rounded bg-white/10" />
+                  <div className="mt-4 h-4 w-full animate-pulse rounded bg-white/10" />
+                </div>
+              ))
+            ) : (
+              decoratedPosts.map((post, index) => (
+                <motion.article
+                  key={post.slug}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, delay: 0.12 * index }}
+                  whileHover={{ y: -10, scale: 1.01 }}
+                  className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.03] p-5 backdrop-blur-xl md:p-6"
+                >
+                  <div className={`pointer-events-none absolute -inset-3 rounded-[2.25rem] bg-gradient-to-br ${post.accent} opacity-0 blur-2xl transition-all duration-300 group-hover:opacity-30`} />
+                  <div className="pointer-events-none absolute inset-0 rounded-[2rem] border border-cyan-300/0 transition-colors duration-300 group-hover:border-cyan-300/25" />
+                  <div className="grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-center">
+                    <BlogCardMedia post={post} />
 
-                  <div className="relative">
-                    <div className="flex flex-wrap items-center gap-3 text-sm text-gray-300">
-                      <span
-                        className={`rounded-full bg-gradient-to-r px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white ${post.accent}`}
-                      >
-                        {post.category}
-                      </span>
-                      <span className="inline-flex items-center gap-2">
-                        <CalendarDays className="h-4 w-4 text-purple-300" />
-                        {post.publishDate}
-                      </span>
-                      <span className="inline-flex items-center gap-2">
-                        <Clock3 className="h-4 w-4 text-cyan-300" />
-                        {post.readTime}
-                      </span>
-                    </div>
+                    <div className="relative">
+                      <div className="flex flex-wrap items-center gap-3 text-sm text-gray-300">
+                        <span
+                          className={`rounded-full bg-gradient-to-r px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white ${post.accent}`}
+                        >
+                          {post.department}
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <CalendarDays className="h-4 w-4 text-purple-300" />
+                          {formatDate(post.date)}
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <Clock3 className="h-4 w-4 text-cyan-300" />
+                          {post.readTime}
+                        </span>
+                      </div>
 
-                    <h2 className="mt-5 text-3xl font-semibold leading-tight text-white transition-colors duration-300 group-hover:text-cyan-100">
-                      {post.name}
-                    </h2>
-                    <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-300 md:text-base">
-                      {post.description}
-                    </p>
+                      <h2 className="mt-5 text-3xl font-semibold leading-tight text-white transition-colors duration-300 group-hover:text-cyan-100">
+                        {post.title}
+                      </h2>
+                      <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-300 md:text-base">
+                        {post.description}
+                      </p>
 
-                    <div className="mt-6 flex items-center gap-3">
-                      <button
-                        type="button"
-                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-cyan-300/50 hover:bg-cyan-400/10 group-hover:shadow-[0_0_22px_rgba(34,211,238,0.16)]"
-                      >
-                        Read article
-                        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                      </button>
-                      <span className="text-xs uppercase tracking-[0.24em] text-white/35">
-                        {post.kicker}
-                      </span>
+                      <div className="mt-6 flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => window.location.assign(`/blog/${post.slug}`)}
+                          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-cyan-300/50 hover:bg-cyan-400/10 group-hover:shadow-[0_0_22px_rgba(34,211,238,0.16)]"
+                        >
+                          Read article
+                          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        </button>
+                        <span className="text-xs uppercase tracking-[0.24em] text-white/35">
+                          {post.kicker}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.article>
-            ))}
+                </motion.article>
+              ))
+            )}
           </div>
 
           <motion.aside
@@ -421,29 +378,21 @@ const BlogPage = ({
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white">Blog mode</h3>
-                  <p className="text-sm text-gray-400">
-                    More editorial More motion More ZORA
-                  </p>
+                  <p className="text-sm text-gray-400">Live backend content, same ZORA styling</p>
                 </div>
               </div>
 
               <div className="mt-6 space-y-4">
                 <div className="rounded-[1.5rem] border border-white/10 bg-black/25 p-4">
-                  <p className="text-sm font-medium text-purple-200">
-                    Interactive background
-                  </p>
+                  <p className="text-sm font-medium text-purple-200">Interactive background</p>
                   <p className="mt-2 text-sm leading-6 text-gray-300">
-                    The hero uses a live video layer plus cursor-reactive lighting to
-                    make the page feel active instead of static
+                    The hero uses a live video layer plus cursor-reactive lighting to make the page feel active instead of static
                   </p>
                 </div>
                 <div className="rounded-[1.5rem] border border-white/10 bg-black/25 p-4">
-                  <p className="text-sm font-medium text-cyan-200">
-                    Unique layout
-                  </p>
+                  <p className="text-sm font-medium text-cyan-200">Unique layout</p>
                   <p className="mt-2 text-sm leading-6 text-gray-300">
-                    The page now opens like an editorial landing experience, then
-                    flows into story panels instead of a standard hero card and grid
+                    Backend posts now flow into story panels instead of a fixed mock card grid
                   </p>
                 </div>
               </div>
@@ -453,12 +402,9 @@ const BlogPage = ({
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-black/30">
                 <TrendingUp className="h-6 w-6 text-white" />
               </div>
-              <h3 className="mt-5 text-2xl font-semibold text-white">
-                Need a custom AI roadmap?
-              </h3>
+              <h3 className="mt-5 text-2xl font-semibold text-white">Need a custom AI roadmap?</h3>
               <p className="mt-3 text-sm leading-7 text-gray-200">
-                Move from ideas to production with consulting, automation design
-                and customer-facing AI systems built by ZORA.
+                Move from ideas to production with consulting, automation design and customer-facing AI systems built by ZORA.
               </p>
               <button
                 type="button"
