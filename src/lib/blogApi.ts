@@ -11,42 +11,8 @@ const WEBSITE_SLUG =
   (import.meta.env.VITE_PUBLIC_WEBSITE_SLUG as string | undefined)?.trim() ||
   (import.meta.env.VITE_BLOG_WEBSITE_SLUG as string | undefined)?.trim() ||
   "zora-products";
+
 const POSTS_ENDPOINT = `public/websites/${WEBSITE_SLUG}/blogs`;
-
-function getCandidateBaseUrls(): string[] {
-  const isLocalhost =
-    typeof window !== "undefined" &&
-    /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
-
-  const baseUrls: string[] = [];
-  const pushUnique = (value: string) => {
-    const trimmed = value.trim();
-    if (!trimmed || baseUrls.includes(trimmed)) {
-      return;
-    }
-    baseUrls.push(trimmed);
-  };
-
-  if (isLocalhost) {
-    pushUnique(LOCAL_API_BASE_URL);
-  }
-
-  pushUnique(BLOG_API_BASE_URL);
-
-  if (PUBLIC_API_BASE_URL.startsWith("http://") || PUBLIC_API_BASE_URL.startsWith("https://") || PUBLIC_API_BASE_URL.startsWith("//")) {
-    pushUnique(PUBLIC_API_BASE_URL);
-  }
-
-  if (PUBLIC_API_BASE_URL.startsWith("/")) {
-    pushUnique(PUBLIC_API_BASE_URL);
-  }
-
-  if (!isLocalhost) {
-    pushUnique(LOCAL_API_BASE_URL);
-  }
-
-  return baseUrls;
-}
 
 function isRecord(value: unknown): value is UnknownRecord {
   return typeof value === "object" && value !== null;
@@ -80,6 +46,42 @@ function normalizeBaseUrl(baseUrl: string): string {
   return baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
 }
 
+function getCandidateBaseUrls(): string[] {
+  const isLocalhost =
+    typeof window !== "undefined" &&
+    /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
+
+  const baseUrls: string[] = [];
+  const pushUnique = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed || baseUrls.includes(trimmed)) {
+      return;
+    }
+    baseUrls.push(trimmed);
+  };
+
+  if (isLocalhost) {
+    pushUnique(LOCAL_API_BASE_URL);
+  }
+
+  pushUnique(BLOG_API_BASE_URL);
+
+  if (
+    PUBLIC_API_BASE_URL.startsWith("http://") ||
+    PUBLIC_API_BASE_URL.startsWith("https://") ||
+    PUBLIC_API_BASE_URL.startsWith("//") ||
+    PUBLIC_API_BASE_URL.startsWith("/")
+  ) {
+    pushUnique(PUBLIC_API_BASE_URL);
+  }
+
+  if (!isLocalhost) {
+    pushUnique(LOCAL_API_BASE_URL);
+  }
+
+  return baseUrls;
+}
+
 function resolveUrl(value: unknown): string {
   const rawValue = toStringValue(value).trim();
 
@@ -91,15 +93,12 @@ function resolveUrl(value: unknown): string {
     return rawValue;
   }
 
-  if (BLOG_API_BASE_URL || PUBLIC_API_BASE_URL || LOCAL_API_BASE_URL) {
-    try {
-      return new URL(rawValue, BLOG_API_BASE_URL || PUBLIC_API_BASE_URL || LOCAL_API_BASE_URL).toString();
-    } catch {
-      return rawValue;
-    }
+  const baseUrl = BLOG_API_BASE_URL || PUBLIC_API_BASE_URL || LOCAL_API_BASE_URL;
+  try {
+    return new URL(rawValue, normalizeBaseUrl(baseUrl)).toString();
+  } catch {
+    return rawValue;
   }
-
-  return rawValue;
 }
 
 function stripHtml(value: string): string {
@@ -150,7 +149,7 @@ function inferDepartment(post: UnknownRecord): string {
   return tagNames[0] || websiteName || "General";
 }
 
-function buildPlaceholderImage(title: string, department: string) {
+function buildPlaceholderImage(title: string, department: string): string {
   const safeTitle = title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const safeDepartment = department.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const svg = `
@@ -175,6 +174,7 @@ function buildPlaceholderImage(title: string, department: string) {
       <text x="70" y="430" font-family="Arial, sans-serif" font-size="28" fill="#cbd5e1">ZORA Product Blog</text>
     </svg>
   `;
+
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
@@ -183,19 +183,12 @@ function normalizeSection(section: unknown, fallbackTitle: string): BlogSection 
     return null;
   }
 
-  const subtitle = toStringValue(
-    section.subtitle ?? section.heading ?? section.title,
-    fallbackTitle
-  );
-  const paragraph = toStringValue(
-    section.paragraph ?? section.content ?? section.description ?? section.body
-  );
+  const subtitle = toStringValue(section.subtitle ?? section.heading ?? section.title, fallbackTitle);
+  const paragraph = toStringValue(section.paragraph ?? section.content ?? section.description ?? section.body);
   const image = resolveUrl(section.image ?? section.imageUrl ?? section.media_url);
   const video = resolveUrl(section.video ?? section.videoUrl ?? section.video_url);
   const imageAlt = toStringValue(section.imageAlt ?? section.image_alt ?? section.alt);
-  const mediaCaption = toStringValue(
-    section.mediaCaption ?? section.media_caption ?? section.caption
-  );
+  const mediaCaption = toStringValue(section.mediaCaption ?? section.media_caption ?? section.caption);
 
   if (!subtitle && !paragraph && !image && !video) {
     return null;
@@ -209,47 +202,6 @@ function normalizeSection(section: unknown, fallbackTitle: string): BlogSection 
     video: video || undefined,
     mediaCaption: mediaCaption || undefined,
   };
-}
-
-function normalizeSections(post: UnknownRecord, title: string, fallbackText: string): BlogSection[] {
-  const rawSections = post.sections ?? post.content_sections ?? post.blocks;
-
-  if (Array.isArray(rawSections)) {
-    const sections = rawSections
-      .map((section, index) =>
-        normalizeSection(section, `Section ${index + 1}`)
-      )
-      .filter((section): section is BlogSection => section !== null);
-
-    if (sections.length > 0) {
-      return sections;
-    }
-  }
-
-  const body = toStringValue(post.content ?? post.body ?? fallbackText);
-  const introVideo = resolveUrl(post.introVideo ?? post.intro_video);
-  const image = resolveUrl(post.featuredImage ?? post.featured_image ?? post.bannerImage ?? post.banner_image ?? post.ogImage ?? post.og_image);
-
-  const sectionsFromBody = buildSectionsFromBody(body, title, image, introVideo);
-  if (sectionsFromBody.length > 0) {
-    return sectionsFromBody;
-  }
-
-  const plainTextBody = stripHtml(body);
-  if (!plainTextBody) {
-    return [];
-  }
-
-  return [
-    {
-      subtitle: "Overview",
-      paragraph: plainTextBody,
-      image: image || undefined,
-      imageAlt: title ? `${title} cover image` : undefined,
-      video: introVideo || undefined,
-      mediaCaption: introVideo ? `${title} video` : undefined,
-    },
-  ];
 }
 
 function buildSectionsFromBody(body: string, title: string, image: string, introVideo: string): BlogSection[] {
@@ -340,6 +292,52 @@ function buildSectionsFromBody(body: string, title: string, image: string, intro
   }));
 }
 
+function normalizeSections(post: UnknownRecord, title: string, fallbackText: string): BlogSection[] {
+  const rawSections = post.sections ?? post.content_sections ?? post.blocks;
+
+  if (Array.isArray(rawSections)) {
+    const sections = rawSections
+      .map((section, index) => normalizeSection(section, `Section ${index + 1}`))
+      .filter((section): section is BlogSection => section !== null);
+
+    if (sections.length > 0) {
+      return sections;
+    }
+  }
+
+  const body = toStringValue(post.content ?? post.body ?? fallbackText);
+  const introVideo = resolveUrl(post.introVideo ?? post.intro_video);
+  const image = resolveUrl(
+    post.featuredImage ??
+      post.featured_image ??
+      post.bannerImage ??
+      post.banner_image ??
+      post.ogImage ??
+      post.og_image
+  );
+
+  const sectionsFromBody = buildSectionsFromBody(body, title, image, introVideo);
+  if (sectionsFromBody.length > 0) {
+    return sectionsFromBody;
+  }
+
+  const plainTextBody = stripHtml(body);
+  if (!plainTextBody) {
+    return [];
+  }
+
+  return [
+    {
+      subtitle: "Overview",
+      paragraph: plainTextBody,
+      image: image || undefined,
+      imageAlt: title ? `${title} cover image` : undefined,
+      video: introVideo || undefined,
+      mediaCaption: introVideo ? `${title} video` : undefined,
+    },
+  ];
+}
+
 function normalizePost(post: unknown, index = 0): BlogPost | null {
   if (!isRecord(post)) {
     return null;
@@ -348,6 +346,7 @@ function normalizePost(post: unknown, index = 0): BlogPost | null {
   const title = toStringValue(post.title ?? post.name ?? post.heading, `Blog Post ${index + 1}`);
   const slugSource = toStringValue(post.slug ?? post.url_slug ?? post.permalink ?? title);
   const slug = slugify(slugSource) || `blog-post-${index + 1}`;
+
   const descriptionSource =
     post.description ??
     post.excerpt ??
@@ -356,29 +355,35 @@ function normalizePost(post: unknown, index = 0): BlogPost | null {
     stripHtml(toStringValue(post.content ?? post.body));
   const description = toStringValue(descriptionSource);
   const department = inferDepartment(post);
-  const featuredImage = resolveUrl(
-    post.featuredImage ??
-      post.featured_image
-  );
-  const bannerImage = resolveUrl(
-    post.bannerImage ??
-      post.banner_image
-  );
+
+  const featuredImage = resolveUrl(post.featuredImage ?? post.featured_image);
+  const bannerImage = resolveUrl(post.bannerImage ?? post.banner_image);
   const ogImage = resolveUrl(post.ogImage ?? post.og_image);
-  const image = featuredImage || bannerImage || ogImage || resolveUrl(
-    post.featuredImage ??
-      post.featured_image ??
-      post.bannerImage ??
-      post.banner_image ??
-      post.image ??
-      post.imageUrl ??
-      post.thumbnail ??
-      post.cover_image
-  );
-  const date = toStringValue(
-    post.date ?? post.publishDate ?? post.publish_date ?? post.publishedAt ?? post.published_at ?? post.createdAt ?? post.created_at,
-    new Date().toISOString()
-  );
+  const image =
+    featuredImage ||
+    bannerImage ||
+    ogImage ||
+    resolveUrl(
+      post.featuredImage ??
+        post.featured_image ??
+        post.bannerImage ??
+        post.banner_image ??
+        post.image ??
+        post.imageUrl ??
+        post.thumbnail ??
+        post.cover_image
+    );
+
+  const dateSource =
+    post.date ??
+    post.publishDate ??
+    post.publish_date ??
+    post.publishedAt ??
+    post.published_at ??
+    post.createdAt ??
+    post.created_at;
+  const date = toStringValue(dateSource, new Date().toISOString());
+
   const readTime = toStringValue(post.readTime ?? post.read_time, estimateReadTime(`${description} ${toStringValue(post.content ?? post.body)}`));
   const sections = normalizeSections(post, title, description);
 
@@ -416,13 +421,7 @@ function extractPosts(payload: unknown): unknown[] {
     return [];
   }
 
-  const candidates = [
-    data.posts,
-    data.results,
-    data.items,
-    data.blogs,
-  ];
-
+  const candidates = [data.posts, data.results, data.items, data.blogs];
   for (const candidate of candidates) {
     if (Array.isArray(candidate)) {
       return candidate;
@@ -432,27 +431,11 @@ function extractPosts(payload: unknown): unknown[] {
   return [];
 }
 
-async function fetchAllPages(baseUrl: string, signal?: AbortSignal): Promise<unknown[]> {
-  const firstPagePath = `${POSTS_ENDPOINT}?page=1&limit=100`;
-  const firstPayload = await requestJson(firstPagePath, signal, baseUrl);
-  const firstPosts = extractPosts(firstPayload);
-  const meta = isRecord(firstPayload) && isRecord(firstPayload.meta) ? firstPayload.meta : null;
-  const totalPages = Number(meta?.totalPages ?? 1);
-
-  if (!Number.isFinite(totalPages) || totalPages <= 1) {
-    return firstPosts;
-  }
-
-  const extraPages = await Promise.all(
-    Array.from({ length: totalPages - 1 }, (_, index) =>
-      requestJson(`${POSTS_ENDPOINT}?page=${index + 2}&limit=100`, signal, baseUrl)
-    )
-  );
-
-  return extraPages.reduce<unknown[]>((all, payload) => all.concat(extractPosts(payload)), firstPosts);
-}
-
-async function requestJson(path: string, signal?: AbortSignal, baseUrl: string = BLOG_API_BASE_URL || PUBLIC_API_BASE_URL || LOCAL_API_BASE_URL): Promise<unknown> {
+async function requestJson(
+  path: string,
+  signal?: AbortSignal,
+  baseUrl: string = BLOG_API_BASE_URL || PUBLIC_API_BASE_URL || LOCAL_API_BASE_URL
+): Promise<unknown> {
   const response = await fetch(new URL(path, normalizeBaseUrl(baseUrl)).toString(), {
     method: "GET",
     headers: {
@@ -468,38 +451,52 @@ async function requestJson(path: string, signal?: AbortSignal, baseUrl: string =
   return response.json();
 }
 
+async function fetchAllPages(baseUrl: string, signal?: AbortSignal): Promise<unknown[]> {
+  const firstPagePath = `${POSTS_ENDPOINT}?page=1&limit=100`;
+  const firstPayload = await requestJson(firstPagePath, signal, baseUrl);
+  const firstPosts = extractPosts(firstPayload);
+  const meta = isRecord(firstPayload) && isRecord(firstPayload.meta) ? firstPayload.meta : null;
+  const totalPages = Number(
+    meta?.totalPages ?? meta?.total_pages ?? meta?.pageCount ?? meta?.page_count ?? 1
+  );
+
+  if (!Number.isFinite(totalPages) || totalPages <= 1) {
+    return firstPosts;
+  }
+
+  const extraPages = await Promise.all(
+    Array.from({ length: totalPages - 1 }, (_, index) =>
+      requestJson(`${POSTS_ENDPOINT}?page=${index + 2}&limit=100`, signal, baseUrl)
+    )
+  );
+
+  return extraPages.reduce<unknown[]>((all, payload) => all.concat(extractPosts(payload)), firstPosts);
+}
+
 export async function fetchBlogPosts(signal?: AbortSignal): Promise<BlogPost[]> {
   const candidateBaseUrls = getCandidateBaseUrls();
   let lastEmptyResult: BlogPost[] = [];
 
-  try {
-    for (const baseUrl of candidateBaseUrls) {
-      try {
-        const payload = await fetchAllPages(baseUrl, signal);
-        const normalizedPosts = payload
-          .map((post, index) => normalizePost(post, index))
-          .filter((post): post is BlogPost => post !== null);
+  for (const baseUrl of candidateBaseUrls) {
+    try {
+      const payload = await fetchAllPages(baseUrl, signal);
+      const normalizedPosts = payload
+        .map((post, index) => normalizePost(post, index))
+        .filter((post): post is BlogPost => post !== null);
 
-        if (normalizedPosts.length > 0) {
-          return normalizedPosts;
-        }
+      if (normalizedPosts.length > 0) {
+        return normalizedPosts;
+      }
 
-        lastEmptyResult = normalizedPosts;
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") {
-          return [];
-        }
+      lastEmptyResult = normalizedPosts;
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return [];
       }
     }
-
-    return lastEmptyResult;
-  } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      return [];
-    }
-    console.error("Failed to load blog posts from backend", error);
-    return [];
   }
+
+  return lastEmptyResult;
 }
 
 export async function fetchBlogPostBySlug(
@@ -508,7 +505,11 @@ export async function fetchBlogPostBySlug(
 ): Promise<BlogPost | null> {
   for (const baseUrl of getCandidateBaseUrls()) {
     try {
-      const payload = await requestJson(`${POSTS_ENDPOINT}/${encodeURIComponent(slug)}`, signal, baseUrl);
+      const payload = await requestJson(
+        `${POSTS_ENDPOINT}/${encodeURIComponent(slug)}`,
+        signal,
+        baseUrl
+      );
       const data = extractPayloadData(payload);
       const normalized = normalizePost(data, 0);
       if (normalized) {

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Clock3, Search } from "lucide-react";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
+import { fetchBlogPosts } from "../../lib/blogApi";
 import type { BlogPost } from "../../types/blog";
 
 interface BlogPageProps {
@@ -50,12 +51,36 @@ const BlogPage = ({
   onCookie,
 }: BlogPageProps) => {
   const [loadingPosts, setLoadingPosts] = useState(true);
+  const [livePosts, setLivePosts] = useState<BlogPost[]>([]);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [liveFetchComplete, setLiveFetchComplete] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const blogSectionRef = useRef<HTMLDivElement | null>(null);
   const previousSearchQueryRef = useRef(searchQuery);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    void fetchBlogPosts(controller.signal)
+      .then((items) => {
+        setLivePosts(items);
+        setFetchError(null);
+      })
+      .catch((error) => {
+        setFetchError(error instanceof Error ? error.message : "Failed to load blog posts.");
+        setLivePosts([]);
+      })
+      .finally(() => {
+        setLiveFetchComplete(true);
+      });
+
+    return () => controller.abort();
+  }, []);
+
   const featuredProducts = useMemo(() => {
-    return posts.map((post, index) => ({
+    const sourcePosts = livePosts.length > 0 ? livePosts : posts;
+
+    return sourcePosts.map((post, index) => ({
       ...post,
       productName:
         post.department === "Lead Generation"
@@ -69,7 +94,7 @@ const BlogPage = ({
         "from-emerald-500/80 via-teal-500/70 to-cyan-500/70",
       ][index % 3],
     }));
-  }, [posts]);
+  }, [livePosts, posts]);
 
   const scrollToBlogSection = () => {
     blogSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -80,7 +105,7 @@ const BlogPage = ({
     return () => window.clearTimeout(timeoutId);
   }, []);
 
-  const showLoading = loading || loadingPosts;
+  const showLoading = loading || loadingPosts || (!liveFetchComplete && livePosts.length === 0 && posts.length === 0 && !fetchError);
 
   const filteredPosts = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
