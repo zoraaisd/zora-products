@@ -29,6 +29,7 @@ import OrbiLeadsPage from "./components/products/detail/orbileads";
 import HRMSPage from "./components/products/detail/hrms";
 import CRMSPage from "./components/products/detail/crms";
 import { mockBlogPosts } from "./data/blogdata";
+import { fetchBlogPostBySlug, fetchBlogPosts } from "./lib/blogApi";
 
 type Page = "home" | "about" | "products" | "product-detail" | "contact" |
             "privacy" | "terms" | "cookies" | "documentation" | "blog" | "blog-post" | "faq";
@@ -116,6 +117,8 @@ function forceScrollToTop() {
 
 function App() {
   const [{ page, productId, blogSlug, blogPage }, setState] = useState<AppState>(() => getInitialState());
+  const [blogPosts, setBlogPosts] = useState(mockBlogPosts);
+  const [blogLoading, setBlogLoading] = useState(true);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -131,11 +134,54 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetchBlogPosts(controller.signal)
+      .then((posts) => {
+        setBlogPosts(posts);
+      })
+      .finally(() => {
+        setBlogLoading(false);
+      });
+
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    if (!blogSlug) {
+      return;
+    }
+
+    const existingPost = blogPosts.find((post) => post.slug === blogSlug);
+    if (existingPost) {
+      return;
+    }
+
+    const controller = new AbortController();
+
+    fetchBlogPostBySlug(blogSlug, controller.signal).then((post) => {
+      if (!post) {
+        return;
+      }
+
+      setBlogPosts((currentPosts) => {
+        if (currentPosts.some((currentPost) => currentPost.slug === post.slug)) {
+          return currentPosts;
+        }
+
+        return [post, ...currentPosts];
+      });
+    });
+
+    return () => controller.abort();
+  }, [blogPosts, blogSlug]);
+
   // Derive selectedProduct from productId
   const selectedProduct = useMemo(() => findProductById(productId), [productId]);
   const selectedBlogPost = useMemo(
-    () => mockBlogPosts.find((post) => post.slug === blogSlug) ?? null,
-    [blogSlug]
+    () => blogPosts.find((post) => post.slug === blogSlug) ?? null,
+    [blogPosts, blogSlug]
   );
 
   // Scroll before paint whenever page or product changes.
@@ -268,6 +314,8 @@ function App() {
   if (page === "blog") {
     return (
       <BlogPage
+        posts={blogPosts}
+        loading={blogLoading}
         onHome={() => setPageState("home")}
         onAbout={() => setPageState("about")}
         onProducts={() => setPageState("products")}
@@ -288,6 +336,8 @@ function App() {
     return (
       <BlogPostPage
         post={selectedBlogPost}
+        posts={blogPosts}
+        loading={blogLoading && !selectedBlogPost}
         onBack={() => setPageState("blog", null, null, blogPage ?? 1)}
         onPostClick={handleBlogPostClick}
         onHome={() => setPageState("home")}

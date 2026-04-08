@@ -3,9 +3,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Clock3, Search } from "lucide-react";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
-import { mockBlogPosts } from "../../data/blogdata";
+import type { MockBlogPost } from "../../data/blogdata";
 
 interface BlogPageProps {
+  posts: MockBlogPost[];
+  loading?: boolean;
   onHome: () => void;
   onAbout: () => void;
   onProducts: () => void;
@@ -21,21 +23,6 @@ interface BlogPageProps {
   onCookie?: () => void;
 }
 
-const featuredProducts = mockBlogPosts.map((post, index) => ({
-  ...post,
-  productName:
-    post.department === "Lead Generation"
-      ? "ORBILEADS"
-      : post.department === "Sales Automation"
-        ? "CRMS"
-        : "HRMS",
-  accent: [
-    "from-violet-500/80 via-purple-500/70 to-fuchsia-500/70",
-    "from-cyan-500/80 via-sky-500/70 to-indigo-500/70",
-    "from-emerald-500/80 via-teal-500/70 to-cyan-500/70",
-  ][index % 3],
-}));
-
 const POSTS_PER_PAGE = 6;
 
 function formatDate(iso: string) {
@@ -47,6 +34,8 @@ function formatDate(iso: string) {
 }
 
 const BlogPage = ({
+  posts,
+  loading = false,
   onHome,
   onAbout,
   onProducts,
@@ -65,6 +54,23 @@ const BlogPage = ({
   const blogSectionRef = useRef<HTMLDivElement | null>(null);
   const previousSearchQueryRef = useRef(searchQuery);
 
+  const featuredProducts = useMemo(() => {
+    return posts.map((post, index) => ({
+      ...post,
+      productName:
+        post.department === "Lead Generation"
+          ? "ORBILEADS"
+          : post.department === "Sales Automation"
+            ? "CRMS"
+            : post.department.toUpperCase(),
+      accent: [
+        "from-violet-500/80 via-purple-500/70 to-fuchsia-500/70",
+        "from-cyan-500/80 via-sky-500/70 to-indigo-500/70",
+        "from-emerald-500/80 via-teal-500/70 to-cyan-500/70",
+      ][index % 3],
+    }));
+  }, [posts]);
+
   const scrollToBlogSection = () => {
     blogSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -73,6 +79,8 @@ const BlogPage = ({
     const timeoutId = window.setTimeout(() => setLoadingPosts(false), 250);
     return () => window.clearTimeout(timeoutId);
   }, []);
+
+  const showLoading = loading || loadingPosts;
 
   const filteredPosts = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -177,7 +185,7 @@ const BlogPage = ({
             transition={{ delay: 0.15, duration: 0.7, ease: "easeOut" }}
             className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3"
           >
-            {loadingPosts ? (
+            {showLoading ? (
               [...Array(6)].map((_, index) => (
                 <div
                   key={index}
@@ -251,7 +259,7 @@ const BlogPage = ({
             )}
           </motion.div>
 
-          {!loadingPosts && totalPages > 1 ? (
+          {!showLoading && totalPages > 1 ? (
             <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
               <button
                 type="button"

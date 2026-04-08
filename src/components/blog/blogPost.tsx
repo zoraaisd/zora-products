@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Clock, Send, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, RefreshCw, Send, Tag, TrendingUp, User } from "lucide-react";
 import Footer from "../layout/Footer";
 import Navbar from "../layout/Navbar";
-import { mockBlogPosts, type MockBlogPost, type MockBlogSection } from "../../data/blogdata";
+import type { MockBlogPost, MockBlogSection } from "../../data/blogdata";
 
 interface BlogPostPageProps {
+  posts: MockBlogPost[];
   post?: MockBlogPost | null;
   loading?: boolean;
   onBack: () => void;
@@ -135,46 +136,56 @@ function RecentArticlesSidebar({
     fullName: "",
     email: "",
     phone: "",
+    service: "",
     message: "",
   });
 
   return (
-    <aside className="hidden lg:block lg:sticky lg:top-8 lg:w-[336px] lg:self-start">
-      <div className="space-y-2.5">
-        <div className="rounded-[22px] border border-white/10 bg-white/[0.05] p-3.5 shadow-[0_20px_55px_rgba(0,0,0,0.22)] backdrop-blur-2xl">
-          <h3 className="text-2xl font-semibold text-white">Recent Articles</h3>
-          <div className="mt-3 space-y-2">
+    <aside className="lg:-mt-[292px] lg:self-start lg:sticky lg:top-8">
+      <div className="space-y-10">
+        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_18px_45px_rgba(7,4,22,0.35)]">
+          <div className="mb-5 flex items-center gap-2">
+            <RefreshCw size={18} className="text-purple-300" />
+            <h3 className="text-[1.55rem] font-bold text-white">Recent Articles</h3>
+          </div>
+          <div className="space-y-5 border-t border-white/10 pt-5">
             {recentArticles.map((article) => (
               <button
                 key={article.slug}
                 type="button"
                 onClick={() => onPostClick?.(article.slug)}
-                className="flex w-full items-start gap-2.5 rounded-2xl border border-white/8 bg-black/20 p-2 text-left transition-all duration-300 hover:border-cyan-300/25 hover:bg-white/[0.04]"
+                className="group grid w-full grid-cols-[92px_minmax(0,1fr)] items-center gap-4 border-b border-white/10 pb-5 text-left last:border-b-0 last:pb-0"
               >
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="h-11 w-14 rounded-xl object-cover"
-                />
-                <div className="min-w-0">
-                  <p className="line-clamp-2 text-[0.88rem] font-semibold leading-[1.15rem] text-white">
+                <div className="h-[68px] w-[92px] overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div>
+                  <p className="text-[1.02rem] font-semibold leading-snug text-white transition-colors group-hover:text-purple-200">
                     {article.title}
                   </p>
-                  <p className="mt-1 text-[11px] text-slate-400">
-                    {formatDate(article.date)}
-                  </p>
+                  <div className="mt-2 flex items-center gap-2 text-sm text-gray-400">
+                    <Calendar size={13} className="text-purple-300" />
+                    <span>{formatDate(article.date)}</span>
+                  </div>
                 </div>
               </button>
             ))}
           </div>
         </div>
 
-        <div className="rounded-[22px] border border-white/10 bg-white/[0.05] p-3.5 shadow-[0_20px_55px_rgba(0,0,0,0.22)] backdrop-blur-2xl">
-          <h3 className="text-2xl font-semibold text-white">Book a Consultation</h3>
-          <p className="mt-2 text-sm leading-6 text-slate-300">
-            Fill in your details here and our team can follow up with the right AI setup for your business.
+        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_18px_45px_rgba(7,4,22,0.35)]">
+          <div className="mb-4 flex items-center gap-2">
+            <TrendingUp size={18} className="text-fuchsia-300" />
+            <h3 className="text-[1.55rem] font-bold text-white">Book Your Free Consultation</h3>
+          </div>
+          <p className="mb-5 text-sm leading-relaxed text-gray-400">
+            Fill out the form and our team will get back to you within 24 hours.
           </p>
-          <form className="mt-3 space-y-2.5">
+          <form className="space-y-4">
             <input
               type="text"
               placeholder="Full Name"
@@ -185,52 +196,66 @@ function RecentArticlesSidebar({
                   fullName: event.target.value,
                 }))
               }
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/35 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
             />
-            <input
-              type="email"
-              placeholder="Email Address"
-              value={consultationForm.email}
-              onChange={(event) =>
-                setConsultationForm((current) => ({
-                  ...current,
-                  email: event.target.value,
-                }))
-              }
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/35 focus:outline-none"
-            />
-            <input
-              type="text"
-              placeholder="Phone Number"
-              value={consultationForm.phone}
-              onChange={(event) =>
-                setConsultationForm((current) => ({
-                  ...current,
-                  phone: event.target.value,
-                }))
-              }
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/35 focus:outline-none"
-            />
-            <textarea
-              rows={4}
-              placeholder="Your Message"
-              value={consultationForm.message}
-              onChange={(event) =>
-                setConsultationForm((current) => ({
-                  ...current,
-                  message: event.target.value,
-                }))
-              }
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/35 focus:outline-none"
-            />
-            <button
-              type="button"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_rgba(34,211,238,0.16)] transition-transform duration-200 hover:-translate-y-0.5"
-            >
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={consultationForm.email}
+            onChange={(event) =>
+              setConsultationForm((current) => ({
+                ...current,
+                email: event.target.value,
+              }))
+            }
+            className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
+          />
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            value={consultationForm.phone}
+            onChange={(event) =>
+              setConsultationForm((current) => ({
+                ...current,
+                phone: event.target.value,
+              }))
+            }
+            className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
+          />
+          <input
+            type="text"
+            placeholder="Service Interested In"
+            value={consultationForm.service}
+            onChange={(event) =>
+              setConsultationForm((current) => ({
+                ...current,
+                service: event.target.value,
+              }))
+            }
+            className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
+          />
+          <textarea
+            rows={4}
+            placeholder="Your Message"
+            value={consultationForm.message}
+            onChange={(event) =>
+              setConsultationForm((current) => ({
+                ...current,
+                message: event.target.value,
+              }))
+            }
+            className="w-full resize-none rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-purple-400/50 focus:outline-none"
+          />
+          <button
+            type="button"
+            className="w-full rounded-2xl bg-gradient-to-r from-purple-600 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:from-purple-500 hover:to-fuchsia-400"
+          >
+            <span className="inline-flex items-center justify-center gap-2">
               <Send className="h-4 w-4" />
-              Send Request
-            </button>
-          </form>
+              Send Message
+            </span>
+          </button>
+        </form>
         </div>
       </div>
     </aside>
@@ -238,6 +263,7 @@ function RecentArticlesSidebar({
 }
 
 const BlogPostPage = ({
+  posts,
   post,
   loading = false,
   onBack,
@@ -245,7 +271,7 @@ const BlogPostPage = ({
   onHome,
   onAbout,
   onProducts,
-  onProductClick,
+  onProductClick: _onProductClick,
   onBlog,
   onContact,
   onDocumentation,
@@ -258,8 +284,12 @@ const BlogPostPage = ({
     ? "Loading Blog Post"
     : post?.title ?? "Blog Post";
   const recentArticles = useMemo(
-    () => mockBlogPosts.filter((item) => item.slug !== post?.slug).slice(0, 3),
-    [post?.slug]
+    () =>
+      [...posts]
+        .filter((item) => item.slug !== post?.slug)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 3),
+    [post?.slug, posts]
   );
 
   return (
@@ -282,148 +312,138 @@ const BlogPostPage = ({
         currentPage="blog"
       />
 
-      <div className="mx-auto max-w-7xl px-6 pb-12 pt-36">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_360px] lg:items-start lg:gap-x-[3.25rem]">
-          <div>
-      <section className="relative overflow-hidden pb-6">
-        <div className="relative z-10">
-          <motion.button
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.45, ease: "easeOut" }}
-            onClick={onBack}
-            className="group mb-8 inline-flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-white"
-          >
-            <ArrowLeft
-              size={15}
-              className="transition-transform duration-200 group-hover:-translate-x-1"
-            />
-            Back to Blog
-          </motion.button>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.08, ease: "easeOut" }}
-            className="grid gap-8"
-          >
+      <section className="relative overflow-hidden px-6 pb-0 pt-40">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute left-1/2 top-0 h-[360px] w-[600px] -translate-x-1/2 rounded-full bg-purple-600/15 blur-[100px]" />
+        </div>
+        <div className="relative z-10 mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+          <div className="lg:grid lg:grid-cols-[minmax(0,840px)_420px] lg:items-start lg:gap-28">
             <div className="min-w-0">
-              <div className="mb-5 flex flex-wrap items-center gap-3">
+              <motion.button
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4 }}
+                onClick={onBack}
+                className="group mb-8 inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-purple-300"
+              >
+                <ArrowLeft
+                  size={15}
+                  className="transition-transform duration-200 group-hover:-translate-x-1"
+                />
+                Back to Blog
+              </motion.button>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.05 }}
+                className="mb-5 flex flex-wrap items-center gap-5"
+              >
                 {post?.department ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-400/20 bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-200">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-500/25 bg-purple-500/12 px-3 py-1 text-xs font-semibold text-purple-200">
                     <Tag size={11} />
                     {post.department}
                   </span>
                 ) : null}
-                {post?.featured ? (
-                  <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-200">
-                    Featured
-                  </span>
-                ) : null}
-              </div>
-
-              <h1 className="max-w-4xl bg-gradient-to-r from-white via-purple-100 to-cyan-200 bg-clip-text text-4xl font-extrabold leading-tight text-transparent md:text-5xl">
-                {pageTitle}
-              </h1>
-
-              <div className="mt-5 flex flex-wrap items-center gap-5 text-sm text-slate-400">
-                <span>ZORA Editorial Team</span>
-                {post?.date ? (
-                  <span className="inline-flex items-center gap-2">
-                    <Calendar size={14} className="text-amber-400" />
-                    {formatDate(post.date)}
-                  </span>
-                ) : null}
+                <span className="flex items-center gap-2 text-sm text-gray-400">
+                  <User size={14} className="text-purple-300" />
+                  ZORA Editorial Team
+                </span>
                 {post?.readTime ? (
-                  <span className="inline-flex items-center gap-2">
-                    <Clock size={14} className="text-cyan-300" />
+                  <span className="flex items-center gap-2 text-sm text-gray-400">
+                    <Clock size={14} className="text-purple-300" />
                     {post.readTime}
                   </span>
                 ) : null}
-              </div>
+              </motion.div>
 
-              <p className="mt-6 max-w-4xl text-base leading-8 text-slate-300 md:text-lg">
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="mb-5 max-w-full text-4xl font-extrabold leading-tight tracking-tight text-white md:text-[3.2rem]"
+              >
+                {pageTitle}
+              </motion.h1>
+              <p className="mb-6 max-w-full text-left text-base leading-relaxed text-gray-300 md:text-[1.05rem]">
                 {loading
                   ? "Preparing the full article content for you."
                   : post?.description ?? "The requested blog post could not be found."}
               </p>
-
-              {post?.image ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="group mt-8 max-w-4xl overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] shadow-[0_20px_55px_rgba(0,0,0,0.3)]"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="h-full min-h-[220px] w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
-                  </div>
-                </motion.div>
-              ) : null}
             </div>
-
-            <div className="hidden" />
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      <motion.article
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.12, ease: "easeOut" }}
-        className="pb-8"
-      >
-        <div className="grid gap-8">
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.22)] backdrop-blur-2xl md:p-8">
-            <div className="space-y-10">
-          {loading ? (
-            [...Array(3)].map((_, index) => (
-              <section
-                key={index}
-                className="border-b border-white/8 pb-8 last:border-b-0"
-              >
-                <div className="h-3 w-24 animate-pulse rounded bg-cyan-300/20" />
-                <div className="mt-4 h-8 w-2/3 animate-pulse rounded bg-white/10" />
-                <div className="mt-4 space-y-3">
-                  <div className="h-4 w-full animate-pulse rounded bg-white/10" />
-                  <div className="h-4 w-11/12 animate-pulse rounded bg-white/10" />
-                  <div className="h-4 w-4/5 animate-pulse rounded bg-white/10" />
-                </div>
-              </section>
-            ))
-          ) : post?.sections?.length ? (
-            post.sections.map((section, index) => (
-              <section
-                key={section.subtitle}
-                className="pb-8"
-              >
-                <h2 className="text-2xl font-semibold leading-snug text-white md:text-[1.95rem]">
-                  {section.subtitle}
-                </h2>
-                <SectionBody section={section} postTitle={post.title} />
-                {index < post.sections.length - 1 ? (
-                  <div className="mt-8 h-px bg-white/8" />
-                ) : null}
-              </section>
-            ))
-          ) : (
-            <section className="border-b border-white/8 pb-8 last:border-b-0">
-                <p className="text-base leading-8 text-slate-300">
-                  No blog content is available for this post yet.
-                </p>
-              </section>
-          )}
-            </div>
+      <div className="mx-auto max-w-[1440px] px-4 pb-32 pt-2 sm:px-6 lg:px-8">
+        <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,840px)_420px] lg:gap-28">
+          <motion.article
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.25 }}
+            className="max-w-[860px]"
+          >
+            {post?.image ? (
+              <div className="mt-1 overflow-hidden border border-white/10 bg-white/[0.03] shadow-[0_18px_45px_rgba(7,4,22,0.35)]">
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="h-[210px] w-full object-cover md:h-[300px]"
+                />
+              </div>
+            ) : null}
+            {post?.date ? (
+              <div className="mt-5 flex items-center gap-2 text-sm text-gray-400">
+                <Calendar size={14} className="text-purple-300" />
+                <span className="font-medium text-gray-300">Posted on</span>
+                <span>{formatDate(post.date)}</span>
+              </div>
+            ) : null}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-8 mt-5 origin-left h-px bg-gradient-to-r from-purple-500/60 via-fuchsia-500/30 to-transparent"
+            />
 
-          </div>
-        </div>
-      </motion.article>
-          </div>
+            <div className="max-w-none pr-2">
+              {loading ? (
+                [...Array(3)].map((_, index) => (
+                  <section
+                    key={index}
+                    className="border-b border-white/8 pb-8 last:border-b-0"
+                  >
+                    <div className="h-3 w-24 animate-pulse rounded bg-cyan-300/20" />
+                    <div className="mt-4 h-8 w-2/3 animate-pulse rounded bg-white/10" />
+                    <div className="mt-4 space-y-3">
+                      <div className="h-4 w-full animate-pulse rounded bg-white/10" />
+                      <div className="h-4 w-11/12 animate-pulse rounded bg-white/10" />
+                      <div className="h-4 w-4/5 animate-pulse rounded bg-white/10" />
+                    </div>
+                  </section>
+                ))
+              ) : post?.sections?.length ? (
+                post.sections.map((section, index) => (
+                  <section key={section.subtitle} className="mb-10">
+                    <h2 className="mb-4 text-2xl font-semibold text-white md:text-[1.95rem]">
+                      {section.subtitle}
+                    </h2>
+                    <SectionBody section={section} postTitle={post.title} />
+                    {index < post.sections.length - 1 ? (
+                      <div className="mt-8 h-px bg-white/8" />
+                    ) : null}
+                  </section>
+                ))
+              ) : (
+                <section className="border-b border-white/8 pb-8 last:border-b-0">
+                  <p className="text-base leading-8 text-slate-300">
+                    No blog content is available for this post yet.
+                  </p>
+                </section>
+              )}
+            </div>
+          </motion.article>
+
           <RecentArticlesSidebar
             recentArticles={recentArticles}
             onPostClick={onPostClick}
