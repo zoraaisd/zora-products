@@ -1,0 +1,11 @@
+export { default as Hero } from "./Hero";
+export { default as EnterpriseDifferentiators } from "./EnterpriseDifferentiators";
+export { default as Industries } from "./Industries";
+export { default as Technologies } from "./Technologies";
+export { default as GlobalImpact } from "./GlobalImpact";
+export { default as ProductsShowcase } from "./ProductsShowcase";
+export { default as DeliveryProcess } from "./DeliveryProcess";
+export { default as InsightsPreview } from "./InsightsPreview";
+export { default as Testimonials } from "./Testimonials";
+export { default as Cta } from "./Cta";
+export { default as SectionReveal } from "./SectionReveal";

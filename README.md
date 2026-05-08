@@ -1,76 +1,103 @@
-# 🚀 Zora Global AI
+# Zora Services
 
-Enterprise AI Automation & Intelligent Business Solutions Platform.
+A modern, full-featured services platform built with React and TypeScript. Zora provides a comprehensive solution for browsing IT and non-IT services, managing appointments and exploring product offerings.
 
-Zora Global AI delivers comprehensive enterprise-grade artificial intelligence solutions including AI automation, CRM intelligence, workflow automation, security and scalable business AI systems.
+## Features
 
----
+- 🎯 **Service Categories** - Browse and filter IT and non-IT services
+- 📅 **Appointment Booking** - Schedule appointments with ease
+- 🛍️ **Product Catalog** - Explore available products
+- ✨ **Smooth Animations** - Beautiful transitions powered by Framer Motion
+- 🎨 **Responsive Design** - Modern UI with Tailwind CSS
+- ⚡ **Fast Performance** - Optimized with Vite for rapid development and production builds
+- 📱 **Mobile Friendly** - Works seamlessly across all devices
 
-## 🌐 Live Website
+## Tech Stack
 
-🔗 https://www.zoraai.us/
+- **React** (v19) - UI library
+- **TypeScript** - Type-safe development
+- **Vite** - Build tool and dev server
+- **React Router** - Client-side routing
+- **Tailwind CSS** - Utility-first CSS framework
+- **Framer Motion** - Animation library
+- **Lucide React** - Icon library
+- **ESLint** - Code quality
 
----
+## Project Structure
 
-## 🧠 About The Project
-
-Zora Global AI is a modern AI solutions platform designed to:
-
-- Automate business processes
-- Deliver intelligent CRM insights
-- Enable workflow automation
-- Provide scalable enterprise AI systems
-- Improve decision-making through AI
-
-This project is built with performance, SEO and scalability in mind.
-
----
-
-## ⚙️ Tech Stack
-
-- ⚛️ React
-- ⚡ Vite
-- 🟦 TypeScript
-- 🎨 Tailwind CSS
-- 🎞 Framer Motion
-- 📊 SEO Optimized Structure
-
----
-
-## 📂 Project Structure
-
+```
 src/
-├── components/
-│ ├── layout/
-│ ├── pages/
-│ ├── products/
-│ └── section/
-├── assets/
-├── App.tsx
-└── main.tsx
+├── components/        # Reusable UI components
+├── pages/            # Page components
+├── layouts/          # Layout components
+├── data/             # Data files and constants
+├── assets/           # Images and static files
+├── App.tsx           # Root component
+└── main.tsx          # Application entry point
+```
 
+## Prerequisites
 
----
+- Node.js (v16 or higher)
+- npm or yarn package manager
 
-## ✨ Features
+## Installation
 
-- 🌌 Modern AI-focused UI
-- 🎞 Smooth animations (Framer Motion)
-- 📱 Fully responsive design
-- 🔍 SEO optimized (Title, Meta, H1 structure)
-- 📊 Structured content hierarchy
-- 📩 Contact form integration (Formspree)
-- 📅 Calendly booking integration
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd zora-services
+```
 
----
+2. Install dependencies:
+```bash
+npm install
+```
 
-## 🔎 SEO Implementation
+## Available Scripts
 
-- Optimized `<title>` tag
-- Meta description (150–160 characters)
-- Single `<h1>` structure
-- Semantic HTML hierarchy
-- Bing & Google index compliant
+### Development Server
 
----
+```bash
+npm run dev
+```
+Starts the development server with hot module replacement (HMR). Open [http://localhost:5173](http://localhost:5173) in your browser.
 
+### Build
+
+```bash
+npm run build
+```
+Creates an optimized production build. Outputs to the `dist/` directory.
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+Serves the production build locally for testing before deployment.
+
+### Lint
+
+```bash
+npm run lint
+```
+Runs ESLint to check code quality and style.
+
+## Development Workflow
+
+1. Create feature branches for new development
+2. Run `npm run lint` before committing to ensure code quality
+3. Test changes using `npm run dev`
+4. Build and preview with `npm run build && npm run preview`
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## License
+
+Private project - All rights reserved.

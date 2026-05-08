@@ -1,8 +1,115 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  base = "/"
+
+# Canonical host redirects
+[[redirects]]
+  from   = "http://zoraglobalai.com/*"
+  to     = "https://www.zoraglobalai.com/:splat"
+  status = 301
+  force  = true
 
 [[redirects]]
+  from   = "https://zoraglobalai.com/*"
+  to     = "https://www.zoraglobalai.com/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "http://www.zoraglobalai.com/*"
+  to     = "https://www.zoraglobalai.com/:splat"
+  status = 301
+  force  = true
+
+# Service URL canonicalization
+[[redirects]]
+  from   = "/services"
+  to     = "/services/website-web-application-services"
+  status = 301
+
+[[redirects]]
+  from   = "/services/it"
+  to     = "/services/website-web-application-services"
+  status = 301
+
+[[redirects]]
+  from   = "/services/non-it"
+  to     = "/services/website-web-application-services"
+  status = 301
+
+[[redirects]]
+  from   = "/services/it/:category/:item"
+  to     = "/services/:category"
+  status = 301
+
+[[redirects]]
+  from   = "/services/non-it/:category/:item"
+  to     = "/services/:category"
+  status = 301
+
+[[redirects]]
+  from   = "/services/it/:category"
+  to     = "/services/:category"
+  status = 301
+
+[[redirects]]
+  from   = "/services/non-it/:category"
+  to     = "/services/:category"
+  status = 301
+
+[[redirects]]
+  from   = "/services/website-web-application-services/:item"
+  to     = "/services/website-web-application-services"
+  status = 301
+
+[[redirects]]
+  from   = "/services/mobile-application-development/:item"
+  to     = "/services/mobile-application-development"
+  status = 301
+
+[[redirects]]
+  from   = "/services/custom-enterprise-software/:item"
+  to     = "/services/custom-enterprise-software"
+  status = 301
+
+[[redirects]]
+  from   = "/services/digital-marketing-services/:item"
+  to     = "/services/digital-marketing-services"
+  status = 301
+
+[[redirects]]
+  from   = "/services/ai-automation-solutions/:item"
+  to     = "/services/ai-automation-solutions"
+  status = 301
+
+[[redirects]]
+  from   = "/services/cloud-infrastructure-services/:item"
+  to     = "/services/cloud-infrastructure-services"
+  status = 301
+
+[[redirects]]
+  from   = "/services/business-strategy-consulting/:item"
+  to     = "/services/business-strategy-consulting"
+  status = 301
+
+[[redirects]]
+  from   = "/services/staff-augmentation-workforce-solutions/:item"
+  to     = "/services/staff-augmentation-workforce-solutions"
+  status = 301
+
+[[redirects]]
+  from   = "/services/accounting-financial-operations/:item"
+  to     = "/services/accounting-financial-operations"
+  status = 301
+
+[[redirects]]
+  from   = "/services/branding-creative-services/:item"
+  to     = "/services/branding-creative-services"
+  status = 301
+
+# SPA fallback. Keep this last.
+[[redirects]]
   from = "/*"
-  to = "/index.html"
+  to   = "/index.html"
   status = 200

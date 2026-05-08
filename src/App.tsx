@@ -1,459 +1,285 @@
-import { useState, useEffect, useMemo, useLayoutEffect } from "react";
-import Navbar from "./components/layout/Navbar";
-import Hero from "./components/section/Hero";
-import TopProducts from "./components/section/TopProducts";
-import AllProducts from "./components/section/AllProducts";
-import WhyChoose from "./components/section/WhyChoose";
-import Tools from "./components/section/Tools";
-import CTA from "./components/section/CTA";
-import Footer from "./components/layout/Footer";
-import NexusPricing from "./components/section/NexusPricing";
-import About from "./components/about";
-import ProductsPage from "./components/products";
-import ContactPage from "./components/contact";
-import BlogPage from "./components/blog/blog";
-import BlogPostPage from "./components/blog/blogPost";
-import { products, type Product } from "./components/products/data";
-import { topProducts, type TopProduct } from "./components/products/topdata";
-import SecureMessengerPage from "./components/products/detail/secure-messenger";
-import TelecomBotPage from "./components/products/detail/telecom-bot";
-import ChatBotPage from "./components/products/detail/chat-bot";
-import WorkflowAutomationPage from "./components/products/detail/workflow-automation";
-import EmailAutomationPage from "./components/products/detail/email-automation";
-import WhatsappAutomationPage from "./components/products/detail/whatsapp-automation";
-import AnalyticsEnginePage from "./components/products/detail/analytics-engine";
-import SmartAssistantPage from "./components/products/detail/smart-assistant";
-import AIIntelligenceHubPage from "./components/products/detail/ai-intelligence-hub";
-import SecurityShieldPage from "./components/products/detail/security-shield";
-import OrbiLeadsPage from "./components/products/detail/orbileads";
-import HRMSPage from "./components/products/detail/hrms";
-import CRMSPage from "./components/products/detail/crms";
-import { fetchBlogPostBySlug, fetchBlogPosts } from "./lib/blogApi";
-import type { BlogPost } from "./types/blog";
+import React, { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Navigate, Routes, Route, useLocation } from "react-router-dom";
 
-type Page = "home" | "about" | "products" | "product-detail" | "contact" |
-            "privacy" | "terms" | "cookies" | "documentation" | "blog" | "blog-post" | "faq";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import CookieNotice from "./components/CookieNotice";
+import ScrollToTop from "./components/ScrollToTop";
+import Home from "./pages/Home";
+import AccountingFinancialOperationsPage from "./pages/services/accounting-financial-operations";
+import AiAutomationSolutionsPage from "./pages/services/ai-automation-solutions";
+import BrandingCreativeServicesPage from "./pages/services/branding-creative-services";
+import BusinessStrategyConsultingPage from "./pages/services/business-strategy-consulting";
+import CloudInfrastructureServicesPage from "./pages/services/cloud-infrastructure-services";
+import CustomEnterpriseSoftwarePage from "./pages/services/custom-enterprise-software";
+import DigitalMarketingServicesPage from "./pages/services/digital-marketing-services";
+import MobileApplicationDevelopmentPage from "./pages/services/mobile-application-development";
+import StaffAugmentationWorkforceSolutionsPage from "./pages/services/staff-augmentation-workforce-solutions";
+import WebsiteWebApplicationServicesPage from "./pages/services/website-web-application-services";
 
-interface AppState {
-  page: Page;
-  productId: string | null;
-  blogSlug?: string | null;
-  blogPage?: number;
-}
+/* ================= MAIN PAGES ================= */
+const About = lazy(() => import("./pages/About"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const BookAppointment = lazy(() => import("./pages/BookAppointment"));
+const ProductDetail = lazy(() => import("./pages/products/ItemPage"));
 
-function findProductById(id: string | null): Product | TopProduct | null {
-  if (!id) return null;
-  const product = products.find(p => p.id === id);
-  if (product) return product;
-  const topProduct = topProducts.find(p => p.id === id);
-  return topProduct || null;
-}
+/* ================= BLOG ================= */
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
 
-function getInitialState(): AppState {
-  // Parse the pathname from the URL to determine the initial page
-  const path = window.location.pathname.replace(/^\//, "");
-  if (!path || path === "") return { page: "home", productId: null };
-  if (path === "blog") {
-    return { page: "blog", productId: null, blogPage: 1 };
-  }
-  if (path.startsWith("blog/page/")) {
-    const rawPageNumber = Number(path.split("/")[2]);
-    const blogPage = Number.isFinite(rawPageNumber) && rawPageNumber > 0
-      ? Math.floor(rawPageNumber)
-      : 1;
-    return { page: "blog", productId: null, blogPage };
-  }
-  if (path.startsWith("blog/")) {
-    const blogSlug = path.split("/").slice(1).join("/");
-    return { page: "blog-post", productId: null, blogSlug, blogPage: 1 };
-  }
-  if (path.startsWith("products/")) {
-    const productId = path.split("/")[1];
-    return { page: "product-detail", productId };
-  }
-  // Handle known pages
-  const knownPages: Page[] = [
-    "home", "about", "products", "contact", "privacy", "terms", "cookies", "documentation", "blog", "faq"
-  ];
-  if (knownPages.includes(path as Page)) {
-    return { page: path as Page, productId: null };
-  }
-  return { page: "home", productId: null };
-}
+const RouteFallback: React.FC = () => (
+  <div className="min-h-[85vh] bg-gradient-to-b from-[#0b0318] via-[#120424] to-[#16062d]" />
+);
 
-function getUrlForPage(page: Page, productId: string | null = null): string {
-  if (page === "blog-post") {
-    return productId ? `/blog/${productId}` : "/blog";
-  }
-  if (page === "blog") {
-    const nextPage = productId ? Number(productId) : 1;
-    return nextPage > 1 ? `/blog/page/${nextPage}` : "/blog";
-  }
-  if (page === "product-detail" && productId) {
-    return `/products/${productId}`;
-  }
-  if (page === "home") return "/";
-  return `/${page}`;
-}
-
-function forceScrollToTop() {
-  // Scroll all possible scroll targets to ensure it works
-  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-  
-  requestAnimationFrame(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  });
-  
-  setTimeout(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, 50);
-}
-
-function App() {
-  const [{ page, productId, blogSlug, blogPage }, setState] = useState<AppState>(() => getInitialState());
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [blogLoading, setBlogLoading] = useState(true);
-
-  useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
-
-    forceScrollToTop();
-
-    return () => {
-      if ("scrollRestoration" in window.history) {
-        window.history.scrollRestoration = "auto";
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetchBlogPosts(controller.signal)
-      .then((posts) => {
-        setBlogPosts(posts);
-      })
-      .finally(() => {
-        setBlogLoading(false);
-      });
-
-    return () => controller.abort();
-  }, []);
-
-  useEffect(() => {
-    if (!blogSlug) {
-      return;
-    }
-
-    const existingPost = blogPosts.find((post) => post.slug === blogSlug);
-    if (existingPost) {
-      return;
-    }
-
-    const controller = new AbortController();
-
-    fetchBlogPostBySlug(blogSlug, controller.signal).then((post) => {
-      if (!post) {
-        return;
-      }
-
-      setBlogPosts((currentPosts) => {
-        if (currentPosts.some((currentPost) => currentPost.slug === post.slug)) {
-          return currentPosts;
-        }
-
-        return [post, ...currentPosts];
-      });
-    });
-
-    return () => controller.abort();
-  }, [blogPosts, blogSlug]);
-
-  // Derive selectedProduct from productId
-  const selectedProduct = useMemo(() => findProductById(productId), [productId]);
-  const selectedBlogPost = useMemo(
-    () => blogPosts.find((post) => post.slug === blogSlug) ?? null,
-    [blogPosts, blogSlug]
-  );
-
-  // Scroll before paint whenever page or product changes.
-  useLayoutEffect(() => {
-    forceScrollToTop();
-  }, [page, productId, blogSlug, blogPage]);
-
-  // Persist state to localStorage
-  useEffect(() => {
-      localStorage.setItem(
-      "zora-app-state",
-      JSON.stringify({ page, productId, blogSlug, blogPage })
-    );
-  }, [page, productId, blogSlug, blogPage]);
-
-  // Handle browser back/forward buttons
-  useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
-      // Scroll to top before updating state
-      forceScrollToTop();
-      
-      if (event.state?.page) {
-        setState({
-          page: event.state.page,
-          productId: event.state.productId || null,
-          blogSlug: event.state.blogSlug || null,
-          blogPage: event.state.blogPage || 1,
-        });
-      } else {
-        // No state means we're at the initial entry, go home
-        setState({ page: "home", productId: null, blogSlug: null, blogPage: 1 });
-      }
-    };
-
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
-
-
-  const setPageState = (
-    newPage: Page,
-    productId: string | null = null,
-    nextBlogSlug: string | null = null,
-    nextBlogPage: number = 1
-  ) => {
-    const normalizedBlogPage = nextBlogPage > 0 ? Math.floor(nextBlogPage) : 1;
-    const newState = {
-      page: newPage,
-      productId,
-      blogSlug: nextBlogSlug,
-      blogPage: normalizedBlogPage,
-    };
-    const url = getUrlForPage(
-      newPage,
-      newPage === "blog-post"
-        ? nextBlogSlug
-        : newPage === "blog"
-          ? String(normalizedBlogPage)
-          : productId
-    );
-    const isSameState =
-      page === newPage &&
-      productId === newState.productId &&
-      blogSlug === newState.blogSlug &&
-      blogPage === newState.blogPage;
-
-    // Scroll BEFORE state change to ensure scroll happens before render
-    forceScrollToTop();
-
-    if (isSameState) {
-      window.history.replaceState(newState, "", url);
-    } else {
-      window.history.pushState(newState, "", url);
-    }
-
-    setState(newState);
-  };
-
-  const handleProductClick = (product: Product) => {
-    setPageState("product-detail", product.id);
-  };
-
-  const handleTopProductClick = (product: TopProduct) => {
-    setPageState("product-detail", product.id);
-  };
-
-  const handleBlogPostClick = (slug: string) => {
-    setPageState("blog-post", null, slug, blogPage ?? 1);
-  };
-
-  const handleBlogPageChange = (nextBlogPage: number) => {
-    setPageState("blog", null, null, nextBlogPage);
-  };
-
-
-  if (page === "about") {
-    return (
-      <About
-        onBack={() => setPageState("home")}
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProduct={() => setPageState("products")}
-        onContact={() => setPageState("contact")}
-        onDocumentation={() => setPageState("documentation")}
-        onBlog={() => setPageState("blog", null, null, 1)}
-        onFAQ={() => setPageState("faq")}
-        onPrivacy={() => setPageState("privacy")}
-        onTerms={() => setPageState("terms")}
-        onCookie={() => setPageState("cookies")}
-      />
-    );
-  }
-
-  if (page === "contact") {
-    return (
-      <ContactPage
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onContact={() => setPageState("contact")}
-        onDocumentation={() => setPageState("documentation")}
-        onBlog={() => setPageState("blog", null, null, 1)}
-        onFAQ={() => setPageState("faq")}
-        onPrivacy={() => setPageState("privacy")}
-        onTerms={() => setPageState("terms")}
-        onCookie={() => setPageState("cookies")}
-      />
-    );
-  }
-  if (page === "blog") {
-    return (
-      <BlogPage
-        posts={blogPosts}
-        loading={blogLoading}
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onBlog={() => setPageState("blog", null, null, 1)}
-        onPostClick={handleBlogPostClick}
-        currentPage={blogPage ?? 1}
-        onPageChange={handleBlogPageChange}
-        onContact={() => setPageState("contact")}
-        onDocumentation={() => setPageState("documentation")}
-        onFAQ={() => setPageState("faq")}
-        onPrivacy={() => setPageState("privacy")}
-        onTerms={() => setPageState("terms")}
-        onCookie={() => setPageState("cookies")}
-      />
-    );
-  }
-  if (page === "blog-post") {
-    return (
-      <BlogPostPage
-        post={selectedBlogPost}
-        posts={blogPosts}
-        loading={blogLoading && !selectedBlogPost}
-        onBack={() => setPageState("blog", null, null, blogPage ?? 1)}
-        onPostClick={handleBlogPostClick}
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onProductClick={(id) => setPageState("product-detail", id)}
-        onBlog={() => setPageState("blog", null, null, 1)}
-        onContact={() => setPageState("contact")}
-        onDocumentation={() => setPageState("documentation")}
-        onFAQ={() => setPageState("faq")}
-        onPrivacy={() => setPageState("privacy")}
-        onTerms={() => setPageState("terms")}
-        onCookie={() => setPageState("cookies")}
-      />
-    );
-  }
-  if (page === "products") {
-    return (
-      <ProductsPage
-        onProductClick={handleProductClick}
-        onTopProductClick={handleTopProductClick}
-        onHome={() => setPageState("home")}
-        onAbout={() => setPageState("about")}
-        onProducts={() => setPageState("products")}
-        onContact={() => setPageState("contact")}
-        onDocumentation={() => setPageState("documentation")}
-        onBlog={() => setPageState("blog", null, null, 1)}
-        onFAQ={() => setPageState("faq")}
-        onPrivacy={() => setPageState("privacy")}
-        onTerms={() => setPageState("terms")}
-        onCookie={() => setPageState("cookies")}
-      />
-    );
-  }
-
-  if (page === "product-detail" && selectedProduct) {
-    const backToProducts = () => setPageState("products");
-    const goHome = () => setPageState("home");
-    const goAbout = () => setPageState("about");
-    const goProducts = () => setPageState("products");
-    const goContact = () => setPageState("contact");
-    const goDocumentation = () => setPageState("documentation");
-    const goBlog = () => setPageState("blog", null, null, 1);
-    const goFAQ = () => setPageState("faq");
-    const goPrivacy = () => setPageState("privacy");
-    const goTerms = () => setPageState("terms");
-    const goCookie = () => setPageState("cookies");
-
-    const commonProps = { 
-      onBack: backToProducts, 
-      onHome: goHome, 
-      onAbout: goAbout, 
-      onProducts: goProducts, 
-      onContact: goContact,
-      onDocumentation: goDocumentation,
-      onBlog: goBlog,
-      onFAQ: goFAQ,
-      onPrivacy: goPrivacy,
-      onTerms: goTerms,
-      onCookie: goCookie
-    };
-
-    // Handle TopProducts
-    if ("accentColor" in selectedProduct && !("bgPattern" in selectedProduct)) {
-      switch (selectedProduct.id) {
-        case "orbileads": return <OrbiLeadsPage {...commonProps} />;
-        case "hrms": return <HRMSPage {...commonProps} />;
-        case "crms": return <CRMSPage {...commonProps} />;
-      }
-    }
-
-    // Handle MainProducts
-    switch (selectedProduct.id) {
-      case "secure-messenger": return <SecureMessengerPage {...commonProps} />;
-      case "telecom-bot": return <TelecomBotPage {...commonProps} />;
-      case "chat-bot": return <ChatBotPage {...commonProps} />;
-      case "workflow-automation": return <WorkflowAutomationPage {...commonProps} />;
-      case "email-automation": return <EmailAutomationPage {...commonProps} />;
-      case "whatsapp-automation": return <WhatsappAutomationPage {...commonProps} />;
-      case "analytics-engine": return <AnalyticsEnginePage {...commonProps} />;
-      case "smart-assistant": return <SmartAssistantPage {...commonProps} />;
-      case "ai-intelligence-hub": return <AIIntelligenceHubPage {...commonProps} />;
-      case "security-shield": return <SecurityShieldPage {...commonProps} />;
-      default: setPageState("products"); return null;
-    }
-  }
+const AppShell: React.FC = () => {
+  const location = useLocation();
+  const isServicesRoute = location.pathname.startsWith("/services");
 
   return (
-    <div className="relative">
-      <Navbar onHomeClick={() => setPageState("home")}
-              onAboutClick={() => setPageState("about")}
-              onProductClick={() => setPageState("products")}
-              onBlogClick={() => setPageState("blog", null, null, 1)}
-              onContactClick={() => setPageState("contact")}
-              currentPage={page} />
-      <Hero onProductClick={() => setPageState("products")} />
-      <TopProducts onProductClick={handleTopProductClick} />
-      <AllProducts onProductClick={handleProductClick} />
-      <NexusPricing />
-      <WhyChoose />
-      <Tools />
-      <CTA />
-      <Footer 
-        onHomeClick={() => setPageState("home")}
-        onAboutClick={() => setPageState("about")} 
-        onProductClick={() => setPageState("products")} 
-        onContactClick={() => setPageState("contact")}
-        onDocumentationClick={() => setPageState("documentation")}
-        onBlogClick={() => setPageState("blog", null, null, 1)}
-        onFAQClick={() => setPageState("faq")}
-        onPrivacyClick={() => setPageState("privacy")}
-        onTermsClick={() => setPageState("terms")}
-        onCookieClick={() => setPageState("cookies")}
-      />
-    </div>
+    <>
+      <ScrollToTop />
+
+      <div className={`${isServicesRoute ? "services-theme bg-white text-slate-900" : "bg-[#0b0618] text-white"} min-h-screen flex flex-col`}>
+
+        {/* NAVBAR */}
+        <Navbar />
+
+        {/* MAIN CONTENT */}
+        <main className="flex-grow">
+          <Suspense fallback={<RouteFallback />}>
+          <Routes>
+
+            {/* ---------- MAIN PAGES ---------- */}
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route
+              path="/services"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/website-web-application-services"
+              element={<WebsiteWebApplicationServicesPage />}
+            />
+            <Route
+              path="/services/mobile-application-development"
+              element={<MobileApplicationDevelopmentPage />}
+            />
+            <Route
+              path="/services/ai-automation-solutions"
+              element={<AiAutomationSolutionsPage />}
+            />
+            <Route
+              path="/services/custom-enterprise-software"
+              element={<CustomEnterpriseSoftwarePage />}
+            />
+            <Route
+              path="/services/cloud-infrastructure-services"
+              element={<CloudInfrastructureServicesPage />}
+            />
+            <Route
+              path="/services/digital-marketing-services"
+              element={<DigitalMarketingServicesPage />}
+            />
+            <Route
+              path="/services/staff-augmentation-workforce-solutions"
+              element={<StaffAugmentationWorkforceSolutionsPage />}
+            />
+            <Route
+              path="/services/accounting-financial-operations"
+              element={<AccountingFinancialOperationsPage />}
+            />
+            <Route
+              path="/services/business-strategy-consulting"
+              element={<BusinessStrategyConsultingPage />}
+            />
+            <Route
+              path="/services/branding-creative-services"
+              element={<BrandingCreativeServicesPage />}
+            />
+            <Route
+              path="/services/it/website-web-application-services"
+              element={<WebsiteWebApplicationServicesPage />}
+            />
+            <Route
+              path="/services/it/mobile-application-development"
+              element={<MobileApplicationDevelopmentPage />}
+            />
+            <Route
+              path="/services/it/ai-automation-solutions"
+              element={<AiAutomationSolutionsPage />}
+            />
+            <Route
+              path="/services/it/custom-enterprise-software"
+              element={<CustomEnterpriseSoftwarePage />}
+            />
+            <Route
+              path="/services/it/cloud-infrastructure-services"
+              element={<CloudInfrastructureServicesPage />}
+            />
+            <Route
+              path="/services/non-it/accounting-financial-operations"
+              element={<AccountingFinancialOperationsPage />}
+            />
+            <Route
+              path="/services/non-it/digital-marketing-services"
+              element={<DigitalMarketingServicesPage />}
+            />
+            <Route
+              path="/services/non-it/staff-augmentation-workforce-solutions"
+              element={<StaffAugmentationWorkforceSolutionsPage />}
+            />
+            <Route
+              path="/services/non-it/business-strategy-consulting"
+              element={<BusinessStrategyConsultingPage />}
+            />
+            <Route
+              path="/services/non-it/branding-creative-services"
+              element={<BrandingCreativeServicesPage />}
+            />
+            <Route path="/products" element={<Navigate to="/" replace />} />
+            <Route path="/products/:productSlug" element={<ProductDetail />} />
+            <Route path="/contact" element={<ContactPage />} />
+
+            {/* ---------- BLOG ---------- */}
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+
+            <Route
+              path="/services/it"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/non-it"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/website-web-application-services/:itemSlug"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/mobile-application-development/:itemSlug"
+              element={<Navigate to="/services/mobile-application-development" replace />}
+            />
+            <Route
+              path="/services/ai-automation-solutions/:itemSlug"
+              element={<Navigate to="/services/ai-automation-solutions" replace />}
+            />
+            <Route
+              path="/services/custom-enterprise-software/:itemSlug"
+              element={<Navigate to="/services/custom-enterprise-software" replace />}
+            />
+            <Route
+              path="/services/cloud-infrastructure-services/:itemSlug"
+              element={<Navigate to="/services/cloud-infrastructure-services" replace />}
+            />
+            <Route
+              path="/services/digital-marketing-services/:itemSlug"
+              element={<Navigate to="/services/digital-marketing-services" replace />}
+            />
+            <Route
+              path="/services/staff-augmentation-workforce-solutions/:itemSlug"
+              element={<Navigate to="/services/staff-augmentation-workforce-solutions" replace />}
+            />
+            <Route
+              path="/services/accounting-financial-operations/:itemSlug"
+              element={<Navigate to="/services/accounting-financial-operations" replace />}
+            />
+            <Route
+              path="/services/business-strategy-consulting/:itemSlug"
+              element={<Navigate to="/services/business-strategy-consulting" replace />}
+            />
+            <Route
+              path="/services/branding-creative-services/:itemSlug"
+              element={<Navigate to="/services/branding-creative-services" replace />}
+            />
+            <Route
+              path="/services/it/website-web-application-services/:itemSlug"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/it/mobile-application-development/:itemSlug"
+              element={<Navigate to="/services/mobile-application-development" replace />}
+            />
+            <Route
+              path="/services/it/ai-automation-solutions/:itemSlug"
+              element={<Navigate to="/services/ai-automation-solutions" replace />}
+            />
+            <Route
+              path="/services/it/custom-enterprise-software/:itemSlug"
+              element={<Navigate to="/services/custom-enterprise-software" replace />}
+            />
+            <Route
+              path="/services/it/cloud-infrastructure-services/:itemSlug"
+              element={<Navigate to="/services/cloud-infrastructure-services" replace />}
+            />
+            <Route
+              path="/services/non-it/accounting-financial-operations/:itemSlug"
+              element={<Navigate to="/services/accounting-financial-operations" replace />}
+            />
+            <Route
+              path="/services/non-it/digital-marketing-services/:itemSlug"
+              element={<Navigate to="/services/digital-marketing-services" replace />}
+            />
+            <Route
+              path="/services/non-it/staff-augmentation-workforce-solutions/:itemSlug"
+              element={<Navigate to="/services/staff-augmentation-workforce-solutions" replace />}
+            />
+            <Route
+              path="/services/non-it/business-strategy-consulting/:itemSlug"
+              element={<Navigate to="/services/business-strategy-consulting" replace />}
+            />
+            <Route
+              path="/services/non-it/branding-creative-services/:itemSlug"
+              element={<Navigate to="/services/branding-creative-services" replace />}
+            />
+            <Route
+              path="/services/:categorySlug"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/:categorySlug/:itemSlug"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/it/:categorySlug"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/non-it/:categorySlug"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/it/:categorySlug/:itemSlug"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+            <Route
+              path="/services/non-it/:categorySlug/:itemSlug"
+              element={<Navigate to="/services/website-web-application-services" replace />}
+            />
+
+            {/* ---------- OTHER ---------- */}
+            <Route path="/book-appointment" element={<BookAppointment />} />
+
+          </Routes>
+          </Suspense>
+        </main>
+
+        {/* FOOTER + GLOBAL COMPONENTS */}
+        <Footer />
+        <CookieNotice />
+
+      </div>
+    </>
   );
-}
+};
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <AppShell />
+    </Router>
+  );
+};
 
 export default App;
+

@@ -1,0 +1,23 @@
+http://zoraglobalai.com/* https://www.zoraglobalai.com/:splat 301!
+https://zoraglobalai.com/* https://www.zoraglobalai.com/:splat 301!
+http://www.zoraglobalai.com/* https://www.zoraglobalai.com/:splat 301!
+
+/services /services/website-web-application-services 301
+/services/it /services/website-web-application-services 301
+/services/non-it /services/website-web-application-services 301
+/services/it/:category/:item /services/:category 301
+/services/non-it/:category/:item /services/:category 301
+/services/it/:category /services/:category 301
+/services/non-it/:category /services/:category 301
+/services/website-web-application-services/:item /services/website-web-application-services 301
+/services/mobile-application-development/:item /services/mobile-application-development 301
+/services/custom-enterprise-software/:item /services/custom-enterprise-software 301
+/services/digital-marketing-services/:item /services/digital-marketing-services 301
+/services/ai-automation-solutions/:item /services/ai-automation-solutions 301
+/services/cloud-infrastructure-services/:item /services/cloud-infrastructure-services 301
+/services/business-strategy-consulting/:item /services/business-strategy-consulting 301
+/services/staff-augmentation-workforce-solutions/:item /services/staff-augmentation-workforce-solutions 301
+/services/accounting-financial-operations/:item /services/accounting-financial-operations 301
+/services/branding-creative-services/:item /services/branding-creative-services 301
+
+/* /index.html 200

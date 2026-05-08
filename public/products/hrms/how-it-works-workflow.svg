@@ -1,0 +1,78 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="48" fill="url(#bg)"/>
+  <rect x="36" y="36" width="1528" height="828" rx="36" fill="white" fill-opacity="0.86"/>
+  <text x="110" y="130" fill="#1E3A8A" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">HRMS Workflow</text>
+  <text x="110" y="175" fill="#64748B" font-family="Arial, Helvetica, sans-serif" font-size="22">A structured operational flow from employee data to business insight</text>
+
+  <path d="M300 420H510" stroke="#93C5FD" stroke-width="10" stroke-linecap="round"/>
+  <path d="M610 420H820" stroke="#93C5FD" stroke-width="10" stroke-linecap="round"/>
+  <path d="M920 420H1130" stroke="#93C5FD" stroke-width="10" stroke-linecap="round"/>
+  <path d="M1230 420H1440" stroke="#93C5FD" stroke-width="10" stroke-linecap="round"/>
+
+  <g>
+    <circle cx="200" cy="420" r="90" fill="#EFF6FF"/>
+    <circle cx="200" cy="420" r="88" stroke="#BFDBFE" stroke-width="4"/>
+    <rect x="162" y="378" width="76" height="84" rx="16" fill="#2563EB"/>
+    <rect x="175" y="392" width="50" height="10" rx="5" fill="#DBEAFE"/>
+    <rect x="175" y="412" width="50" height="10" rx="5" fill="#DBEAFE"/>
+    <rect x="175" y="432" width="30" height="10" rx="5" fill="#DBEAFE"/>
+    <text x="170" y="560" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">01</text>
+    <text x="108" y="592" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Centralized Data</text>
+    <text x="78" y="628" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">Secure employee records and</text>
+    <text x="95" y="654" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">documents in one source.</text>
+  </g>
+
+  <g>
+    <circle cx="560" cy="420" r="90" fill="#EEF2FF"/>
+    <circle cx="560" cy="420" r="88" stroke="#C7D2FE" stroke-width="4"/>
+    <path d="M527 420C527 401.775 541.775 387 560 387C578.225 387 593 401.775 593 420C593 438.225 578.225 453 560 453C541.775 453 527 438.225 527 420Z" fill="#4F46E5"/>
+    <path d="M560 404V420L572 432" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="530" y="560" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">02</text>
+    <text x="493" y="592" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Automation</text>
+    <text x="448" y="628" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">Attendance, payroll, leave and</text>
+    <text x="450" y="654" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">recruitment run with less manual work.</text>
+  </g>
+
+  <g>
+    <circle cx="870" cy="420" r="90" fill="#ECFDF5"/>
+    <circle cx="870" cy="420" r="88" stroke="#A7F3D0" stroke-width="4"/>
+    <rect x="830" y="382" width="80" height="76" rx="16" fill="#10B981"/>
+    <path d="M854 417L867 430L888 409" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="840" y="560" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">03</text>
+    <text x="801" y="592" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Approvals</text>
+    <text x="753" y="628" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">Requests move through structured</text>
+    <text x="771" y="654" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">workflows with clear visibility.</text>
+  </g>
+
+  <g>
+    <circle cx="1180" cy="420" r="90" fill="#FFF7ED"/>
+    <circle cx="1180" cy="420" r="88" stroke="#FED7AA" stroke-width="4"/>
+    <rect x="1135" y="386" width="90" height="70" rx="16" fill="#F59E0B"/>
+    <rect x="1153" y="430" width="14" height="14" rx="4" fill="white"/>
+    <rect x="1173" y="414" width="14" height="30" rx="4" fill="white"/>
+    <rect x="1193" y="400" width="14" height="44" rx="4" fill="white"/>
+    <text x="1150" y="560" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">04</text>
+    <text x="1114" y="592" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Insights</text>
+    <text x="1062" y="628" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">Dashboards and reports reveal</text>
+    <text x="1058" y="654" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">attendance, productivity and trends.</text>
+  </g>
+
+  <g>
+    <circle cx="1490" cy="420" r="90" fill="#F5F3FF"/>
+    <circle cx="1490" cy="420" r="88" stroke="#DDD6FE" stroke-width="4"/>
+    <path d="M1452 448L1486 392L1517 432L1540 402" stroke="#7C3AED" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M1530 402H1544V416" stroke="#7C3AED" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1460" y="560" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">05</text>
+    <text x="1404" y="592" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Better Decisions</text>
+    <text x="1370" y="628" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">Leadership uses accurate data to</text>
+    <text x="1381" y="654" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="18">improve people operations.</text>
+  </g>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#DBEAFE"/>
+      <stop offset="0.5" stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#E0E7FF"/>
+    </linearGradient>
+  </defs>
+</svg>
