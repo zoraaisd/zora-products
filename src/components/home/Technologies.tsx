@@ -7,7 +7,7 @@ import flutterImage from "../../assets/flutter.webp";
 import gcpImage from "../../assets/googlecloudplatform.webp";
 import firebaseImage from "../../assets/firebase.webp";
 import javaImage from "../../assets/java.webp";
-import kubernetesImage from "../../assets/kubernetes.webp";
+import kubernetesImage from "../../assets/Kubernetes.webp";
 import nextjsImage from "../../assets/nextjs.webp";
 import nodejsImage from "../../assets/nodejs.webp";
 import pythonImage from "../../assets/python.webp";
