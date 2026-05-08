@@ -23,7 +23,7 @@ const BusinessStrategyConsultingPage: React.FC = () => {
           name: "Accounting and Financial Operations",
           description:
             "Accounting management, bookkeeping, financial reporting, billing and finance operations support for businesses.",
-          url: "https://www.zoraglobalai.com/services/accounting-financial-operations",
+          url: "https://www.zoraai.us/services/accounting-financial-operations",
         }}
       />
       <BreadcrumbSchema

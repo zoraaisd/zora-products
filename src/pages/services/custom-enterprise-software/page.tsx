@@ -25,7 +25,7 @@ const WebsiteWebApplicationServicesPage: React.FC = () => {
           name: "Custom App Development for Business",
           description:
             "Custom business applications, enterprise software, CRM, ERP and internal platforms built for company workflows.",
-          url: "https://www.zoraglobalai.com/services/custom-enterprise-software",
+          url: "https://www.zoraai.us/services/custom-enterprise-software",
         }}
       />
       <BreadcrumbSchema

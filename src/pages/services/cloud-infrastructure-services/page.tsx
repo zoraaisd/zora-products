@@ -25,7 +25,7 @@ const WebsiteWebApplicationServicesPage: React.FC = () => {
           name: "Cloud Infrastructure Services",
           description:
             "Cloud migration, DevOps, infrastructure modernization and application integration services for businesses.",
-          url: "https://www.zoraglobalai.com/services/cloud-infrastructure-services",
+          url: "https://www.zoraai.us/services/cloud-infrastructure-services",
         }}
       />
       <BreadcrumbSchema

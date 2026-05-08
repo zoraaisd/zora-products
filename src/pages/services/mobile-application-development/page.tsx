@@ -25,7 +25,7 @@ const MobileApplicationDevelopmentPage: React.FC = () => {
           name: "Mobile App Development Services",
           description:
             "Custom Android, iOS and cross-platform mobile application development for growing businesses.",
-          url: "https://www.zoraglobalai.com/services/mobile-application-development",
+          url: "https://www.zoraai.us/services/mobile-application-development",
         }}
       />
       <BreadcrumbSchema

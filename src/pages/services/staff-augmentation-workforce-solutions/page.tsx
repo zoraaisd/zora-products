@@ -23,7 +23,7 @@ const BusinessStrategyConsultingPage: React.FC = () => {
           name: "Staff Augmentation Services",
           description:
             "Flexible workforce and staff augmentation services for businesses that need qualified professionals and reliable support.",
-          url: "https://www.zoraglobalai.com/services/staff-augmentation-workforce-solutions",
+          url: "https://www.zoraai.us/services/staff-augmentation-workforce-solutions",
         }}
       />
       <BreadcrumbSchema

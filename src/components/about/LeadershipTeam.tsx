@@ -3,7 +3,7 @@ import { Linkedin, Mail } from "lucide-react";
 import { FaXTwitter } from "react-icons/fa6";
 import TextReveal from "./TextReveal";
 
-const contactEmail = "info@zoraglobalai.com";
+const contactEmail = "info@zoraai.us";
 
 const openMail = (event: React.MouseEvent<HTMLAnchorElement>) => {
   event.preventDefault();

@@ -25,7 +25,7 @@ const WebsiteWebApplicationServicesPage: React.FC = () => {
           name: "Website Development and SEO Services",
           description:
             "SEO-friendly website development, web application development, e-commerce platforms and SaaS products for businesses.",
-          url: "https://www.zoraglobalai.com/services/website-web-application-services",
+          url: "https://www.zoraai.us/services/website-web-application-services",
         }}
       />
       <BreadcrumbSchema

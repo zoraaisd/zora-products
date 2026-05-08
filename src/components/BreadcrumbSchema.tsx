@@ -1,7 +1,7 @@
 import React from "react";
 import DocumentHead from "./DocumentHead";
 
-const BASE_URL = "https://www.zoraglobalai.com";
+const BASE_URL = "https://www.zoraai.us";
 
 interface Crumb {
   name: string;

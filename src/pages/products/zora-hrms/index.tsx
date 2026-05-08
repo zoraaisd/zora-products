@@ -18,7 +18,7 @@ const ZoraHrmsPage: React.FC = () => {
         serviceSchema={{
           name: "HRMS",
           description: hrmsHero.description,
-          url: "https://www.zoraglobalai.com/products/zora-hrms",
+          url: "https://www.zoraai.us/products/zora-hrms",
         }}
       />
       <BreadcrumbSchema

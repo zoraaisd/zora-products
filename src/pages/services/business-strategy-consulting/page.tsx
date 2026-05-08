@@ -23,7 +23,7 @@ const BusinessStrategyConsultingPage: React.FC = () => {
           name: "Business Strategy Consulting",
           description:
             "Strategic consulting and business support services that improve operations, accelerate growth and strengthen execution.",
-          url: "https://www.zoraglobalai.com/services/business-strategy-consulting",
+          url: "https://www.zoraai.us/services/business-strategy-consulting",
         }}
       />
       <BreadcrumbSchema

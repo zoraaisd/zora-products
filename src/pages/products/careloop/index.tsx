@@ -18,7 +18,7 @@ const CareloopPage: React.FC = () => {
         serviceSchema={{
           name: "CareLoop",
           description: careloopHero.description,
-          url: "https://www.zoraglobalai.com/products/careloop",
+          url: "https://www.zoraai.us/products/careloop",
         }}
       />
       <BreadcrumbSchema

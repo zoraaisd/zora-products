@@ -15,7 +15,7 @@ import PageSEO from "../components/PageSEO";
 import DocumentHead from "../components/DocumentHead";
 
 const ContactPage: React.FC = () => {
-  const EMAIL = "info@zoraglobalai.com";
+  const EMAIL = "info@zoraai.us";
   const PHONE = "9087000345";
   const OFFICE_ADDRESS =
     "Ground Floor, 12, Rajiv Gandhi Salai, Srinivasa Nagar, Kandhanchavadi, Perungudi, Chennai, Tamil Nadu 600096";
@@ -173,9 +173,9 @@ const ContactPage: React.FC = () => {
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
               name: "Zora Global AI",
-              url: "https://www.zoraglobalai.com",
-              logo: "https://www.zoraglobalai.com/logo.webp",
-              email: "info@zoraglobalai.com",
+              url: "https://www.zoraai.us",
+              logo: "https://www.zoraai.us/logo.webp",
+              email: "info@zoraai.us",
               telephone: "+91-9087000345",
               address: {
                 "@type": "PostalAddress",
@@ -190,7 +190,7 @@ const ContactPage: React.FC = () => {
                 "@type": "ContactPoint",
                 telephone: "+91-9087000345",
                 contactType: "customer service",
-                email: "info@zoraglobalai.com",
+                email: "info@zoraai.us",
                 hoursAvailable: "Mo-Fr 08:00-17:00",
                 availableLanguage: "English",
               },

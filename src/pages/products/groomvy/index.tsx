@@ -18,7 +18,7 @@ const GroomvyPage: React.FC = () => {
         serviceSchema={{
           name: "Groomvy",
           description: groomvyHero.description,
-          url: "https://www.zoraglobalai.com/products/groomvy",
+          url: "https://www.zoraai.us/products/groomvy",
         }}
       />
       <BreadcrumbSchema

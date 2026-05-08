@@ -5,20 +5,20 @@
 
 # Canonical host redirects
 [[redirects]]
-  from   = "http://zoraglobalai.com/*"
-  to     = "https://www.zoraglobalai.com/:splat"
+  from   = "http://zoraai.us/*"
+  to     = "https://www.zoraai.us/:splat"
   status = 301
   force  = true
 
 [[redirects]]
-  from   = "https://zoraglobalai.com/*"
-  to     = "https://www.zoraglobalai.com/:splat"
+  from   = "https://zoraai.us/*"
+  to     = "https://www.zoraai.us/:splat"
   status = 301
   force  = true
 
 [[redirects]]
-  from   = "http://www.zoraglobalai.com/*"
-  to     = "https://www.zoraglobalai.com/:splat"
+  from   = "http://www.zoraai.us/*"
+  to     = "https://www.zoraai.us/:splat"
   status = 301
   force  = true
 

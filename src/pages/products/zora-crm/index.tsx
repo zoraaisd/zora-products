@@ -18,7 +18,7 @@ const ZoraCrmPage: React.FC = () => {
         serviceSchema={{
           name: "ZORA CRM",
           description: crmHero.description,
-          url: "https://www.zoraglobalai.com/products/zora-crm",
+          url: "https://www.zoraai.us/products/zora-crm",
         }}
       />
       <BreadcrumbSchema

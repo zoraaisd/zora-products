@@ -22,7 +22,7 @@ import {
   type BlogPost as BlogPostType,
 } from "../lib/blogApi";
 
-const BASE_URL = "https://www.zoraglobalai.com";
+const BASE_URL = "https://www.zoraai.us";
 const ENQUIRY_WEBSITE_SLUG = import.meta.env.VITE_ENQUIRY_WEBSITE_SLUG || "zora-services";
 
 // Utility function to decode HTML entities

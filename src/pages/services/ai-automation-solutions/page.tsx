@@ -25,7 +25,7 @@ const WebsiteWebApplicationServicesPage: React.FC = () => {
           name: "AI Automation Solutions",
           description:
             "AI automation, chatbot development, workflow automation and machine learning solutions for businesses.",
-          url: "https://www.zoraglobalai.com/services/ai-automation-solutions",
+          url: "https://www.zoraai.us/services/ai-automation-solutions",
         }}
       />
       <BreadcrumbSchema

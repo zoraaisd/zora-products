@@ -23,7 +23,7 @@ const BusinessStrategyConsultingPage: React.FC = () => {
           name: "SEO and Digital Marketing Services",
           description:
             "Technical SEO, content strategy, performance marketing, social media and lead generation services for businesses.",
-          url: "https://www.zoraglobalai.com/services/digital-marketing-services",
+          url: "https://www.zoraai.us/services/digital-marketing-services",
         }}
       />
       <BreadcrumbSchema

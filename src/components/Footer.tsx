@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
   const YOUTUBE_URL = "https://www.youtube.com/@zoraglobalaitechnologies";
   const TWITTER_URL = "https://x.com/zoraglobalai";
   const FACEBOOK_URL = "https://www.facebook.com/ZoraGlobalAiTechnologies/";
-  const EMAIL = "info@zoraglobalai.com";
+  const EMAIL = "info@zoraai.us";
   const PHONE = "9087000345";
   const TEl_PHONE="044-4625-4744";
   const GMAIL_COMPOSE_URL = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(

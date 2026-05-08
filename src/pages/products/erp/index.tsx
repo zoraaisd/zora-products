@@ -18,7 +18,7 @@ const ErpPage: React.FC = () => {
         serviceSchema={{
           name: "ERP",
           description: erpHero.description,
-          url: "https://www.zoraglobalai.com/products/erp",
+          url: "https://www.zoraai.us/products/erp",
         }}
       />
       <BreadcrumbSchema
